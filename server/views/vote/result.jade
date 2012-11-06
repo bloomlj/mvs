@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+    h1 投票结果
+    table
+        tr
+            th 需要表头？
+        each org,org_name in answer
+            tr
+                td #{org_name}
+                each question,question_name in answer[org_name]
+                    td #{question_name}: #{question.result}
+
+
+    script(src="/javascripts/jquery.flot.js")
+

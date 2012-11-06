@@ -1,0 +1,19 @@
+body {
+padding-top: 60px;
+padding-bottom: 40px;
+}
+.sidebar-nav {
+padding: 9px 0;
+}
+input[type="number"]{
+	width: 4em;
+}
+.section{
+	background-color: #f0f0aa;
+}
+.group{
+	background-color:#f0f0dd;
+}
+.question{
+	background-color:#f0f0f0 ;
+}

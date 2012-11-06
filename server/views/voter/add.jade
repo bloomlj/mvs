@@ -1,0 +1,39 @@
+extends ../layout
+block content
+  h1 添加选举人
+
+
+
+  form#passform(method="post",action="/voter")
+    label 投票
+        select(name="vote_id")
+            each vote in votes
+                option(value="#{vote._id}") #{vote.name}
+    label 个数：
+        input#passcount(type="number",name="passcount",value="100",min="1")
+        a#generatepass.btn(href="javascript:return false;") 生成随机密码
+    #votepass
+    input#passsubmit(type="submit")
+  script
+    $(document).ready(function(){
+        $("#passsubmit").hide();
+        $("#generatepass").click(function(){
+                var passarray = new Array();
+                var passcount = $("#passcount").val();
+                var htmlstr = '';
+                for(i = 0;i<passcount;i++){
+                    randompass = Math.floor(Math.random() * 1000000);
+                    passarray.push(randompass);
+                    htmlstr+="<label>密码"+ (i+1) +":<input type='text' name='password["+ i +"]' value='"+ randompass +"'></label>"
+                }
+                $("#votepass").html(htmlstr);
+                $("#passsubmit").show();
+                $("a#generatepass").text("重新生成随机密码");
+                //alert(passarray.length);
+            });
+
+
+    });
+
+
+

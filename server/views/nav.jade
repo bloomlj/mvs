@@ -1,0 +1,25 @@
+div.navbar.navbar-inverse.navbar-fixed-top
+  div.navbar-inner
+    div.container-fluid
+      a.btn.btn-navbar(data-toggle="collapse",data-target=".nav-collapse")
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.brand(href="/") 移动投票系统管理
+      div.nav-collapse.collapse
+        p.navbar-text.pull-right
+              |Logged in as 
+              a.navbar-link(href="#") Username
+        ul.nav
+          li.active
+            a(href="/") 首页
+          li
+            a(href="/vote") 投票
+          li
+            a(href="/answer") 投票结果
+          li
+            a(href="/org") 单位
+          li
+            a(href="/candiate") 候选人
+          li
+            a(href="/voter") 选举人

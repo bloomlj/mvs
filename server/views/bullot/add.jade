@@ -1,0 +1,22 @@
+extends ../layout
+block content
+  h1 添加选票/评价单
+
+  form(method="post",action="/bullot")
+    p
+      label(for="name") 名称
+    p
+      input#name(name="name",type="text")
+    p
+      label(for="vtype") 类型
+    p
+      select#vtype(name="vtype")
+        option(value="vote") 选举
+        option(value="mark") 评分
+    p
+      label(for="note") 说明
+    p
+      textarea#note(name="note")
+    p
+      input(type="hidden",name="vote_id",value="#{vote_id}") 
+      input(type="submit")

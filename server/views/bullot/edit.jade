@@ -1,0 +1,15 @@
+extends ../layout
+block content
+  h1 修改选票
+  form(method="post",action="/bullot/#{_id}")
+    p
+      label(for="name") 名称
+    p
+      input#name(name="name",type="text",value="#{name}")
+    p
+      label(for="note") 说明
+    p
+      textarea#note(name="note") #{note}
+    p
+      input(type="hidden",name="_method",value="put")
+      input(type="submit")

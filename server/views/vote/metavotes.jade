@@ -1,0 +1,64 @@
+extends ../layout
+
+block content
+  h1 #{name}的选票信息
+
+  //显示已有的所有选票
+  ul
+    for m in metavote
+      li #{m.name}
+        ul
+          for t in m.targets
+            li #{t.id}{t.name}
+        ul
+          for i in indexes
+            li #{i.name}#{i.weight}
+
+  .actons 添加
+    a#ui-open-vote-add-panel(href="#1") 投票
+    | / 
+    a#ui-open-mark-add-panel(href="#2") 评分
+
+  //投票添加面板
+  #vote-add-panel(style="display:none;")
+    form(method="post",action="/vote/#{_id}/metavote")
+      input#vtype(name="vtype",value="投票",type="hidden")
+      p
+        input#org1(name="org",type="text",placeholder="单位",list="org")
+      p
+        label(for="limit") 限选人数:
+        input#limit(name="limit",type="number",min="1",max="10")
+      datalist#org
+      datalist#targets
+      datalist#indexes
+      p#target-input
+        input(name="target[]",type="text",placeholder="候选人",list="targets")
+        br
+        input(name="target[]",type="text",placeholder="候选人",list="targets")
+      p
+        a#ui-add-more-target(href="javascript:false;") 添加更多候选人
+      p
+        input(type="submit")
+
+  //评分添加面板
+  #mark-add-panel(style="display:none;")
+    form(method="post",action="/vote/#{_id}/metavote")
+      input#vtype(name="vtype",value="评分",type="hidden")
+      p
+        input#org1(name="org",type="text",placeholder="单位",list="org")
+      p#index-input
+        input(name="index[]",type="text",placeholder="评价指标",list="indexes")
+        input(name="weight[]",type="number",name="points",min="1",max="100",placeholder="比重")
+        |%
+        br
+        input(name="index[]",type="text",placeholder="评价指标",list="indexes")
+        input(name="weight[]",type="number",name="points",min="1",max="100",placeholder="比重")
+        |%
+        br
+        input(name="index[]",type="text",placeholder="评价指标",list="indexes")
+        input(name="weight[]",type="number",name="points",min="1",max="100",placeholder="比重")
+        |%
+      p
+        a#ui-add-more-index(href="javascript:false;") 添加更多指标
+      p
+        input(type="submit")

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>西南交通大学人事处投票系统客户端</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+	<!--
+	<link rel="stylesheet"  href="libs/bootstrap/css/bootstrap.min.css" />
+	<link rel="stylesheet"  href="libs/splitviewnavigator/css/splitviewnavigator.css" />
+	<link rel="stylesheet"  href="libs/viewnavigator/css/viewnavigator.css" />
+-->
+	<link rel="stylesheet"  href="css/app.css" />
+
+
+</head>
+<body>
+
+<div id="page">
+	<div id="sidebar" style="display:none;">
+		<header>选票单</header>
+		<nav id="navWrapper">
+			<ul id="navScroller">
+				<li>Option 1</li>
+				<li>Option 2</li>
+				<li>Option 3</li>
+				<li>Option 4</li>
+				<li>Option 5</li>
+				<li>Option 6</li>
+			</ul>
+		</nav>
+	</div>
+
+	<div id="content">
+		<header id="pagetitle">请登入系统</header>
+		<article id="contentWrapper">
+			<div id="contentScroller">
+			  <p class="intro"></p>
+			  <div id="login">
+					<input type="text" name="login" placeholder="用户名"  />			
+					<input type="text" name="password" placeholder="密码" />
+					<button class="btn"  type="button"   id="loginnow">登入</button>
+			  </div>
+		  		<form id="voteform">
+				<script id="votesection-tpl" type="text/template">
+				<div id="section-<%= count%>">
+				 <%  _.each(groups, function(group,i) {  %>
+				 	<ul id="votelist" class="vote">
+				 		<h2 class="messagebox"><%= group.title%>最多选择<%= group.max%>个人</h2> 
+				 		<% _.each(group.candidates,function(candidate,j){%>
+				 			<li class="vote" style="background:#ccc url('images/blank_photo.jpg') no-repeat top left;">
+					 			<input type="checkbox" name="answer[<%= candidate.org%>][<%= candidate.name%>][votevalue]"  value="1" id="checkbox-<%= i%>" />
+					 			<%= candidate.name%> - <%= candidate.org%>
+				 			</li>
+				    	<% });%>
+				    </ul>
+				 <% }); %>  
+				 </div> 
+				</script>
+
+				<script id="marksection-tpl" type="text/template">
+				<div  id="section-<%= count%>">
+				 <%  _.each(groups, function(group,i) {  %>
+				 		<h2 class="messagebox"><%= group.title%></h2>
+				 		<ul id="marklist" class="mark">
+			 				<% _.each(group.orgs,function(org,k){%>
+			 				<% if(!_.isNull(org)){%>
+			 					<li class="mark">
+			 					<h3><%= org.fullname%></h3>
+			 					<% _.each(group.questions,function(question,j){%>
+									<label for="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>"><%= question.text%>:</label>
+			   						<input type="range" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true"/>
+								<% });%>
+			   					</li>
+			 				<% }%>
+				    		<% });%>
+				    	</ul>
+				 <% }); %>  
+				 </div>  
+				</script>
+				
+			  <script id="votesubmit-tpl" type="text/template">
+				<button  type="button" data-theme="e" id="votesubmit">完毕，点此发送投票结果。</button>
+			  </script>
+			  <script id="votenow-tpl" type="text/template">
+				<button  class="btn btn-primary" type="button"   id="votenow">开始</button>
+			  </script>
+
+
+			  </form>
+		     <script id="voteresult-tpl" type="text/template">
+				状态：<%= status%>
+			  </script>
+
+			</div>
+		</article>
+	</div>
+</div>
+
+
+	<script src="cordova-2.2.0.js"></script>
+	<script src="libs/jquery/jquery-1.7.1.js"></script>
+	<script src="libs/iscroll/iscroll.js"></script>
+	
+	<!--
+	<script src="libs/jquery/jquery.animate-enhanced.js"></script>
+	<script src="libs/bootstrap/js/bootstrap.js"></script>
+	<script src="libs/viewnavigator/viewnavigator.js"></script>
+	<script src="libs/viewnavigator/splitviewnavigator.js"></script>
+-->
+	<script src="js/underscore-min.js"></script>
+	<script src="js/app.js"></script>
+
+
+</body>
+</html>

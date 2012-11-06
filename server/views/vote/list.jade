@@ -1,0 +1,22 @@
+extends ../layout
+block content
+    h1 全部投票记录
+    a(href="/vote/add") 添加投票/评价
+    // a(href="/vote/add/mark") 添加新评分
+    ol
+        for doc in docs
+           li #{doc.name}#{doc.vtype}
+            span.metainfo #{doc.created_date}
+            .note #{doc.note}
+            .actions
+                a(href="/vote/#{doc._id}/edit") 修改
+                a(href="/vote/#{doc._id}/destroy") 删除
+                a(href="/vote/#{doc._id}/result") 查看投票结果
+                form(action="/vote/#{doc._id}",method="post")
+                    input(type="hidden",name="_method",value="put")
+                    if doc.isopen == 'no'
+                        input(type="hidden",name="isopen",value="yes")
+                        input(type="submit",value="启动")
+                    else
+                        input(type="hidden",name="isopen",value="no")
+                        input(type="submit",value="停止")                        

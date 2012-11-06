@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+    h1 全部选举人
+    a(href="/voter/add") 生成选举密码
+    table
+        tr
+            td ID
+            td 用户名
+            td 密码
+            td
+        each doc in docs
+            tr
+                td #{doc._id}
+                td #{doc.login}
+                td #{doc.password}
+                td 
+                    a(href="/voter/#{doc._id}/edit") 修改
+                td 
+                    a(href="/voter/#{doc._id}/destroy") 删除
+
