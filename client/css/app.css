@@ -164,12 +164,14 @@ nav, article {
 
 #login{
 	background: #f0f0f0;
-	margin:20px;
+	margin:20px auto 20px;
+	width:200px;
 	padding: 20px;
 }
 #login input{
 	line-height: 20px;
-	padding: 5px;
+	padding: 10px;
+	width:180px;
 }
 .btn{
 	line-height: 20px;
@@ -177,9 +179,13 @@ nav, article {
 	background:#4D90FE;
 	color:#fff;
 	border: 0px;
+	width:204px;
+	height:40px;
 }
 
 .intro{
 	margin:20px;
 	padding: 20px;
+	background: #f0f0f0;
+	display: none;
 }

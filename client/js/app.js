@@ -36,7 +36,7 @@ $(document).ready(function(){
   localStorage.setItem("votedata_str",'');
   localStorage.setItem("connect",'');
   //ajax test
-  var connect={server:"192.168.1.8",port:"3000"};
+  var connect={server:"192.168.80.177",port:"3000"};
   localStorage.setItem("connect",JSON.stringify(connect));
   
   //登入界面
@@ -51,7 +51,7 @@ $(document).ready(function(){
     save_data("login="+login+"&password="+password);
     //localStorage.setItem("votedata_str", "login="+login+"&password="+password);
     if(login == '' || password == ''){
-      jQuery("p.intro").text("用户名和密码必须填写。").addClass('error');
+      jQuery("p.intro").text("用户名和密码必须填写。").addClass('error').show('slow');
     }
     else{
       login_load(connect);
@@ -69,7 +69,7 @@ function login_load(connect){
     type:"GET",
     url:"http://" + connect.server + ":" + connect.port +"/vote/api_opened/"+connect.login+"/"+connect.password,
     error: function(jqXHR, textStatus, errorThrown){
-      $("p.intro").text("登录失败,错误信息：无法与服务器 "+connect.server+" 正常通信。").addClass("error");
+      $("p.intro").text("登录失败,错误信息：无法与服务器 "+connect.server+" 正常通信。").addClass("error").show('slow');
     },
     success: function(doc){
       if(doc.status == 'success'){
@@ -79,7 +79,7 @@ function login_load(connect){
         loadhome(doc.data);
       }
       if(doc.status == 'error'){
-        jQuery("p.intro").text("登录失败。原因："+doc.info).addClass('error');
+        jQuery("p.intro").text("登录失败。原因："+doc.info).addClass('error').show('slow');
       }
     }
   });
@@ -122,13 +122,14 @@ function loadhome(data){
   //加入一个计数器
   data.count = 0;
 //绑定进入事件 ?? why not !!!
-  jQuery("#votenow").bind("click",data,load_ballot);
+  //jQuery("#votenow").bind("click",data,load_ballot);
+  load_ballot(data);
 }
 
 
 //显示选票表单
-function load_ballot(e) {
-    var data = e.data;
+function load_ballot(data) {
+    //var data = e.data;
     //count is only a temp  data.    
     var count = data.count;
     //alert(data.count);
