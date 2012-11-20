@@ -154,8 +154,19 @@ nav, article {
 	line-height:20px;
 	text-align:center;
 	border:1px solid #aaa;
+	padding:5px;
+	background-repeat: no-repeat;
+	background-position: center center;
 }
-
+#contentScroller li.vote:hover{
+	background-color: blue;
+}
+#contentScroller li.vote input{
+	display: none;
+}
+#contentScroller li.vote.active{
+	background-color: red;
+}
 .messagebox{
 	background: #f0f0f0;
 	padding:10px;
@@ -189,3 +200,6 @@ nav, article {
 	background: #f0f0f0;
 	display: none;
 }
+
+
+

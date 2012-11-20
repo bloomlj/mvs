@@ -20,12 +20,13 @@
 		<header>选票单</header>
 		<nav id="navWrapper">
 			<ul id="navScroller">
-				<li>Option 1</li>
-				<li>Option 2</li>
-				<li>Option 3</li>
-				<li>Option 4</li>
-				<li>Option 5</li>
-				<li>Option 6</li>
+				<script id="sidenav-tpl" type="text/template">
+					<% _.each(sections,function(section,i){%>
+					<li><a href="<%= i%>"><%= section.title%></a>
+					<span class="subtitle"><%= section.subtitle%></span>
+					</li>
+					<% });%>
+				</script>
 			</ul>
 		</nav>
 	</div>
@@ -48,7 +49,7 @@
 				 	<ul id="votelist" class="vote">
 				 		<h2 class="messagebox"><%= group.title%>最多选择<%= group.max%>个人</h2> 
 				 		<% _.each(group.candidates,function(candidate,j){%>
-				 			<li class="vote" style="background:#ccc url('images/blank_photo.jpg') no-repeat top left;">
+				 			<li class="vote" style="background-image:url('images/blank_photo.jpg');" >
 					 			<input type="checkbox" name="answer[<%= candidate.org%>][<%= candidate.name%>][votevalue]"  value="1" id="checkbox-<%= i%>" />
 					 			<%= candidate.name%> - <%= candidate.org%>
 				 			</li>
@@ -86,11 +87,11 @@
 				<button  class="btn btn-primary" type="button"   id="votenow">开始</button>
 			  </script>
 
-
 			  </form>
 		     <script id="voteresult-tpl" type="text/template">
 				状态：<%= status%>
 			  </script>
+
 
 			</div>
 		</article>

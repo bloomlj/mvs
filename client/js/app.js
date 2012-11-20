@@ -13,25 +13,6 @@ $(document).ready(function(){
     var scrollNav = new iScroll('navWrapper');
     document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
 
-  //function loaded() {
-  //   scrollContent = new iScroll('contentWrapper', {
-  //   snap: 'li',
-  //   momentum: false,
-  //   hScrollbar: false,
-  //   useTransform: false,
-  //   vScrollbar: false,
-  //   onBeforeScrollStart: function (e) {
-  //     var target = e.target;
-  //     while (target.nodeType != 1) target = target.parentNode;
-
-  //     if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA')
-  //       e.preventDefault();
-  //   }
-  // });
-
-  //}
-
-
   //clear db
   localStorage.setItem("votedata_str",'');
   localStorage.setItem("connect",'');
@@ -41,7 +22,6 @@ $(document).ready(function(){
   
   //登入界面
   jQuery("#loginnow").bind('click',connect,function(){
-
 
     //var formstr = $("form#voteform").serialize();
     var login = $("input[name='login']").val();
@@ -84,18 +64,6 @@ function login_load(connect){
     }
   });
 
-  // jQuery.getJSON("http://" + connect.server + ":" + connect.port +"/vote/api_opened/"+connect.login+"/"+connect.password,function(doc){
-  //   if(doc.status == 'success'){
-  //     doc.data.login = connect.login;
-  //     doc.data.password = connect.password;
-  //     save_data("vote_id="+doc.data._id+"&vote_name="+doc.data.name+"&vote_vtype="+doc.data.vtype);
-  //     loadhome(doc.data);
-  //   }
-  //   if(doc.status == 'error'){
-  //     jQuery("p.intro").text("登录失败。原因："+doc.info).addClass('error');
-  //   }
-
-  // });
 }
 
 // when data get ,then load home page.
@@ -123,17 +91,18 @@ function loadhome(data){
   data.count = 0;
 //绑定进入事件 ?? why not !!!
   //jQuery("#votenow").bind("click",data,load_ballot);
+  load_sidenav(data);
   load_ballot(data);
 }
 
+function load_sidenav(data){
+  tplrender(jQuery("#sidenav-tpl"),data);
+}
 
 //显示选票表单
 function load_ballot(data) {
-    //var data = e.data;
-    //count is only a temp  data.    
+   
     var count = data.count;
-    //alert(data.count);
-    //alert(data.sections.length);
 
     if(count > 0) {
       //绑定保存选票数据
@@ -149,6 +118,16 @@ function load_ballot(data) {
       }
       if(data.vtype=="vote") {
         tplrender(jQuery("#votesection-tpl"),data.sections[count]);
+        jQuery("#contentScroller li.vote").bind("click",function(){
+          if($(this).children("input").attr("checked") == "checked"){
+            $(this).children("input").removeAttr("checked");
+            $(this).removeClass("active");
+          }else{
+            $(this).children("input").attr("checked","checked");
+            $(this).addClass("active");
+          }
+          
+        });
       }
       data.count +=1;
     }else{
@@ -162,10 +141,8 @@ function load_ballot(data) {
         //clear db
         localStorage.setItem("votedata_str",'');
       }));
-      //jQuery("#votenow").siblings('.ui-btn-inner').children('.ui-btn-text').text("完毕，点此发送投票结果。");
-      //jQuery("#votenow").parent('.ui-btn-up-c').text("完毕，点此发送投票结果。");
-    }
 
+    }
 }
 
 
@@ -190,17 +167,12 @@ function post_form(callback){
    else jQuery("p.intro").text("出错啦。");
 }
 
-
 //tpl_el: tpl_element like $("xxx_id")  data: json data to bind.
- function tplrender(tpl_el,data) {
+ function tplrender(tpl_el,data,callback) {
     var votenowtmp = _.template(tpl_el.text());
-    //alert(tpl_el.text());
     var votenowstr = votenowtmp(data);
-    //tpl_el.parent().append(votenowstr).trigger("create");
-   //tpl_el.after(votenowstr).parent().trigger("create");
    tpl_el.after(votenowstr).parent();
+   callback;
  }
-
-
 
 
