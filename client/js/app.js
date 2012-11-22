@@ -17,7 +17,7 @@ $(document).ready(function(){
   localStorage.setItem("votedata_str",'');
   localStorage.setItem("connect",'');
   //ajax test
-  var connect={server:"192.168.80.177",port:"3000"};
+  var connect={server:"192.168.80.177",port:"80"};
   localStorage.setItem("connect",JSON.stringify(connect));
   
   //登入界面
@@ -70,7 +70,7 @@ function login_load(connect){
 function loadhome(data){
 
   //alert(data.login);
-  localStorage.setItem("vote", data);
+  localStorage.setItem("vote",JSON.stringify(data));
   //move login form
   jQuery("#login").remove();
   //show sidebar nav
@@ -86,23 +86,24 @@ function loadhome(data){
   var welcomestr = welcometmp({sectioncount : data.sections.length});
   jQuery("p.intro").text(welcomestr);
  //显示开始按钮
-  tplrender(jQuery("#votenow-tpl"));
+  tplrender("votenow-tpl");
   //加入一个计数器
-  data.count = 0;
+  //data.count = 0;
 //绑定进入事件 ?? why not !!!
   //jQuery("#votenow").bind("click",data,load_ballot);
   load_sidenav(data);
-  load_ballot(data);
+  load_ballot(0);
 }
 
 function load_sidenav(data){
-  tplrender(jQuery("#sidenav-tpl"),data);
+  tplrender("sidenav-tpl",data);
 }
 
 //显示选票表单
-function load_ballot(data) {
+function load_ballot(count) {
    
-    var count = data.count;
+    var data = JSON.parse(localStorage.getItem("vote"));
+    //alert(data.sections.length);
 
     if(count > 0) {
       //绑定保存选票数据
@@ -110,14 +111,14 @@ function load_ballot(data) {
     }
     //count is a temp var to count the sections array ,so when the value is larger than the array length,STOP RENDER.
     if(count < data.sections.length){
-      jQuery("#votenow").siblings('.ui-btn-inner').children('.ui-btn-text').text("下一单");
+      //jQuery("#votenow").siblings('.ui-btn-inner').children('.ui-btn-text').text("下一单");
       data.sections[count].count = count;
       if(count > 0 ) jQuery("div#section-"+(count -1)).remove();
       if(data.vtype=="mark") {
-        tplrender(jQuery("#marksection-tpl"),data.sections[count]);
+        tplrender("marksection-tpl",data.sections[count]);
       }
       if(data.vtype=="vote") {
-        tplrender(jQuery("#votesection-tpl"),data.sections[count]);
+        tplrender("votesection-tpl",data.sections[count]);
         jQuery("#contentScroller li.vote").bind("click",function(){
           if($(this).children("input").attr("checked") == "checked"){
             $(this).children("input").removeAttr("checked");
@@ -132,10 +133,10 @@ function load_ballot(data) {
       data.count +=1;
     }else{
       jQuery("#votenow").parent('.ui-btn-up-c').remove();
-      tplrender(jQuery("#votesubmit-tpl"));
+      tplrender("votesubmit-tpl");
       jQuery("#votesubmit").bind("click",post_form(function(msg){
         //alert(msg.status);
-        tplrender(jQuery("#voteresult-tpl"),{"status":msg.status});
+        tplrender("voteresult-tpl",{"status":msg.status});
         //remove form
         jQuery("#voteform").remove();
         //clear db
@@ -168,10 +169,13 @@ function post_form(callback){
 }
 
 //tpl_el: tpl_element like $("xxx_id")  data: json data to bind.
- function tplrender(tpl_el,data,callback) {
-    var votenowtmp = _.template(tpl_el.text());
+ function tplrender(tpl_id,data,callback) {
+
+    jQuery(".by_"+tpl_id).remove();
+    var votenowtmp = _.template(jQuery("#"+tpl_id).text());
     var votenowstr = votenowtmp(data);
-   tpl_el.after(votenowstr).parent();
+   jQuery("#"+tpl_id).after(votenowstr);
+   jQuery("#"+tpl_id).next().addClass("by_"+tpl_id);
    callback;
  }
 

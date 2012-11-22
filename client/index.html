@@ -22,7 +22,7 @@
 			<ul id="navScroller">
 				<script id="sidenav-tpl" type="text/template">
 					<% _.each(sections,function(section,i){%>
-					<li><a href="<%= i%>"><%= section.title%></a>
+					<li><a href="javascript:load_ballot(<%= i%>);"><%= section.title%></a>
 					<span class="subtitle"><%= section.subtitle%></span>
 					</li>
 					<% });%>
