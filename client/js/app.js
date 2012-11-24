@@ -180,3 +180,7 @@ function post_form(callback){
  }
 
 
+function showValue(obj)
+{
+  $(obj).next().html(obj.value);
+}

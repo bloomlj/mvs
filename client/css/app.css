@@ -203,3 +203,28 @@ nav, article {
 
 
 
+input[type="range"] {
+    -webkit-appearance: none;
+    background-color: #f0f0f0;
+    height: 10px;
+    border:1px solid #;
+}
+ 
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;
+    top: -1px;
+    z-index: 1;
+    width: 30px;
+    height: 30px;
+ 
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    border-radius: 40px;
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ebf1f6), color-stop(50%,#abd3ee), color-stop(51%,#89c3eb), color-stop(100%,#d5ebfb));
+}
+
+
+
+
+
