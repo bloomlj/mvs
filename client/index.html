@@ -61,7 +61,7 @@
 				 		<ul id="marklist" class="mark">
 			 				<% _.each(group.orgs,function(org,k){%>
 			 				<% if(!_.isNull(org)){%>
-			 					<li class="mark">
+			 					<li class="mark mark-org">
 			 					<h3><%= org.fullname%></h3>
 			 					<% _.each(group.questions,function(question,j){%>
 									<label for="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>"><%= question.text%>:</label>
