@@ -5,8 +5,6 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 	<link rel="stylesheet"  href="css/app.css" />
-
-
 </head>
 <body>
 
@@ -22,6 +20,7 @@
 					</li>
 					<% });%>
 				</script>
+				<li><button  type="button" data-theme="e" id="votesubmit">发送投票结果</button></li>
 			</ul>
 		</nav>
 	</div>
@@ -65,7 +64,7 @@
 			 					<h3><%= org.fullname%></h3>
 			 					<% _.each(group.questions,function(question,j){%>
 									<label for="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>"><%= question.text%>:</label>
-			   						<input type="range" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="showValue(this)"/><span class="rangevalue"></span>
+			   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" />
 								<% });%>
 			   					</li>
 			 				<% }%>
@@ -75,12 +74,7 @@
 				 </div>  
 				</script>
 				
-			  <script id="votesubmit-tpl" type="text/template">
-				<button  type="button" data-theme="e" id="votesubmit">完毕，点此发送投票结果。</button>
-			  </script>
-			  <script id="votenow-tpl" type="text/template">
-				<button  class="btn btn-primary" type="button"   id="votenow">开始</button>
-			  </script>
+
 
 			  </form>
 		     <script id="voteresult-tpl" type="text/template">

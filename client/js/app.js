@@ -1,22 +1,6 @@
 $(document).ready(function(){
 
 
-    //$("#sidebar").hide();
-    var scrollNav = new iScroll('navWrapper');
-    document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-
-    
-    var scrollContent = new iScroll('contentWrapper',{
-        onBeforeScrollStart: function (e) {
-        var target = e.target;
-        while (target.nodeType != 1) target = target.parentNode;
-
-        if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA'&& target.tagName != 'BUTTON')
-          e.preventDefault();
-        }
-    });
-
-
   //clear db
   localStorage.setItem("votedata_str",'');
   localStorage.setItem("connect",'');
@@ -89,18 +73,27 @@ function loadhome(data){
   var welcometmp = _.template("本次会议共有选票单<%= sectioncount%>个。");
   var welcomestr = welcometmp({sectioncount : data.sections.length});
   jQuery("p.intro").text(welcomestr);
- //显示开始按钮
-  tplrender("votenow-tpl");
-  //加入一个计数器
-  //data.count = 0;
-//绑定进入事件 ?? why not !!!
-  //jQuery("#votenow").bind("click",data,load_ballot);
+
   load_sidenav(data);
   load_ballot(0);
+
+  var scrollNav = new iScroll('navWrapper');
+  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+  var scrollContent = new iScroll('contentWrapper',{
+    onBeforeScrollStart: function (e) {
+    var target = e.target;
+    while (target.nodeType != 1) target = target.parentNode;
+
+    if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA'&& target.tagName != 'BUTTON')
+      e.preventDefault();
+    }
+  });
 }
 
 function load_sidenav(data){
   tplrender("sidenav-tpl",data);
+
 }
 
 //显示选票表单
@@ -183,8 +176,3 @@ function post_form(callback){
    callback;
  }
 
-
-function showValue(obj)
-{
-  $(obj).next().html(obj.value);
-}
