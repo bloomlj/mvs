@@ -5,6 +5,8 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 	<link rel="stylesheet"  href="css/app.css" />
+	<link rel="stylesheet"  href="libs/jquery.slider/jquery.slider.min.css" />
+	
 </head>
 <body>
 
@@ -40,8 +42,8 @@
 				<script id="votesection-tpl" type="text/template">
 				<div id="section-<%= count%>">
 				 <%  _.each(groups, function(group,i) {  %>
+				 	<div class="messagebox"><%= group.title%>最多选择<%= group.max%>个人</div> 
 				 	<ul id="votelist" class="vote">
-				 		<h2 class="messagebox"><%= group.title%>最多选择<%= group.max%>个人</h2> 
 				 		<% _.each(group.candidates,function(candidate,j){%>
 				 			<li class="vote" style="background-image:url('images/blank_photo.jpg');" >
 					 			<input type="checkbox" name="answer[<%= candidate.org%>][<%= candidate.name%>][votevalue]"  value="1" id="checkbox-<%= i%>" />
@@ -56,7 +58,7 @@
 				<script id="marksection-tpl" type="text/template">
 				<div  id="section-<%= count%>">
 				 <%  _.each(groups, function(group,i) {  %>
-				 		<h2 class="messagebox"><%= group.title%></h2>
+				 		<div class="messagebox"><%= group.title%></div>
 				 		<ul id="marklist" class="mark">
 			 				<% _.each(group.orgs,function(org,k){%>
 			 				<% if(!_.isNull(org)){%>
@@ -64,7 +66,7 @@
 			 					<h3><%= org.fullname%></h3>
 			 					<% _.each(group.questions,function(question,j){%>
 									<label for="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>"><%= question.text%>:</label>
-			   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" />
+			   						<input type="number" class="rangeinput SliderSingle" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" />
 								<% });%>
 			   					</li>
 			 				<% }%>
@@ -91,6 +93,7 @@
 	<script src="cordova-2.2.0.js"></script>
 	<script src="libs/jquery/jquery-1.7.1.js"></script>
 	<script src="libs/iscroll/iscroll.js"></script>
+	<script src="libs/jquery.slider/jquery.slider.min.js"></script>
 	<script src="js/underscore-min.js"></script>
 	<script src="js/app.js"></script>
 
