@@ -226,6 +226,11 @@ input[type="range"]::-webkit-slider-thumb {
 .mark-org label{
 	display: block;
 }
+.mark-org-title{
+	background: #fff;
+	border-top: 1px solid blue;
+}
+
 
 
 

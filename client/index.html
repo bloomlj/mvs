@@ -63,7 +63,7 @@
 			 				<% _.each(group.orgs,function(org,k){%>
 			 				<% if(!_.isNull(org)){%>
 			 					<li class="mark mark-org">
-			 					<h3><%= org.fullname%></h3>
+			 					<div class="mark-org-title"><%= org.fullname%></div>
 			 					<% _.each(group.questions,function(question,j){%>
 									<label for="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>"><%= question.text%>:</label>
 			   						<input type="number" class="rangeinput SliderSingle" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" />
