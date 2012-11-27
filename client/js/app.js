@@ -5,7 +5,7 @@ $(document).ready(function(){
   localStorage.setItem("votedata_str",'');
   localStorage.setItem("connect",'');
   //ajax test
-  var connect={server:"192.168.1.8",port:"80"};
+  var connect={server:"192.168.80.177",port:"80"};
   localStorage.setItem("connect",JSON.stringify(connect));
   
   //登入界面
@@ -176,6 +176,15 @@ function post_form(callback){
     var votenowstr = votenowtmp(data);
    jQuery("#"+tpl_id).after(votenowstr);
    jQuery("#"+tpl_id).next().addClass("by_"+tpl_id);
+   sliderrender();
    callback;
+
  }
 
+
+
+function sliderrender(){
+   _.each(jQuery(".SliderSingle"),function(el){
+       $(el).slider({ from: el.min, to: el.max, step: 0.5, round: 1, format: { format: '##.0', locale: 'cn' }, dimension: '&nbsp;分', skin: "plastic" });
+   });
+}
