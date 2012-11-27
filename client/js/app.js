@@ -77,9 +77,12 @@ function loadhome(data){
   load_sidenav(data);
   load_ballot(0);
 
-  var scrollNav = new iScroll('navWrapper');
-  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-
+  var scrollNav = new iScroll('navWrapper',{
+    onBeforeScrollStart: function (e) {
+      e.preventDefault();
+    }
+  });
+  
   var scrollContent = new iScroll('contentWrapper',{
     onBeforeScrollStart: function (e) {
     var target = e.target;
