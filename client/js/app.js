@@ -5,7 +5,7 @@ $(document).ready(function(){
   localStorage.setItem("votedata_str",'');
   localStorage.setItem("connect",'');
   //ajax test
-  var connect={server:"192.168.80.177",port:"80"};
+  var connect={server:"192.168.1.8",port:"80"};
   localStorage.setItem("connect",JSON.stringify(connect));
   
   //登入界面
