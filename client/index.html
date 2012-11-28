@@ -17,8 +17,10 @@
 			<ul id="navScroller">
 				<script id="sidenav-tpl" type="text/template">
 					<% _.each(sections,function(section,i){%>
-					<li><a href="javascript:load_ballot(<%= i%>);"><%= section.title%></a>
+					<li class="sidebaritem"><a href="javascript:load_ballot(<%= i%>);"><%= section.title%></a>
+					<!--
 					<span class="subtitle"><%= section.subtitle%></span>
+					-->
 					</li>
 					<% });%>
 				</script>
@@ -42,15 +44,20 @@
 				<script id="votesection-tpl" type="text/template">
 				<div id="section-<%= count%>">
 				 <%  _.each(groups, function(group,i) {  %>
-				 	<div class="messagebox"><%= group.title%>最多选择<%= group.max%>个人</div> 
+				 	<div class="group">
+				 	<div class="group-title"><%= group.title%>最多选择<%= group.max%>个人</div> 
 				 	<ul id="votelist" class="vote">
 				 		<% _.each(group.candidates,function(candidate,j){%>
-				 			<li class="vote" style="background-image:url('images/blank_photo.jpg');" >
+				 			<li class="group-item">
+				 				<label><%= candidate.name%>(<%= candidate.org%>)
+				 				<div class="checkbox_widget">
 					 			<input type="checkbox" name="answer[<%= candidate.org%>][<%= candidate.name%>][votevalue]"  value="1" id="checkbox-<%= i%>" />
-					 			<%= candidate.name%> - <%= candidate.org%>
+					 			</div>
+					 			</label>
 				 			</li>
 				    	<% });%>
 				    </ul>
+				    </div><!--end of .group-->
 				 <% }); %>  
 				 </div> 
 				</script>
@@ -58,20 +65,27 @@
 				<script id="marksection-tpl" type="text/template">
 				<div  id="section-<%= count%>">
 				 <%  _.each(groups, function(group,i) {  %>
-				 		<div class="messagebox"><%= group.title%></div>
+				 		<div class="group">
+				 		<div class="group-title"><%= group.title%></div>
 				 		<ul id="marklist" class="mark">
 			 				<% _.each(group.orgs,function(org,k){%>
 			 				<% if(!_.isNull(org)){%>
-			 					<li class="mark mark-org">
-			 					<div class="mark-org-title"><%= org.fullname%></div>
+			 					<li class="mark mark-org group-item">
+			 					<div class="group-org"><%= org.fullname%></div>
 			 					<% _.each(group.questions,function(question,j){%>
-									<label for="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>"><%= question.text%>:</label>
-			   						<input type="number" class="rangeinput SliderSingle" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" />
+									<label for="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>"><%= question.text%>
+									<div class="rangeinput_widget">
+			   						<a href="#" onclick="rangedecrease(this);">-</a>
+			   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" />
+			   						<a href="#" onclick="rangeadd(this);">+</a>
+			   						</div>
+			   						</label>
 								<% });%>
 			   					</li>
 			 				<% }%>
 				    		<% });%>
 				    	</ul>
+				    	</div><!--end of .group-->
 				 <% }); %>  
 				 </div>  
 				</script>

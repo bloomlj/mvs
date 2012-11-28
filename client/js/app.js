@@ -8,6 +8,12 @@ $(document).ready(function(){
   var connect={server:"192.168.1.8",port:"80"};
   localStorage.setItem("connect",JSON.stringify(connect));
   
+
+  //for test use
+  connect.login = 'lijun';
+  connect.password = 'lj1984';
+  login_load(connect);
+
   //登入界面
   jQuery("#loginnow").bind('click',connect,function(){
 
@@ -176,15 +182,29 @@ function post_form(callback){
     var votenowstr = votenowtmp(data);
    jQuery("#"+tpl_id).after(votenowstr);
    jQuery("#"+tpl_id).next().addClass("by_"+tpl_id);
-   sliderrender();
    callback;
 
  }
 
 
 
-function sliderrender(){
-   _.each(jQuery(".SliderSingle"),function(el){
-       $(el).slider({ from: el.min, to: el.max, step: 0.5, round: 1, format: { format: '##.0', locale: 'cn' }, dimension: '&nbsp;分', skin: "plastic" });
+function rangeinput_render(selector) {
+    _.each(jQuery(selector),function(el){
+     // $(el).before();
+      // $(el).slider({ from: el.min, to: el.max, step: 0.5, round: 1, format: { format: '##.0', locale: 'cn' }, dimension: '&nbsp;分', skin: "plastic" });
    });
 }
+
+function rangedecrease(el) {
+  var current = $(el).next().val();
+  var min = $(el).next().attr('min');
+  if(current > min) $(el).next().val(current-1);
+  return false;
+}
+function rangeadd(el) {
+  var current = $(el).prev().val();
+  var max = $(el).prev().attr('max');
+  if(current < max)   $(el).prev().val(parseInt(current)+1);
+  return false;
+}
+
