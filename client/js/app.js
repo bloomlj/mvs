@@ -5,12 +5,19 @@ $(document).ready(function(){
   localStorage.setItem("connect",'');
   localStorage.setItem("userinput",'{}');
   //ajax test
-  var connect={server:"192.168.80.177",port:"80"};
+  var connect={server:"192.168.1.8",port:"80"};
+
+  //for test use
+
   connect.login = 'lijun';
   connect.password = 'lj1984';
+  //for test use end
+
   localStorage.setItem("connect",JSON.stringify(connect));
-  //for test use
+
+//for test use
   login_load(connect);
+  //for test use end
 
   //登入界面
   jQuery("#loginnow").bind('click',connect,function(){
@@ -37,7 +44,6 @@ $(document).ready(function(){
 
 function login_load(connect){
   //login
-  //alert("http://" + connect.server + ":" + connect.port +"/vote/api_opened/"+login+"/"+password);
   $.ajax({
     type:"GET",
     url:"http://" + connect.server + ":" + connect.port +"/vote/api_opened/"+connect.login+"/"+connect.password,
@@ -78,9 +84,12 @@ function loadhome(data){
   load_sidenav(data);
   load_ballot(0);
 
-  var scrollNav = new iScroll('navWrapper');
-  document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-
+  var scrollNav = new iScroll('navWrapper',{
+    onBeforeScrollStart: function (e) {
+      e.preventDefault();
+    }
+  });
+  
   var scrollContent = new iScroll('contentWrapper',{
     onBeforeScrollStart: function (e) {
     var target = e.target;
@@ -163,6 +172,7 @@ function post_form(){
    jQuery("#"+tpl_id).next().addClass("by_"+tpl_id);
    callback;
  }
+
 
 function rangedecrease(el) {
   var current = $(el).next().val();
