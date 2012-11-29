@@ -1,17 +1,15 @@
 $(document).ready(function(){
 
-
   //clear db
-  localStorage.setItem("votedata_str",'');
+  localStorage.setItem("vote",'');
   localStorage.setItem("connect",'');
+  localStorage.setItem("userinput",'{}');
   //ajax test
   var connect={server:"192.168.80.177",port:"80"};
-  localStorage.setItem("connect",JSON.stringify(connect));
-  
-
-  //for test use
   connect.login = 'lijun';
   connect.password = 'lj1984';
+  localStorage.setItem("connect",JSON.stringify(connect));
+  //for test use
   login_load(connect);
 
   //登入界面
@@ -20,9 +18,10 @@ $(document).ready(function(){
     //var formstr = $("form#voteform").serialize();
     var login = $("input[name='login']").val();
     var password = $("input[name='password']").val();
+    var connect = JSON.parse(localStorage.getItem("connect"));
     connect.login = login;
     connect.password = password;
-    save_data("login="+login+"&password="+password);
+    localStorage.setItem("connect",JSON.stringify(connect));
     //localStorage.setItem("votedata_str", "login="+login+"&password="+password);
     if(login == '' || password == ''){
       jQuery("p.intro").text("用户名和密码必须填写。").addClass('error').show('slow');
@@ -47,9 +46,6 @@ function login_load(connect){
     },
     success: function(doc){
       if(doc.status == 'success'){
-        doc.data.login = connect.login;
-        doc.data.password = connect.password;
-        save_data("vote_id="+doc.data._id+"&vote_name="+doc.data.name+"&vote_vtype="+doc.data.vtype);
         loadhome(doc.data);
       }
       if(doc.status == 'error'){
@@ -63,7 +59,6 @@ function login_load(connect){
 // when data get ,then load home page.
 function loadhome(data){
 
-  //alert(data.login);
   localStorage.setItem("vote",JSON.stringify(data));
   //move login form
   jQuery("#login").remove();
@@ -106,14 +101,9 @@ function load_sidenav(data){
 function load_ballot(count) {
    
     var data = JSON.parse(localStorage.getItem("vote"));
-    //alert(data.sections.length);
 
-    if(count > 0) {
-      //绑定保存选票数据
-      save_data($("form#voteform").serialize());
-    }
     //count is a temp var to count the sections array ,so when the value is larger than the array length,STOP RENDER.
-    if(count < data.sections.length){
+    if(count < data.sections.length && count >= 0){
       //jQuery("#votenow").siblings('.ui-btn-inner').children('.ui-btn-text').text("下一单");
       data.sections[count].count = count;
       if(count > 0 ) jQuery("div#section-"+(count -1)).remove();
@@ -133,42 +123,34 @@ function load_ballot(count) {
           
         });
       }
+      
+
       data.count +=1;
-    }else{
-      jQuery("#votenow").parent('.ui-btn-up-c').remove();
-      tplrender("votesubmit-tpl");
-      jQuery("#votesubmit").bind("click",post_form(function(msg){
-        //alert(msg.status);
-        tplrender("voteresult-tpl",{"status":msg.status});
-        //remove form
-        jQuery("#voteform").remove();
-        //clear db
-        localStorage.setItem("votedata_str",'');
-      }));
 
-    }
+
+    }else{ }
 }
 
 
-function save_form_data(){
+function post_form(){
 
-  var votedata_str = localStorage.getItem("votedata_str") + "&" + $("form#voteform").serialize();
-  localStorage.setItem("votedata_str",votedata_str);
-  console.log($("form#voteform").serialize()); 
-}
-
-function save_data(serialize_str){
-
-  var votedata_str = localStorage.getItem("votedata_str") + "&" + serialize_str;
-  localStorage.setItem("votedata_str",votedata_str);
-  console.log($("form#voteform").serialize()); 
-}
-
-function post_form(callback){
+   var userinput = JSON.parse(localStorage.getItem("userinput"));
    var connect = JSON.parse(localStorage.getItem("connect"));
-   var votedata_str = "form=pad"+localStorage.getItem("votedata_str");
-   if(votedata_str)  $.post("http://"+connect.server+":"+connect.port+"/answer/api_create", votedata_str,callback);
-   else jQuery("p.intro").text("出错啦。");
+   var votedata = JSON.parse(localStorage.getItem("vote"));
+
+   var postdata = userinput;
+   postdata["login"] = connect.login;
+   postdata["password"] = connect.password;
+   postdata["vote_id"] = votedata._id;
+   postdata["vtype"] = votedata.vtype;
+   postdata["vote_name"] = votedata.name;
+   console.log(postdata);
+   $.post("http://"+connect.server+":"+connect.port+"/answer/api_create", postdata,function(msg){
+      alert(msg.status);
+      tplrender("voteresult-tpl",{"status":msg.status});
+      jQuery("#voteform").remove();
+   });
+   
 }
 
 //tpl_el: tpl_element like $("xxx_id")  data: json data to bind.
@@ -180,33 +162,49 @@ function post_form(callback){
    jQuery("#"+tpl_id).after(votenowstr);
    jQuery("#"+tpl_id).next().addClass("by_"+tpl_id);
    callback;
-
  }
-
-
-
-function sliderrender(){
-   _.each(jQuery(".SliderSingle"),function(el){
-       $(el).slider({ from: el.min, to: el.max, step: 0.5, round: 1, format: { format: '##.0', locale: 'cn' }, dimension: '&nbsp;分', skin: "plastic" });
-   });
-}
-
-function rangeinput_render(selector) {
-    _.each(jQuery(selector),function(el){
-     // $(el).before();
-      // $(el).slider({ from: el.min, to: el.max, step: 0.5, round: 1, format: { format: '##.0', locale: 'cn' }, dimension: '&nbsp;分', skin: "plastic" });
-   });
-}
 
 function rangedecrease(el) {
   var current = $(el).next().val();
   var min = $(el).next().attr('min');
-  if(current > min) $(el).next().val(current-1);
+  if(current > min) {
+    $(el).next().val(current-1);
+    saveinput($(el).next()[0]);
+  }
   return false;
 }
+
 function rangeadd(el) {
   var current = $(el).prev().val();
   var max = $(el).prev().attr('max');
-  if(current < max)   $(el).prev().val(parseInt(current)+1);
+  if(current < max){
+    $(el).prev().val(parseInt(current)+1);
+    saveinput($(el).prev()[0]);
+  }
+  
   return false;
+}
+
+function saveinput(el){
+  var userinput = JSON.parse(localStorage.getItem("userinput"));
+  //checkbox
+  if("checkbox" == $(el).attr("type")){
+    if("checked" == $(el).attr("checked")){
+      userinput[$(el).attr("name")] = $(el).val();
+    }else{
+      delete userinput[$(el).attr("name")];
+    }
+  }
+  //number
+  if("number" == $(el).attr("type")){
+      userinput[$(el).attr("name")] = $(el).val();
+  }
+  localStorage.setItem("userinput",JSON.stringify(userinput));
+
+  //debug
+  // console.log($(el).attr("type"));
+  //console.log(userinput);
+   // console.log(localStorage.getItem("userinput"));
+  // console.log($(el).attr("checked"));
+
 }

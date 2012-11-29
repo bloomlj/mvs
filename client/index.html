@@ -5,7 +5,6 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 	<link rel="stylesheet"  href="css/app.css" />
-	<link rel="stylesheet"  href="libs/jquery.slider/jquery.slider.min.css" />
 	
 </head>
 <body>
@@ -24,7 +23,7 @@
 					</li>
 					<% });%>
 				</script>
-				<li><button  type="button" data-theme="e" id="votesubmit">发送投票结果</button></li>
+				<li><a href="#submit" id="votesubmit" onclick="post_form();">发送投票结果</a></li>
 			</ul>
 		</nav>
 	</div>
@@ -51,7 +50,7 @@
 				 			<li class="group-item">
 				 				<label><%= candidate.name%>(<%= candidate.org%>)
 				 				<div class="checkbox_widget">
-					 			<input type="checkbox" name="answer[<%= candidate.org%>][<%= candidate.name%>][votevalue]"  value="1" id="checkbox-<%= i%>" />
+					 			<input type="checkbox" name="answer[<%= candidate.org%>][<%= candidate.name%>][votevalue]"  value="1" id="checkbox-<%= i%>" onchange="saveinput(this)" />
 					 			</div>
 					 			</label>
 				 			</li>
@@ -76,7 +75,7 @@
 									<label for="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>"><%= question.text%>
 									<div class="rangeinput_widget">
 			   						<a href="#" onclick="rangedecrease(this);">-</a>
-			   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" />
+			   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
 			   						<a href="#" onclick="rangeadd(this);">+</a>
 			   						</div>
 			   						</label>
@@ -104,12 +103,11 @@
 </div>
 
 
-	<script src="cordova-2.2.0.js"></script>
-	<script src="libs/jquery/jquery-1.7.1.js"></script>
-	<script src="libs/iscroll/iscroll.js"></script>
-	<script src="libs/jquery.slider/jquery.slider.min.js"></script>
-	<script src="js/underscore-min.js"></script>
-	<script src="js/app.js"></script>
+	<script src="cordova-2.2.0.js" type="text/javascript"></script>
+	<script src="libs/jquery/jquery-1.7.1.js" type="text/javascript"></script>
+	<script src="libs/iscroll/iscroll.js" type="text/javascript" ></script>
+	<script src="js/underscore-min.js" type="text/javascript"></script>
+	<script src="js/app.js" type="text/javascript"></script>
 
 
 </body>

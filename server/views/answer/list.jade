@@ -1,20 +1,19 @@
 extends ../layout
 
 block content
-    h1 全部投票/评价方案
-    a(href="/answer/add") 添加一条新评价方案
+    h1 投票结果
     table
         tr
             td ID
             td 投票 
-            td 投票人
+            td KEY
             td
         each doc in docs
             tr
                 td #{doc._id}
-                td #{doc.vote_name} - #{doc.vote_id} 
-                td #{doc.login}
+                td #{doc.vote_name}[#{doc.vote_id}] 
+                td #{doc.password}
                 td 
-                    a(href="/answer/#{doc._id}/edit") 修改
+                    a(href="/answer/#{doc._id}/show") 查看详细
                     a(href="/answer/#{doc._id}/destroy") 删除
 
