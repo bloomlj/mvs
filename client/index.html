@@ -74,9 +74,9 @@
 			 					<% _.each(group.questions,function(question,j){%>
 									<label for="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>"><%= question.text%>
 									<div class="rangeinput_widget">
-			   						<a href="#" onclick="rangedecrease(this);">-</a>
+			   						<a href="#" onclick="rangedecrease(this);"><img src="images/ic_action_turn_left.png" /></a>
 			   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
-			   						<a href="#" onclick="rangeadd(this);">+</a>
+			   						<a href="#" onclick="rangeadd(this);"><img src="images/ic_action_turn_right.png" /></a>
 			   						</div>
 			   						</label>
 								<% });%>

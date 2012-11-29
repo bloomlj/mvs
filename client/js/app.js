@@ -187,7 +187,7 @@ function rangedecrease(el) {
 function rangeadd(el) {
   var current = $(el).prev().val();
   var max = $(el).prev().attr('max');
-  if(current < max){
+  if(parseInt(current) < max){
     $(el).prev().val(parseInt(current)+1);
     saveinput($(el).prev()[0]);
   }

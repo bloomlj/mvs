@@ -104,7 +104,7 @@ nav, article {
 #navScroller > li {
 	padding:0 15px;
 	border-bottom:1px solid #ccc;
-	height:40px; line-height:40px;
+	height:60px; line-height:60px;
 }
 
 #contentScroller {
@@ -174,7 +174,10 @@ nav, article {
 }
 #contentScroller li.group-item label{
 	display: block;
-	padding:15px 5px 15px 4px;
+	height:64px;
+	line-height: 64px;
+	font-size:20px;
+	/*padding:15px 5px 15px 4px;*/
 	border-bottom:1px solid #ccc;
 }
 
@@ -244,8 +247,7 @@ input[type="range"]::-webkit-slider-thumb {
 	float:right;
 }
 .rangeinput_widget a{
-	font-size: 1.5em;
-	font-weight: bold;
+
 }
 
 
