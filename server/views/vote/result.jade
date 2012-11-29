@@ -5,11 +5,11 @@ block content
     table
         tr
             th 需要表头？
-        each org,org_name in answer
+        each questions,org_name in result
             tr
                 td #{org_name}
-                each question,question_name in answer[org_name]
-                    td #{question_name}: #{question.result}
+                each value,question_name in questions
+                    td #{question_name}: #{value.avg}
 
 
     script(src="/javascripts/jquery.flot.js")

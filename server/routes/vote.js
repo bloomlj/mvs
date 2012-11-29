@@ -42,7 +42,7 @@ exports.result = function(req, res){
 
         db.do('answer',function(collection){
         collection.find({'vote_id' : req.params.id}).toArray(function(err, docs) {
-        //console.dir(docs);
+        console.dir(docs);
 
 
         var result = {};
@@ -79,7 +79,6 @@ exports.result = function(req, res){
 
         
         if("vote" == vote.vtype){
-          var result = {};
           //process  vote
           for (var i = 0; i < docs.length; i++) {
             for (var org in docs[i].answer) {
@@ -107,13 +106,12 @@ exports.result = function(req, res){
             }
           }
 
-
         }
 
 
         console.dir(result);
         if (req.params.format == 'json') res.send(result);
-        else res.render('vote/result', result);
+        else res.render('vote/result', {'result':result});
        
         });
         });
