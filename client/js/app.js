@@ -233,15 +233,10 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady(){
     document.addEventListener("backbutton", function(e){
-       alert("确定要退出吗？");
-       e.preventDefault();
-       navigator.app.exitApp();
-       // if($.mobile.activePage.is('#homepage')){
-       //     e.preventDefault();
-       //     navigator.app.exitApp();
-       // }
-       // else {
-       //     //navigator.app.backHistory()
-       // }
+       r = confirm("确定要退出吗？");
+       if(r){
+        e.preventDefault();
+        navigator.app.exitApp();
+       }else{}
     }, false);
 }
