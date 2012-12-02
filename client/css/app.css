@@ -173,12 +173,8 @@ nav, article {
 	background-repeat: no-repeat;
 	background-position: center center;
 }
-#contentScroller li.vote input{
-	display: none;
-}
-#contentScroller li.vote.active{
-	background-color: #666;
-}
+
+
 #contentScroller li.group-item label{
 	display: block;
 	height:50px;
@@ -188,7 +184,9 @@ nav, article {
 	border-bottom:1px solid #ccc;
 }
 
-
+input[type="number"]{
+	width:2em;
+}
 
 
 #login{

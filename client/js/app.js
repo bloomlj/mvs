@@ -121,16 +121,6 @@ function load_ballot(count) {
       }
       if(data.vtype=="vote") {
         tplrender("votesection-tpl",data.sections[count]);
-        jQuery("#contentScroller li.vote").bind("click",function(){
-          if($(this).children("input").attr("checked") == "checked"){
-            $(this).children("input").removeAttr("checked");
-            $(this).removeClass("active");
-          }else{
-            $(this).children("input").attr("checked","checked");
-            $(this).addClass("active");
-          }
-          
-        });
       }
       
 
@@ -138,6 +128,22 @@ function load_ballot(count) {
 
 
     }else{ }
+    //load datasaved
+    var userinput = JSON.parse(localStorage.getItem("userinput"));
+    //console.log(userinput);
+    $("input").each(function(i){
+      //console.log($(this).val());
+      //console.log(userinput[this.name]);
+      if(typeof userinput[this.name] != "undefined"){
+        $(this).val(userinput[this.name]);
+        if( "checkbox" == $(this).attr("type")  && '1' == parseInt(userinput[this.name]) ){
+          $(this).attr("checked","checked");
+        }
+      }
+
+    });
+
+
 }
 
 
@@ -200,7 +206,9 @@ function saveinput(el){
   //checkbox
   if("checkbox" == $(el).attr("type")){
     if("checked" == $(el).attr("checked")){
-      userinput[$(el).attr("name")] = $(el).val();
+      //userinput[$(el).attr("name")] = $(el).val();
+      userinput[$(el).attr("name")] = 1;
+      console.log($(el).val());
     }else{
       delete userinput[$(el).attr("name")];
     }
@@ -213,8 +221,27 @@ function saveinput(el){
 
   //debug
   // console.log($(el).attr("type"));
-  //console.log(userinput);
+  console.log(userinput);
    // console.log(localStorage.getItem("userinput"));
   // console.log($(el).attr("checked"));
 
+}
+
+
+
+document.addEventListener("deviceready", onDeviceReady, false);
+
+function onDeviceReady(){
+    document.addEventListener("backbutton", function(e){
+       alert("确定要退出吗？");
+       e.preventDefault();
+       navigator.app.exitApp();
+       // if($.mobile.activePage.is('#homepage')){
+       //     e.preventDefault();
+       //     navigator.app.exitApp();
+       // }
+       // else {
+       //     //navigator.app.backHistory()
+       // }
+    }, false);
 }
