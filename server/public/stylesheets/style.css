@@ -17,3 +17,11 @@ input[type="number"]{
 .question{
 	background-color:#f0f0f0 ;
 }
+
+/*for vote*/
+ul#votelist{margin-top: 10px;}
+
+ul#votelist div.thumbnail{
+	background-color: #f0f0f0;
+	padding:10px;
+}

@@ -1,22 +1,32 @@
 extends ../layout
 block content
     h1 全部投票记录
-    a(href="/vote/add") 添加投票/评价
-    // a(href="/vote/add/mark") 添加新评分
-    ol
+    a.btn(href="/vote/add") 
+       i.icon-file
+       | 添加投票/评价
+    ul#votelist.thumbnails
         for doc in docs
-           li #{doc.name}#{doc.vtype}
-            span.metainfo #{doc.created_date}
-            .note #{doc.note}
-            .actions
-                a(href="/vote/#{doc._id}/edit") 修改
-                a(href="/vote/#{doc._id}/destroy") 删除
-                a(href="/vote/#{doc._id}/result") 查看投票结果
-                form(action="/vote/#{doc._id}",method="post")
-                    input(type="hidden",name="_method",value="put")
-                    if doc.isopen == 'no'
-                        input(type="hidden",name="isopen",value="yes")
-                        input(type="submit",value="启动")
-                    else
-                        input(type="hidden",name="isopen",value="no")
-                        input(type="submit",value="停止")                        
+           li.span6
+            div.thumbnail
+                h4 #{doc.name}#{doc.vtype}
+                span.metainfo #{doc.created_date}
+                .note #{doc.note}
+                .actions
+                    |操作：
+                    a.btn(href="/vote/#{doc._id}/edit") 
+                        i.icon-pencil
+                        |修改
+                    a.btn(href="/vote/#{doc._id}/destroy") 
+                        i.icon-remove
+                        |删除
+                    a.btn(href="/vote/#{doc._id}/result") 
+                        i.icon-list
+                        |查看结果
+                    form(action="/vote/#{doc._id}",method="post")
+                        input(type="hidden",name="_method",value="put")
+                        if doc.isopen == 'no'
+                            input(type="hidden",name="isopen",value="yes")
+                            input.btn.btn-inverse(type="submit",value="启动")
+                        else
+                            input(type="hidden",name="isopen",value="no")
+                            input.btn.btn-danger(type="submit",value="停止")                        
