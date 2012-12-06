@@ -5,7 +5,7 @@ $(document).ready(function(){
   localStorage.setItem("connect",'');
   localStorage.setItem("userinput",'{}');
   //ajax test
-  var connect={server:"192.168.1.10",port:"80"};
+  var connect={server:"192.168.1.8",port:"80"};
 
   //for test use
 

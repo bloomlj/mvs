@@ -11,13 +11,21 @@ input[type="number"]{
 .section{
 	background-color: #f0f0aa;
 }
+.section>legend{
+    background-color: #ccc;
+}
 .group{
 	background-color:#f0f0dd;
+}
+.group>legend{
+    background-color: #ddd;
 }
 .question{
 	background-color:#f0f0f0 ;
 }
-
+.group>question{
+    background-color: #eee;
+}
 /*for vote*/
 ul#votelist{margin-top: 10px;}
 
