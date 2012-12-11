@@ -1,16 +1,153 @@
-extends  ../layout
+extends ../layout
 block content
-  h1 修改投票
-  form(method="post",action="/vote/#{_id}")
-    p
-      label(for="name") 名称
-    p
-      input#name(name="name",type="text",value="#{name}")
-    p 
-      label(for="note") 说明
-    p
-      textarea#note(name="note") #{note}
-    p
-      input(type="hidden",name="_method",value="put")
-      input(type="submit")
+  h1 添加一次投票
 
+  form(method="post",action="/vote")
+    #setp1.well
+      <h2>填写基本信息</h2>
+      label(for="title") 名称:
+        input#name(name="name",type="text")
+      label 类型:
+        select#vtype(name="vtype")
+          option(value="") 
+          option(value="vote") 投票
+          option(value="mark") 评分
+      label(for="note") 说明:
+        textarea#note(name="note")
+      a#btn_to_setp2.btn(href="#setp2")  下一步
+
+    #setp2.well
+      <h2>编辑选票</h2>
+      //选票单 sections
+      fieldset.section
+        ///legend 选票单
+        label.span6 标题: 
+          input(name="sections[0][title]",type="text")
+        label.span6 副标题:
+          input(name="sections[0][subtitle]",type="text")
+        //子选票单 groups
+        .group.row
+          fieldset.group.span6
+            ///legend 组
+            input(name="sections[0][groups][0][title]",placeholder="标题")
+            //候选人
+            fieldset.forvote.candidate
+              //legend 候选人
+              input.span2(name="sections[0][groups][0][candidates][0][org]",type="text",placeholder="单位")
+              input.span1(name="sections[0][groups][0][candidates][0][name]",type="text",placeholder="姓名")
+              //input(name="sections[0][groups][0][candidates][0][photo]",type="text")
+              a(href="javascript:return false;",onclick="remove_field(this)")  删除
+            a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
+            label.forvote 选举控制参数
+              span.count
+              span 最多选几
+              input(name="sections[0][groups][0][max]",type="number")
+              span 最少选几
+              input(name="sections[0][groups][0][min]",type="number")
+            //参与评价的单位              
+            fieldset.formark.org
+              legend 参与评价的单位
+              each org,i in orgs
+                label.checkbox.inline
+                  input(type="checkbox",name="sections[0][groups][0][orgs][#{i}][fullname]",value="#{org.name}")
+                  | #{org.name}
+            //评价指标
+            fieldset.formark.question
+              legend 评价指标
+              //label 指标代码
+              //  input(name="sections[0][groups][0][questions][0][code]",type="text")
+              label 指标内容
+                input(name="sections[0][groups][0][questions][0][text]",type="text")
+              label 分数
+                input.input-mini(name="sections[0][groups][0][questions][0][weight]",type="number")
+              fieldset.formark.subquestion
+                legend 二级指标
+                //label 指标代码
+                //  input(name="sections[0][groups][0][questions][0][subquestions][0][code]",type="text")
+                label 指标内容
+                  input(name="sections[0][groups][0][questions][0][subquestions][0][text]",type="text")
+                label 分数
+                  input.input-mini(name="sections[0][groups][0][questions][0][subquestions][0][weight]",type="number")
+                a(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标
+              a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标
+              a(href="javascript:return false;",onclick="remove_field(this)")  删除指标
+            a.formark(href="javascript:return false;",onclick="add_field(this,'question')")  添加指标
+            a(href="javascript:return false;",onclick="remove_field(this)")  删除子选票单
+          a(href="javascript:return false;",onclick="add_field(this,'group')")  添加子选票单
+          a.btn(href="javascript:return false;",onclick="remove_field(this)")  删除选票单
+      a.span12.section.btn(href="javascript:return false;",onclick="add_field(this,'section')")  添加选票单
+
+    #setp3.well
+      label 设置状态：
+        input(type="radio",name="isopen",value="no",checked="checked")
+        | 稍后开放
+        input(type="radio",name="isopen",value="yes")
+        | 立即开放
+
+      .field.span12
+        input.btn(type="submit")
+  script
+    function add_field(link,fieldtype){
+      //先计算已有的字段
+      var len = $(link).prevAll("fieldset."+fieldtype).length;
+      //复制一份
+      $(link).before($(link).prev().clone());
+
+      //alert($(link).prev().find("input").length);
+      //alert(len);
+      //更新这个的所有name
+      for(i = 0;i<$(link).prev().find("input").length;i++){
+        name = $(link).prev().find("input")[i].name;
+        //alert(name);
+        if(fieldtype == 'section'){
+          $(link).prev().find("input")[i].name = name.replace(fieldtype+'s'+'['+(len-1)+']',fieldtype+'s'+'['+len+']');
+        }
+        else{
+          $(link).prev().find("input")[i].name = name.replace('['+fieldtype+'s]'+'['+(len-1)+']','['+fieldtype+'s]'+'['+len+']');
+        }
+      }
+
+    }
+
+    function remove_field(link){
+          //$(link).prev().val(1);
+          //$(link).parent().hide('slow');
+          $(link).parent().remove();  
+          //update_count(link);
+    }
+
+    function update_count(link){
+         var len = $(this).siblings("fieldset").length;
+         //alert(len);
+         $(".count").text(len);
+          //$(this).parent().next(".maxcandidate").find("span.countcandidate").text(len);
+          //$(this).parent().next(".maxcandidate").find("input").val(len).attr("max",len);
+          //$(this).parent().next().next(".mincandidate").find("input").attr("max",len);
+    }
+
+    $(document).ready(function(){
+      $("#setp2").hide();
+      $("#setp3").hide();
+
+     // $(".section").hide();
+     // $(".forvote").hide();
+     // $(".formark").hide();
+
+      $("#btn_to_setp2").click(function(){
+        $("#setp1").hide();
+        $("#setp2").show('slow');
+
+        if($("#vtype").val() != 'vote'){
+          $(".forvote").hide();
+          $(".forvote input").val('');
+          $(".formark").show();
+        }
+        if($("#vtype").val() != 'mark'){
+          $(".formark").hide();
+          $(".formark input").val('');
+          $(".forvote").show();
+        }
+      });
+
+
+    });

@@ -8,12 +8,6 @@ padding: 9px 0;
 input[type="number"]{
 	width: 4em;
 }
-.section{
-	background-color: #f0f0aa;
-}
-.section>legend{
-    background-color: #ccc;
-}
 .group{
 	background-color:#f0f0dd;
 }
