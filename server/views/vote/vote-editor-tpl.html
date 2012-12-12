@@ -1,23 +1,103 @@
-    <script id="pet-template" type="text/template">
-tbody
-  tr.pet
-    td.name= pet.name
-    td.description is a #{pet.age} year old #{pet.species}
-    td.siblings and has sibling(s)
-      ul
-        each sibling in pet.siblings
-          li= sibling
-    </script>
-     <script id="vote-template" type="text/template">
-<h2>填写基本信息adfads</h2>
-label(for="name") 名称:
-  input#name(name="name",type="text",value="#{name}")
-label 类型:
-  select#vtype(name="vtype")
-    option(value="") 
-    option(value="vote") 投票
-    option(value="mark") 评分
-label(for="note") 说明:
-  textarea#note(name="note")
-a#btn_to_setp2.btn(href="#setp2")  下一步
-    </script>
+<script id="vote-template" type="text/template">
+#setp1.well
+  <h2>填写基本信息</h2>
+  label(for="name") 名称:
+    input#name(name="name",type="text",value="#{votedata.name}")
+  label 类型:
+    select#vtype(name="vtype")
+      option(value="") 
+      option(value="vote") 投票
+      option(value="mark") 评分
+  label(for="note") 说明:
+    textarea#note(name="note")
+  a#to_setp2.btn(href="#setp2")  下一步
+#sections
+</script>
+
+<script id="section-template" type="text/template">
+.well
+  each section,i in votedata.sections
+    .section-item
+      <h2>选票信息</h2>
+      label 标题:
+        input(name="sections[#{i}][title]",type="text",value="#{section.title}")
+      label 副标题:
+        input(name="sections[#{i}][subtitle]",type="text",value="#{section.subtitle}")
+      label 候选人:
+        a.add-candidates.btn(data-section="") 添加
+      .candidates
+</script>
+
+<script id="group-template" type="text/template">
+    //子选票单 groups
+    #candidates-section-0.group.modal.hide.fade(tabindex="-1",role="dialog",aria-hidden="true")
+      .modal-header
+        button.close(data-dismiss="modal",aria-hidden="true") ×
+        h3 添加候选人
+      .modal-body
+        fieldset.span6
+          label.forvote 选举控制参数
+            span.count
+            span 最多选几
+            input(name="sections[0][groups][0][max]",type="number")
+            span 最少选几
+            input(name="sections[0][groups][0][min]",type="number")
+          label 分组名称
+            input(name="sections[0][groups][0][title]")
+      .modal-footer
+        button.btn(data-dismiss="modal",aria-hidden="true") 设置完毕
+        button.btn.btn-primary Save changes
+    a(href="javascript:return false;",onclick="remove_field(this)")  x
+    #mark-section-0.group.row  
+</script>
+<script id="candidate-template" type="text/template">
+//候选人
+fieldset.forvote.candidate
+  //legend 候选人
+  input.span2(name="sections[0][groups][0][candidates][0][org]",type="text",placeholder="单位")
+  input.span1(name="sections[0][groups][0][candidates][0][name]",type="text",placeholder="姓名")
+  //input(name="sections[0][groups][0][candidates][0][photo]",type="text")
+  a(href="javascript:return false;",onclick="remove_field(this)")  删除
+a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
+</script>
+<script id="org-template" type="text/template">
+//参与评价的单位              
+fieldset.formark.org
+  legend 参与评价的单位
+  each org,i in allorgs
+    label.checkbox.inline
+      input(type="checkbox",name="sections[0][groups][0][orgs][#{i}][fullname]",value="#{org.name}")
+      | #{org.name}
+</script>
+<script id="question-template" type="text/template">
+//评价指标
+fieldset.formark.question
+  legend 评价指标
+  //label 指标代码
+  //  input(name="sections[0][groups][0][questions][0][code]",type="text")
+  label 指标内容
+    input(name="sections[0][groups][0][questions][0][text]",type="text")
+  label 分数
+    input.input-mini(name="sections[0][groups][0][questions][0][weight]",type="number")
+</script>
+<script id="subquestion-template" type="text/template">
+fieldset.formark.subquestion
+  legend 二级指标
+  //label 指标代码
+  //input(name="sections[0][groups][0][questions][0][subquestions][0][code]",type="text")
+  label 指标内容
+    input(name="sections[0][groups][0][questions][0][subquestions][0][text]",type="text")
+  label 分数
+    input.input-mini(name="sections[0][groups][0][questions][0][subquestions][0][weight]",type="number")
+</script>
+<script id="vote-status-template" type="text/template">
+#setp3.well
+  label 设置状态：
+    input(type="radio",name="isopen",value="no",checked="checked")
+    | 稍后开放
+    input(type="radio",name="isopen",value="yes")
+    | 立即开放
+
+  .field.span12
+    input.btn(type="submit")
+</script>

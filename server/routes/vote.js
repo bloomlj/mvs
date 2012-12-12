@@ -156,11 +156,21 @@ exports.api_opened = function(req, res){
 
 exports.add = function(req, res){
   //pageinfo = {title:'MVS add a vote.'};
+  var vote = {}; 
+  vote.votedata = {name:"",vtype:"",note:"",sections:[],isopen:'no'};
+  vote.votedata.sections.push({title:"",subtitle:"",groups:[]});
+  vote.votedata.sections[0].groups.push({title:"",max:"",min:"",candidates:[],questions:[],orgs:[]});
+  vote.votedata.sections[0].groups[0].candidates.push({org:"",name:""});
+  vote.votedata.sections[0].groups[0].questions.push({text:"",weight:"",subquestions:[]});
+  vote.votedata.sections[0].groups[0].questions[0].subquestions.push({text:"",weight:""});
+  vote.votedata.sections[0].groups[0].orgs.push({fullname:"",code:""});
+
     //get orgs
     db.do('orgs',function(collection){
         collection.find({}).toArray(function(err, docs) {
         console.dir(docs);
-        res.render('vote/add', {'orgs' : docs});
+        vote.allorgs = docs;
+        res.render('vote/add', vote);
       });
     });
 
