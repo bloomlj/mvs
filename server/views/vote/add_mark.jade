@@ -1,0 +1,71 @@
+extends ../layout
+block content
+  h1 添加一次投票
+
+  form(method="post",action="/vote")
+    #setp1.well
+      h2 填写基本信息
+      label(for="title") 名称:
+        input#name(name="name",type="text")
+        input(type="hidden",name="vtype",value="mark")
+      label(for="note") 说明:
+        textarea#note(name="note")
+    #setp2
+      h2 编辑选票
+      //选票单 sections
+      fieldset.section
+        ///legend 选票单
+        label 标题: 
+          input(name="sections[0][title]",type="text")
+        label 副标题:
+          input(name="sections[0][subtitle]",type="text")
+        //子选票单 groups
+        .group.row
+          fieldset.group.span4
+            ///legend 组
+            ///label 标题:
+              input(name="sections[0][groups][0][title]",placeholder="标题",type="hidden")
+            //参与评价的单位              
+            fieldset.formark.org
+              a(href="#",role="button",data-toggle="modal").btn.modalfire 选择参加评价的单位
+              div.modal.hide.fade
+                div.modal-header
+                  button(type="button",data-dismiss="modal",aria-hidden="true").close &times;
+                  h3 选择参加评价的单位
+                div.modal-body
+                  p 
+                    each org,i in allorgs
+                      label.checkbox.span3
+                        input(type="checkbox",name="sections[0][groups][0][orgs][#{i}][fullname]",value="#{org.name}")
+                        | #{org.name}
+                div.modal-footer
+                  button.btn.btn-primary(data-dismiss="modal",aria-hidden="true") 选好了
+            //评价指标
+            fieldset.formark.question
+              label 指标内容:
+                input(name="sections[0][groups][0][questions][0][text]",type="text",placeholder="一级指标内容").questiontext
+              label 分数
+                input.input-mini(name="sections[0][groups][0][questions][0][weight]",type="number",placeholder="分数")
+              fieldset.formark.subquestion
+                ol
+                  li 
+                    input(name="sections[0][groups][0][questions][0][subquestions][0][text]",type="text",placeholder="二级指标内容").questiontext
+                    input.input-mini(name="sections[0][groups][0][questions][0][subquestions][0][weight]",type="number",placeholder="分数")
+                    a(href="javascript:return false;",onclick="remove_field(this)")  删除
+                  a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标
+              a(href="javascript:return false;",onclick="remove_field(this)")  删除指标
+            a.formark(href="javascript:return false;",onclick="add_field(this,'question')")  添加指标
+            a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除组
+          a.btn.btn-info.addgroup(href="javascript:return false;",onclick="add_field(this,'group')")  添加组
+          a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除选票单
+      a.section.btn(href="javascript:return false;",onclick="add_field(this,'section')")  添加选票单
+
+    #setp3.well
+      label 设置状态：
+        input(type="radio",name="isopen",value="no",checked="checked")
+        | 稍后开放
+        input(type="radio",name="isopen",value="yes")
+        | 立即开放
+
+      input.btn(type="submit")
+  script(src="/javascripts/vote-editor.js")

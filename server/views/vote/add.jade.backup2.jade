@@ -1,0 +1,9 @@
+extends ../layout
+block content
+  h1 添加一次投票
+
+  form(method="post",action="/vote")
+    #forminner
+  include vote-editor-tpl.html
+  script(src="/javascripts/jade.min.js")
+  script(src="/javascripts/vote-editor.js")

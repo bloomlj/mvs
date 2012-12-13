@@ -3,7 +3,90 @@ block content
   h1 添加一次投票
 
   form(method="post",action="/vote")
-    #forminner
-  include vote-editor-tpl.html
-  script(src="/javascripts/jade.min.js")
+    #setp1.well
+      h2 填写基本信息
+      label(for="title") 名称:
+        input#name(name="name",type="text")
+      label 类型:
+        select#vtype(name="vtype")
+          option(value="") 
+          option(value="vote") 投票
+          option(value="mark") 评分
+      label(for="note") 说明:
+        textarea#note(name="note")
+      a#btn_to_setp2.btn(href="#setp2")  下一步
+
+    #setp2
+      h2 编辑选票
+      //选票单 sections
+      fieldset.section
+        ///legend 选票单
+        label 标题: 
+          input(name="sections[0][title]",type="text")
+        label 副标题:
+          input(name="sections[0][subtitle]",type="text")
+        //子选票单 groups
+        .group.row
+          fieldset.group.span4
+            ///legend 组
+            ///label 标题:
+              input(name="sections[0][groups][0][title]",placeholder="标题",type="hidden")
+            label 限投
+              input(name="sections[0][groups][0][max]",type="number")
+              | 人
+            ///label 最少选几
+              input(name="sections[0][groups][0][min]",type="number",type="hidden")
+            //候选人
+            fieldset.forvote.candidate
+              ol
+                li
+                  input.span2(name="sections[0][groups][0][candidates][0][org]",type="text",placeholder="单位")
+                  input.span1(name="sections[0][groups][0][candidates][0][name]",type="text",placeholder="姓名")
+                  //input(name="sections[0][groups][0][candidates][0][photo]",type="text")
+                  a(href="javascript:return false;",onclick="remove_field(this)")  删除
+                a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
+
+            //参与评价的单位              
+            fieldset.formark.org
+              legend 参与评价的单位
+              each org,i in allorgs
+                label.checkbox.inline
+                  input(type="checkbox",name="sections[0][groups][0][orgs][#{i}][fullname]",value="#{org.name}")
+                  | #{org.name}
+            //评价指标
+            fieldset.formark.question
+              legend 评价指标
+              //label 指标代码
+              //  input(name="sections[0][groups][0][questions][0][code]",type="text")
+              label 指标内容
+                input(name="sections[0][groups][0][questions][0][text]",type="text")
+              label 分数
+                input.input-mini(name="sections[0][groups][0][questions][0][weight]",type="number")
+              fieldset.formark.subquestion
+                legend 二级指标
+                //label 指标代码
+                //  input(name="sections[0][groups][0][questions][0][subquestions][0][code]",type="text")
+                label 指标内容
+                  input(name="sections[0][groups][0][questions][0][subquestions][0][text]",type="text")
+                label 分数
+                  input.input-mini(name="sections[0][groups][0][questions][0][subquestions][0][weight]",type="number")
+                a(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标
+              a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标
+              a(href="javascript:return false;",onclick="remove_field(this)")  删除指标
+            a.formark(href="javascript:return false;",onclick="add_field(this,'question')")  添加指标
+            a(href="javascript:return false;",onclick="remove_field(this)")  删除组
+          a.addgroup-btn.btn(href="javascript:return false;",onclick="add_field(this,'group')")  添加组
+          a(href="javascript:return false;",onclick="remove_field(this)")  删除选票单
+      a.span12.section(href="javascript:return false;",onclick="add_field(this,'section')")  添加选票单
+      a#btn_to_setp3.btn(href="#setp3")  下一步
+
+    #setp3.well
+      label 设置状态：
+        input(type="radio",name="isopen",value="no",checked="checked")
+        | 稍后开放
+        input(type="radio",name="isopen",value="yes")
+        | 立即开放
+
+      .field.span12
+        input.btn(type="submit")
   script(src="/javascripts/vote-editor.js")

@@ -1,59 +1,78 @@
-var vote = {};
+    function add_field(link,fieldtype){
+      //先计算已有的字段
+      var len = $(link).prevAll("fieldset."+fieldtype).length;
+      //复制一份
+      $(link).before($(link).prev().clone());
 
+      //更新这个的所有name
+      for(i = 0;i<$(link).prev().find("input").length;i++){
+        name = $(link).prev().find("input")[i].name;
+        if(fieldtype == 'section'){
+          $(link).prev().find("input")[i].name = name.replace(fieldtype+'s'+'['+(len-1)+']',fieldtype+'s'+'['+len+']');
+        }
+        else{
+          $(link).prev().find("input")[i].name = name.replace('['+fieldtype+'s]'+'['+(len-1)+']','['+fieldtype+'s]'+'['+len+']');
+        }
+      }
 
-vote.init = function(){
-  vote.votedata = {name:"",vtype:"",note:"",sections:[],isopen:'no'}
-}
+    }
 
-vote.section_add = function(sections_array){
-  sections_array.push({title:"",subtitle:"",groups:[]});
-}
-vote.section_group_add = function(groups_array){
-  groups_array.push({title:"",max:"",min:"",candidates:[],questions:[],orgs:[]});
-}
-vote.section_group_candidate_add = function(candidates_array){
-  candidates_array.push({org:"",name:""});
-}
-vote.section_group_question_add = function(questions_array){
-  questions_array.push({text:"",weight:"",subquestions:[]});
-}
-vote.section_group_question_subquestion_add = function(subquestions_array){
-  subquestions_array.push({text:"",weight:""});
-}
-vote.section_group_orgs_add = function(orgs_array){
-  orgs_array.push({fullname:"",code:""});
-}
+    function remove_field(link){
+          //$(link).prev().val(1);
+          //$(link).parent().hide('slow');
+          $(link).parent().remove();  
+          //update_count(link);
+    }
 
-vote.render = function(){
-    var tpl = $('#vote-template').html();
-    console.log(tpl);
-    var fn = jade.compile(tpl);
-    var htmlstr = fn(vote);
-    console.log(htmlstr);
-    $('#forminner').html(htmlstr);
-}
+    function update_count(link){
+         var len = $(this).siblings("fieldset").length;
+         //alert(len);
+         $(".count").text(len);
+          //$(this).parent().next(".maxcandidate").find("span.countcandidate").text(len);
+          //$(this).parent().next(".maxcandidate").find("input").val(len).attr("max",len);
+          //$(this).parent().next().next(".mincandidate").find("input").attr("max",len);
+    }
 
-vote.render_sections = function(){
-    var tpl = $('#section-template').html();
-    console.log(tpl);
-    var fn = jade.compile(tpl);
-    var htmlstr = fn(vote);
-    console.log(htmlstr);
-    $('#sections').html(htmlstr);
-}
+    $(document).ready(function(){
+      // $("#setp2").hide();
+      // $("#setp3").hide();
 
-$(document).ready(function(){
+      $("#btn_to_setp2").click(function(){
+        // $("#setp1").hide();
+        // $("#setp2").show();
 
-  vote.init();
-  vote.render();
+        if($("#vtype").val() != 'vote'){
+          $(".forvote").hide();
+          $(".forvote input").val('');
+          $(".formark").show();
+        }
+        if($("#vtype").val() != 'mark'){
+          $(".formark").hide();
+          $(".formark input").val('');
+          $(".forvote").show();
+        }
+      });
 
+      $("#btn_to_setp3").click(function(){
+        // $("#setp1").hide();
+        // $("#setp2").hide();
+        // $("#setp3").show();
 
-  $("#to_setp2").click(function(){
-    vote.section_add(vote.votedata.sections);
-    vote.render_sections();
-  });
+        if($("#vtype").val() != 'vote'){
+          $(".forvote").hide();
+          $(".forvote input").val('');
+          $(".formark").show();
+        }
+        if($("#vtype").val() != 'mark'){
+          $(".formark").hide();
+          $(".formark input").val('');
+          $(".forvote").show();
+        }
+      });
 
-  
-});
+      $('.modalfire').live('click', function() {
+        $(this).next().modal();
+      });
+      
 
-
+    });

@@ -5,25 +5,41 @@ padding-bottom: 40px;
 .sidebar-nav {
 padding: 9px 0;
 }
-input[type="number"]{
-	width: 4em;
-}
-.group{
-	background-color:#f0f0dd;
-}
-.group>legend{
-    background-color: #ddd;
-}
-.question{
-	background-color:#f0f0f0 ;
-}
-.group>question{
-    background-color: #eee;
-}
 /*for vote*/
 ul#votelist{margin-top: 10px;}
 
 ul#votelist div.thumbnail{
 	background-color: #f0f0f0;
 	padding:10px;
+}
+
+
+/*for vote form*/
+fieldset.section{
+    border: 1px solid #ccc;
+}
+fieldset.group{
+    border: 1px solid #ccc;
+    background: #f0f0f0;
+    margin-bottom: 10px;
+}
+fieldset.candidate{
+    border: 1px solid #ccc;
+}
+input[type="number"]{
+    width: 4em;
+}
+fieldset{
+    position: relative;
+}
+a.addgroup{
+    margin-left:20px;
+}
+.deletebtn{
+    position: absolute;
+    top:0;
+    right:0;
+}
+input.questiontext{
+    width: 10em;
 }

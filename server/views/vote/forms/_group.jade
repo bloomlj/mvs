@@ -1,0 +1,48 @@
+//子选票单 groups
+.group
+fieldset.group
+  ///legend 组
+  input(name="sections[0][groups][0][title]",placeholder="标题")
+  //候选人
+  fieldset.forvote.candidate
+    //legend 候选人
+    input.span2(name="sections[0][groups][0][candidates][0][org]",type="text",placeholder="单位")
+    input.span1(name="sections[0][groups][0][candidates][0][name]",type="text",placeholder="姓名")
+    //input(name="sections[0][groups][0][candidates][0][photo]",type="text")
+    a(href="javascript:return false;",onclick="remove_field(this)")  删除
+  a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
+  label.forvote 选举控制参数
+    span.count
+    span 最多选几
+    input(name="sections[0][groups][0][max]",type="number")
+    span 最少选几
+    input(name="sections[0][groups][0][min]",type="number")
+  //参与评价的单位              
+  fieldset.formark.org
+    legend 参与评价的单位
+    each org,i in allorgs
+      label.checkbox.inline
+        input(type="checkbox",name="sections[0][groups][0][orgs][#{i}][fullname]",value="#{org.name}")
+        | #{org.name}
+  //评价指标
+  fieldset.formark.question
+    legend 评价指标
+    //label 指标代码
+    //  input(name="sections[0][groups][0][questions][0][code]",type="text")
+    label 指标内容
+      input(name="sections[0][groups][0][questions][0][text]",type="text")
+    label 分数
+      input.input-mini(name="sections[0][groups][0][questions][0][weight]",type="number")
+    fieldset.formark.subquestion
+      legend 二级指标
+      //label 指标代码
+      //  input(name="sections[0][groups][0][questions][0][subquestions][0][code]",type="text")
+      label 指标内容
+        input(name="sections[0][groups][0][questions][0][subquestions][0][text]",type="text")
+      label 分数
+        input.input-mini(name="sections[0][groups][0][questions][0][subquestions][0][weight]",type="number")
+      a(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标
+    a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标
+    a(href="javascript:return false;",onclick="remove_field(this)")  删除指标
+  a.formark(href="javascript:return false;",onclick="add_field(this,'question')")  添加指标
+  a(href="javascript:return false;",onclick="remove_field(this)")  删除子选票单

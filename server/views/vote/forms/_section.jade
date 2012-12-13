@@ -1,0 +1,9 @@
+fieldset.section
+///legend 选票单
+label 标题: 
+input(name="sections[0][title]",type="text")
+label 副标题:
+input(name="sections[0][subtitle]",type="text")
+include _group
+a(href="javascript:return false;",onclick="add_field(this,'group')")  添加子选票单
+a.btn(href="javascript:return false;",onclick="remove_field(this)")  删除选票单

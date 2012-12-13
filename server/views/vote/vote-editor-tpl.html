@@ -1,6 +1,6 @@
 <script id="vote-template" type="text/template">
 #setp1.well
-  <h2>填写基本信息</h2>
+  h2 填写基本信息
   label(for="name") 名称:
     input#name(name="name",type="text",value="#{votedata.name}")
   label 类型:
@@ -17,39 +17,28 @@
 <script id="section-template" type="text/template">
 .well
   each section,i in votedata.sections
-    .section-item
+    .section-item(id="section-#{i}")
       <h2>选票信息</h2>
       label 标题:
         input(name="sections[#{i}][title]",type="text",value="#{section.title}")
       label 副标题:
         input(name="sections[#{i}][subtitle]",type="text",value="#{section.subtitle}")
       label 候选人:
-        a.add-candidates.btn(data-section="") 添加
-      .candidates
+        a.section-group-add.btn(data-section="section-#{i}") 添加
+      .groups
 </script>
 
 <script id="group-template" type="text/template">
-    //子选票单 groups
-    #candidates-section-0.group.modal.hide.fade(tabindex="-1",role="dialog",aria-hidden="true")
-      .modal-header
-        button.close(data-dismiss="modal",aria-hidden="true") ×
-        h3 添加候选人
-      .modal-body
-        fieldset.span6
-          label.forvote 选举控制参数
-            span.count
-            span 最多选几
-            input(name="sections[0][groups][0][max]",type="number")
-            span 最少选几
-            input(name="sections[0][groups][0][min]",type="number")
-          label 分组名称
-            input(name="sections[0][groups][0][title]")
-      .modal-footer
-        button.btn(data-dismiss="modal",aria-hidden="true") 设置完毕
-        button.btn.btn-primary Save changes
-    a(href="javascript:return false;",onclick="remove_field(this)")  x
-    #mark-section-0.group.row  
+label.forvote 选举控制参数
+  span.count
+  span 最多选几
+  input(name="sections[0][groups][0][max]",type="number")
+  span 最少选几
+  input(name="sections[0][groups][0][min]",type="number")
+label 分组名称
+  input(name="sections[0][groups][0][title]")
 </script>
+
 <script id="candidate-template" type="text/template">
 //候选人
 fieldset.forvote.candidate

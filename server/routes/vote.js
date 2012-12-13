@@ -158,6 +158,7 @@ exports.add = function(req, res){
   //pageinfo = {title:'MVS add a vote.'};
   var vote = {}; 
   vote.votedata = {name:"",vtype:"",note:"",sections:[],isopen:'no'};
+  vote.votedata = {name:"",vtype:"",note:"",sections:[],isopen:'no'};
   vote.votedata.sections.push({title:"",subtitle:"",groups:[]});
   vote.votedata.sections[0].groups.push({title:"",max:"",min:"",candidates:[],questions:[],orgs:[]});
   vote.votedata.sections[0].groups[0].candidates.push({org:"",name:""});
@@ -176,6 +177,23 @@ exports.add = function(req, res){
 
 };
 
+exports.addvote = function(req, res){
+  var vote = {}; 
+  res.render('vote/add_vote', vote);
+};
+
+exports.addmark = function(req, res){
+  var vote = {}; 
+    //get orgs
+    db.do('orgs',function(collection){
+        collection.find({}).toArray(function(err, docs) {
+        console.dir(docs);
+        vote.allorgs = docs;
+        res.render('vote/add_mark', vote);
+      });
+    });
+
+};
 
 exports.edit = function(req, res){
 
@@ -192,14 +210,11 @@ exports.edit = function(req, res){
 exports.create = function(req, res){
 
     db.do('vote',function(collection){
-
       //insert
       var vote = req.body;
        //default values
-
       vote.updated_date = new Date();
       //vote.open = 'N';
-      
       collection.insert(vote, {safe:true}, function(err, docs) {
         if (err) console.warn(err.message);
         if (err && err.message.indexOf('E11000 ') !== -1) {
@@ -209,6 +224,7 @@ exports.create = function(req, res){
         //res.redirect('/vote/'+docs[0]._id+'/addtargets');
       });
     });
+
 }
 
 

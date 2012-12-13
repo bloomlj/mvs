@@ -1,0 +1,55 @@
+extends ../layout
+block content
+  h1 添加一次投票
+
+  form(method="post",action="/vote")
+    #setp1.well
+      h2 基本信息
+      label(for="title") 名称:
+        input#name(name="name",type="text")
+        input(type="hidden",name="vtype",value="vote")
+      label(for="note") 说明:
+        textarea#note(name="note")
+
+    #setp2
+      h2 编辑选票单
+      //选票单 sections
+      fieldset.section
+        ///legend 选票单
+        label 标题: 
+          input(name="sections[0][title]",type="text")
+        label 副标题:
+          input(name="sections[0][subtitle]",type="text")
+        //子选票单 groups
+        .group.row
+          fieldset.group.span4
+            ///legend 组
+            ///label 标题:
+              input(name="sections[0][groups][0][title]",placeholder="标题",type="hidden")
+            label 限投
+              input(name="sections[0][groups][0][max]",type="number")
+              | 人
+            ///label 最少选几
+              input(name="sections[0][groups][0][min]",type="number",type="hidden")
+            //候选人
+            fieldset.forvote.candidate
+              ol
+                li
+                  input.span2(name="sections[0][groups][0][candidates][0][org]",type="text",placeholder="单位")
+                  input.span1(name="sections[0][groups][0][candidates][0][name]",type="text",placeholder="姓名")
+                  //input(name="sections[0][groups][0][candidates][0][photo]",type="text")
+                  a(href="javascript:return false;",onclick="remove_field(this)")  删除
+                a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
+            a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除组
+          a.btn.btn-info.addgroup(href="javascript:return false;",onclick="add_field(this,'group')")  添加组
+          a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除选票单
+      a.section.btn(href="javascript:return false;",onclick="add_field(this,'section')")  添加选票单
+
+    #setp3
+      label 设置状态：
+        input(type="radio",name="isopen",value="no",checked="checked")
+        | 稍后开放
+        input(type="radio",name="isopen",value="yes")
+        | 立即开放
+      input.btn(type="submit")
+  script(src="/javascripts/vote-editor.js")

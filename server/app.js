@@ -38,10 +38,12 @@ app.get('/', routes.index);
 
 app.get('/vote.:format?', vote.list);
 app.get('/vote/add', vote.add);
+app.get('/vote/addvote', vote.addvote);
+app.get('/vote/addmark', vote.addmark);
 app.get('/vote/:id/edit', vote.edit);
 app.get('/vote/api_opened/:login/:password', vote.api_opened);
 app.get('/vote/:id/result.:format?', vote.result);
-app.get('/vote/:id.:format?', vote.show);
+//app.get('/vote/:id.:format?', vote.show);
 app.get('/vote/:id/destroy', vote.destroy);
 app.post('/vote', vote.create);
 app.put('/vote/:id', vote.update);
