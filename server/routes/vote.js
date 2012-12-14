@@ -196,12 +196,20 @@ exports.addmark = function(req, res){
 };
 
 exports.edit = function(req, res){
-
+  var vote = {}; 
     db.do('vote',function(collection){
       var ObjectID = require('mongodb').ObjectID;
       collection.findOne({'_id' : new ObjectID(req.params.id)},function(err, doc){
         console.dir(doc);
-        res.render('vote/edit', doc);
+        vote.votedata = doc;
+        //get orgs
+        db.do('orgs',function(collection){
+        collection.find({}).toArray(function(err, orgs) {
+        vote.allorgs = orgs;
+        res.render('vote/edit', vote);
+          });
+        });
+
       });
 
     });
