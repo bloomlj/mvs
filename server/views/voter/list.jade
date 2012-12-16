@@ -1,21 +1,31 @@
 extends ../layout
-
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li
+      a(href="/voter") 投票密码
 block content
-    h1 全部选举人
-    a(href="/voter/add") 生成选举密码
+    h1 投票密码
+    a(href="/voter/add") 生成投票密码
     table
         tr
-            td ID
-            td 用户名
+            td 投票名称
+            //
+                td 用户名
             td 密码
             td
         each doc in docs
             tr
-                td #{doc._id}
-                td #{doc.login}
-                td #{doc.password}
+                td #{doc.vote_name}
+                //
+                    td #{doc.login}
+                td 共有#{doc.password.length}个密码
                 td 
-                    a(href="/voter/#{doc._id}/edit") 修改
+                    a(href="/voter/#{doc._id}") 查看
+                td 
+                    a(href="/voter/#{doc._id}/print") 打印
                 td 
                     a(href="/voter/#{doc._id}/destroy") 删除
 

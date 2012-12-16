@@ -21,15 +21,26 @@ exports.list = function(req, res){
 
 exports.show = function(req, res){
 
+    db.do('voter',function(collection){
+      var ObjectID = require('mongodb').ObjectID;
+      collection.findOne({'_id' : new ObjectID(req.params.id)},function(err, doc){
+        console.dir(doc);
+        if (req.params.format == 'json') { res.set('Access-Control-Allow-Origin', '*');res.send(doc);}
+        else res.render('voter/show', doc);
+      });
+    });
+};
+
+exports.print = function(req, res){
 
     db.do('voter',function(collection){
       var ObjectID = require('mongodb').ObjectID;
-      collection.find({'_id' : new ObjectID(req.params.id)}).toArray(function(err, docs) {
-        console.dir(docs[0]);
-        res.render('voter/show', docs[0]);
+      collection.findOne({'_id' : new ObjectID(req.params.id)},function(err, doc){
+        console.dir(doc);
+        if (req.params.format == 'json') { res.set('Access-Control-Allow-Origin', '*');res.send(doc);}
+        else res.render('voter/print', doc);
       });
     });
-
 };
 
 exports.add = function(req, res){
@@ -41,7 +52,6 @@ exports.add = function(req, res){
        
       });
     });
-
 
 };
 

@@ -34,11 +34,12 @@ exports.show = function(req, res){
 
 
 exports.result = function(req, res){
-
+  var renderdata = {};
     db.do('vote',function(collection){
       var ObjectID = require('mongodb').ObjectID;
       collection.findOne({'_id' : new ObjectID(req.params.id)},function(err, vote){
         console.dir(vote);
+        renderdata.vote = vote;
 
         db.do('answer',function(collection){
         collection.find({'vote_id' : req.params.id}).toArray(function(err, docs) {
@@ -110,8 +111,10 @@ exports.result = function(req, res){
 
 
         console.dir(result);
-        if (req.params.format == 'json') res.send(result);
-        else res.render('vote/result', {'result':result});
+        renderdata.result = result;
+
+        if (req.params.format == 'json') res.send(renderdata);
+        else res.render('vote/result', renderdata);
        
         });
         });

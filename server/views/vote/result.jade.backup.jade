@@ -16,6 +16,12 @@ block content
     table
         tr
             th 需要表头？
+    //
+        each questions,org_name in result
+            tr
+                td #{result.org_name}
+                each value,question_name in questions
+                    td #{result.question_name}: #{result.value.avg}
 
 
     script(src="/javascripts/jquery.flot.js")

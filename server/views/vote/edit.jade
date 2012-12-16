@@ -1,8 +1,17 @@
 extends ../layout
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li
+      a(href="/vote") 投票
+      span.divider /
+    li.active #{votedata.name}
 block content
   h1 添加一次投票
 
-  form(method="post",action="/vote")
+  form(method="post",action="/vote/#{votedata._id}")
     #setp1.well
       h2 基本信息
       label(for="title") 名称:
@@ -26,7 +35,6 @@ block content
             for group,gi in section.groups
               fieldset.group.span4
                 if votedata.vtype == 'vote'
-                  fieldset.group.span4
                     ///legend 组
                     ///label 标题:
                       input(name="sections[#{si}][groups][#{gi}][title]",placeholder="标题",type="hidden",value="#{group.title}")
@@ -36,15 +44,14 @@ block content
                     ///label 最少选几
                       input(name="sections[#{si}][groups][#{gi}][min]",type="number",type="hidden",value="#{group.min}")
                     //候选人
-                    fieldset.forvote.candidate
-                      ol
-                        for candidate,ci in groups.candidates
-                          li
-                            input.span2(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][org]",type="text",placeholder="单位")
-                            input.span1(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][name]",type="text",placeholder="姓名")
-                            //input(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][photo]",type="text")
-                            a(href="javascript:return false;",onclick="remove_field(this)")  删除
-                          a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
+                    ol
+                      for candidate,ci in group.candidates
+                        li.candidate
+                          input.span2(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][org]",value="#{candidate.org}",type="text",placeholder="单位")
+                          input.span1(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][name]",value="#{candidate.name}",type="text",placeholder="姓名")
+                          //input(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][photo]",type="text")
+                          a(href="javascript:return false;",onclick="remove_field(this)")  删除
+                      a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
                 else
                     //参与评价的单位              
                     fieldset.formark.org
@@ -85,9 +92,16 @@ block content
 
     #setp3
       label 设置状态：
-        input(type="radio",name="isopen",value="no",checked="checked")
+        if votedata.isopen == "no"
+          input(type="radio",name="isopen",value="no",checked="checked")
+        else
+          input(type="radio",name="isopen",value="no")
         | 稍后开放
-        input(type="radio",name="isopen",value="yes")
+        if votedata.isopen == "yes"
+          input(type="radio",name="isopen",value="yes",checked="checked")
+        else
+          input(type="radio",name="isopen",value="yes")
         | 立即开放
+      input(type="hidden",name="_method",value="put")
       input.btn(type="submit")
   script(src="/javascripts/vote-editor.js")

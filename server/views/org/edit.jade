@@ -1,6 +1,15 @@
 extends ../layout
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li
+      a(href="/org") 单位
+      span.divider /
+    li.active 修改单位信息
 block content
-  h1 修改单位
+  h1 修改单位信息
   form(method="post",action="/org/#{_id}")
     p
       label(for="name") 名称

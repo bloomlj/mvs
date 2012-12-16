@@ -1,4 +1,13 @@
 extends ../layout
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li
+      a(href="/candidate") 候选人
+      span.divider /
+    li.active 添加候选人
 block content
   h1 添加候选人
 
@@ -7,22 +16,6 @@ block content
       label(for="name") 名称
     p
       input#name(name="name",type="text")
-    p
-      input#name(name="candidate[code]",type="text")
-    p
-      input#name(name="candidate[value]",type="text")
-    p
-      input#name(name="candidate_value",type="text")
-    p
-      input#name(name="question[code]",type="text")
-    p
-      input#name(name="question[text]",type="text")
-    p
-      input#name(name="org[code]",type="text")
-    p
-      input#name(name="org[fullname]",type="text")
-    p
-      input#name(name="question_value",type="text")
     p
       label(for="note") 说明
     p

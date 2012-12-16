@@ -1,5 +1,11 @@
 extends ../layout
-
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li
+      a(href="/candidate") 候选人
 block content
     h1 全部候选人
     a(href="/candiate/add") 添加一条新候选人

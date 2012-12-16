@@ -1,4 +1,11 @@
 extends ../layout
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li.active
+      a(href="/vote") 投票
 block content
     h1 全部投票记录
     a.btn(href="/vote/add") 

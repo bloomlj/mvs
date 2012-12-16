@@ -1,19 +1,29 @@
 extends ../layout
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li
+      a(href="/voter") 投票密码
+      span.divider /
+    li  生成选举密码
 block content
-  h1 添加选举人
-
-
+  h1 随机生成投票密码
 
   form#passform(method="post",action="/voter")
     label 投票
         select(name="vote_id")
             each vote in votes
                 option(value="#{vote._id}") #{vote.name}
+    input(type="hidden",name="vote_name")
     label 个数：
         input#passcount(type="number",name="passcount",value="100",min="1")
         a#generatepass.btn(href="javascript:return false;") 生成随机密码
-    #votepass
-    input#passsubmit(type="submit")
+    .row
+        #votepass
+
+    input#passsubmit.btn.btn-primary(type="submit")
   script
     $(document).ready(function(){
         $("#passsubmit").hide();
@@ -24,14 +34,18 @@ block content
                 for(i = 0;i<passcount;i++){
                     randompass = Math.floor(Math.random() * 1000000);
                     passarray.push(randompass);
-                    htmlstr+="<label>密码"+ (i+1) +":<input type='text' name='password["+ i +"]' value='"+ randompass +"'></label>"
+                    htmlstr+="<label class='span4'>密码"+ (i+1) +":<input type='text' name='password["+ i +"]' value='"+ randompass +"'></label>"
                 }
                 $("#votepass").html(htmlstr);
                 $("#passsubmit").show();
                 $("a#generatepass").text("重新生成随机密码");
-                //alert(passarray.length);
+                $("a#generatepass").addClass("btn-success");
             });
 
+        $("select[name='vote_id']").change(function(){
+            var selected_votename = $("select option:selected")[0].text;
+            $("input[name='vote_name']").val(selected_votename);
+          });
 
     });
 

@@ -1,0 +1,21 @@
+extends ../layout
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li
+      a(href="/voter") 投票密码
+      span.divider /
+    li 
+      a(href="/voter/#{_id}") 投票#{vote_name}的密码
+block content
+    h1 投票"#{vote_name}"，共有#{passcount}个密码
+    .row
+      for p,i in password
+          .span3 
+              span.badge.badge-success #{i+1}:
+              span.badge #{p}
+    hr
+    a(href="/voter/#{_id}/print").btn.btn-primary 打印密码清单
+

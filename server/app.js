@@ -88,9 +88,11 @@ app.put('/candiate/:id', candiate.update);
 
 app.get('/voter.:format?', voter.list);
 app.get('/voter/add', voter.add);
-app.get('/voter/:id', voter.show);
 app.get('/voter/:id/edit', voter.edit);
 app.get('/voter/:id/destroy', voter.destroy);
+app.get('/voter/:id/print', voter.print);
+app.get('/voter/:id.:format?', voter.show);
+
 app.post('/voter', voter.create);
 app.put('/voter/:id', voter.update);
 

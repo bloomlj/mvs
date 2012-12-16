@@ -1,6 +1,15 @@
 extends ../layout
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li
+      a(href="/candidate") 候选人
+      span.divider /
+    li.active 修改候选人信息
 block content
-  h1 修改单位
+  h1 修改候选人信息
   form(method="post",action="/candiate/#{_id}")
     p
       label(for="name") 名称
