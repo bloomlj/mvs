@@ -49,6 +49,7 @@ block content
                         li.candidate
                           input.span2(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][org]",value="#{candidate.org}",type="text",placeholder="单位")
                           input.span1(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][name]",value="#{candidate.name}",type="text",placeholder="姓名")
+                          input.span1(name="sections[0][groups][0][candidates][0][order]",value="#{candidate.order}",type="text",placeholder="序号")
                           //input(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][photo]",type="text")
                           a(href="javascript:return false;",onclick="remove_field(this)")  删除
                       a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
@@ -63,9 +64,11 @@ block content
                         div.modal-body
                           p 
                             each org,i in allorgs
-                              label.checkbox.span3
-                                input(type="checkbox",name="sections[#{si}][groups][#{gi}][orgs][#{i}][fullname]",value="#{org.name}")
+                              label.fullname.span2
+                                input(type="checkbox",name="sections[0][groups][0][orgs][#{i}][fullname]",value="#{org.name}")
                                 | #{org.name}
+                              label.order.span1  
+                                input(type="text",name="sections[0][groups][0][orgs][#{i}][order]",placeholder="序号")                          
                         div.modal-footer
                           button.btn.btn-primary(data-dismiss="modal",aria-hidden="true") 选好了
                     //评价指标

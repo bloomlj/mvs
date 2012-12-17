@@ -104,6 +104,22 @@ nav, article {
 	
 }
 
+header#pagetitle > a{
+	display: block;
+	float:left;
+	line-height: 43px;
+	color:#222;
+	background: #eee;
+	-webkit-border-top-left-radius:4px;
+	-moz-border-top-left-radius:4px;
+	-o-border-top-left-radius:4px;
+	border-top-left-radius:4px;
+	
+	-webkit-border-top-right-radius:4px;
+	-moz-border-top-right-radius:4px;
+	-o-border-top-right-radius:4px;
+	border-top-right-radius:4px;
+}
 
 #navScroller > li {
 	padding:0 15px;
@@ -116,8 +132,7 @@ nav, article {
 	-moz-box-sizing:border-box;
 	-o-box-sizing:border-box;
 	box-sizing:border-box;
-
-	width:100%;
+	width: 2000px;
 }
 
 
@@ -148,7 +163,9 @@ nav, article {
 	width:100%;
 	text-align:left;
 }
-
+#contentScroller ul.mark > li{
+	float:left;
+}
 #contentScroller ul.vote {
 	list-style:none;
 	display:block;
@@ -160,6 +177,7 @@ nav, article {
 	border:1px solid #aaa;
 }
 
+/*
 #contentScroller li.vote {
 	display:block; float:left;
 	width:100px; height:145px; 
@@ -169,7 +187,7 @@ nav, article {
 	padding:5px;
 	background-repeat: no-repeat;
 	background-position: center center;
-}
+}*/
 
 
 #contentScroller li.group-item label{
@@ -199,7 +217,7 @@ input[type="number"]{
 #login input{
 	line-height: 20px;
 	padding: 10px;
-	width:80%;
+	width:70%;
 }
 .btn{
 	line-height: 20px;
@@ -245,6 +263,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 .sidebaritem a{
 	color:#007fa4;
+	display: block;
 }
 
 
@@ -266,3 +285,15 @@ input[type="range"]::-webkit-slider-thumb {
 .checkbox_widget input[type="checkbox"]{
 
 }
+
+#vote_result_msg{
+	text-align:center;
+	font-size: 20px;
+	padding:10px;
+}
+
+.success_msg{
+	color:green;
+}
+
+

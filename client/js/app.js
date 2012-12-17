@@ -9,28 +9,25 @@ $(document).ready(function(){
 
   //for test use
 
-  connect.login = 'lijun';
-  connect.password = 'lj1984';
+  //connect.password = '636609';
   //for test use end
 
-  localStorage.setItem("connect",JSON.stringify(connect));
+  //localStorage.setItem("connect",JSON.stringify(connect));
 
 //for test use
-  login_load(connect);
+ // login_load(connect);
   //for test use end
 
   //登入界面
   jQuery("#loginnow").bind('click',connect,function(){
 
     //var formstr = $("form#voteform").serialize();
-    var login = $("input[name='login']").val();
     var password = $("input[name='password']").val();
-    var connect = JSON.parse(localStorage.getItem("connect"));
-    connect.login = login;
+    //var connect = JSON.parse(localStorage.getItem("connect"));
     connect.password = password;
     localStorage.setItem("connect",JSON.stringify(connect));
     //localStorage.setItem("votedata_str", "login="+login+"&password="+password);
-    if(login == '' || password == ''){
+    if(password == ''){
       jQuery("p.intro").text("用户名和密码必须填写。").addClass('error').show('slow');
     }
     else{
@@ -46,7 +43,7 @@ function login_load(connect){
   //login
   $.ajax({
     type:"GET",
-    url:"http://" + connect.server + ":" + connect.port +"/vote/api_opened/"+connect.login+"/"+connect.password,
+    url:"http://" + connect.server + ":" + connect.port +"/vote/api_opened/"+connect.password,
     error: function(jqXHR, textStatus, errorThrown){
       $("p.intro").text("登录失败,错误信息：无法与服务器 "+connect.server+" 正常通信。").addClass("error").show('slow');
     },
@@ -77,9 +74,9 @@ function loadhome(data){
   jQuery("#pagetitle").text(htmlstr);
 
 //显示基本信息
-  var welcometmp = _.template("本次会议共有选票单<%= sectioncount%>个。");
-  var welcomestr = welcometmp({sectioncount : data.sections.length});
-  jQuery("p.intro").text(welcomestr);
+  // var welcometmp = _.template("本次会议共有选票单<%= sectioncount%>个。");
+  // var welcomestr = welcometmp({sectioncount : data.sections.length});
+  // jQuery("p.intro").text(welcomestr);
 
   load_sidenav(data);
   load_ballot(0);
@@ -90,7 +87,9 @@ function loadhome(data){
     }
   });
   
-  var scrollContent = new iScroll('contentWrapper',{
+  var scrollContent = new iScroll('contentWrapper',
+  {
+    vScroll: false,
     onBeforeScrollStart: function (e) {
     var target = e.target;
     while (target.nodeType != 1) target = target.parentNode;
@@ -154,16 +153,16 @@ function post_form(){
    var votedata = JSON.parse(localStorage.getItem("vote"));
 
    var postdata = userinput;
-   postdata["login"] = connect.login;
    postdata["password"] = connect.password;
    postdata["vote_id"] = votedata._id;
    postdata["vtype"] = votedata.vtype;
    postdata["vote_name"] = votedata.name;
    console.log(postdata);
    $.post("http://"+connect.server+":"+connect.port+"/answer/api_create", postdata,function(msg){
-      alert(msg.status);
       tplrender("voteresult-tpl",{"status":msg.status});
       jQuery("#voteform").remove();
+      jQuery("#sidebar").remove();
+      jQuery("#vote_result_msg").addClass("success_msg");
    });
    
 }

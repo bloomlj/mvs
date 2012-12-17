@@ -35,9 +35,11 @@ block content
                 div.modal-body
                   p 
                     each org,i in allorgs
-                      label.checkbox.span3
+                      label.fullname.span2
                         input(type="checkbox",name="sections[0][groups][0][orgs][#{i}][fullname]",value="#{org.name}")
                         | #{org.name}
+                      label.order.span1
+                        input(type="text",name="sections[0][groups][0][orgs][#{i}][order]",placeholder="序号")
                 div.modal-footer
                   button.btn.btn-primary(data-dismiss="modal",aria-hidden="true") 选好了
             //评价指标

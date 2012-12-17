@@ -127,25 +127,22 @@ exports.result = function(req, res){
 
 
 exports.api_opened = function(req, res){
-
-    console.dir(req.params);
-    console.dir(req.body);
-    var login = req.params.login;
     var password = req.params.password;
 
     //first check login ,then send data
     db.do('voter',function(collection){
-      collection.findOne({'login':login,'password':password},function(err, doc){
-        console.dir(doc);
-        if(!doc){
+      collection.findOne({'password':password},function(err, voterdoc){
+        console.dir(voterdoc);
+        if(!voterdoc){
           res.set('Access-Control-Allow-Origin', '*');
           res.send({'status':'error','info':'错误的用户名和密码。'});
         }else{
+          var ObjectID = require('mongodb').ObjectID;
           db.do('vote',function(collection){
-            collection.findOne({'isopen' : 'yes'},function(err, doc){
-              console.dir(doc);
+            collection.findOne({'_id' : new ObjectID(voterdoc.vote_id)},function(err, votedoc){
+              console.dir(votedoc);
               res.set('Access-Control-Allow-Origin', '*');
-              res.send({'status':'success','info':'通过验证','data':doc});
+              res.send({'status':'success','info':'通过验证','data':votedoc});
             });
           });
         }
@@ -256,6 +253,57 @@ exports.update = function(req, res){
     });
 
 }
+
+
+exports.open = function(req, res){
+
+
+    db.do('vote',function(collection){
+      collection.update({}, {$set: {"isopen":"no"}}, {safe:true},
+        function(err) {
+          if (err) console.warn(err.message);
+          else {
+            //这里有必要先把别的vote停掉，然后再开启这一个。
+              db.do('vote',function(collection){
+                var ObjectID = require('mongodb').ObjectID;
+                collection.update({_id: new ObjectID(req.params.id)}, {$set: {"isopen":"yes"}}, {safe:false},
+                  function(err) {
+                    if (err) console.warn(err.message);
+                    else {
+                      console.log('successfully updated'); 
+                      res.redirect('/vote/');
+                    }
+                });
+
+              });
+          }
+      });
+
+    });
+
+
+
+
+}
+
+exports.stop = function(req, res){
+
+    db.do('vote',function(collection){
+
+      var ObjectID = require('mongodb').ObjectID;
+      collection.update({_id: new ObjectID(req.params.id)}, {$set: {"isopen":"no"}}, {safe:true},
+        function(err) {
+          if (err) console.warn(err.message);
+          else {
+            console.log('successfully updated'); 
+            res.redirect('/vote/');
+          }
+      });
+
+    });
+
+}
+
 
 exports.destroy = function(req, res){
 

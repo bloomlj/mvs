@@ -8,9 +8,12 @@ block breadcrumbs
       a(href="/vote") 投票
 block content
     h1 全部投票记录
-    a.btn(href="/vote/add") 
+    a.btn(href="/vote/addvote") 
        i.icon-file
-       | 添加投票/评价
+       | 添加投票
+    a.btn(href="/vote/addmark") 
+       i.icon-file
+       | 添加评价
     ul#votelist.thumbnails
         for doc in docs
            li.span6
@@ -29,11 +32,12 @@ block content
                     a.btn(href="/vote/#{doc._id}/result") 
                         i.icon-list
                         |查看结果
-                    form(action="/vote/#{doc._id}",method="post")
-                        input(type="hidden",name="_method",value="put")
-                        if doc.isopen == 'no'
-                            input(type="hidden",name="isopen",value="yes")
+
+                    if doc.isopen == 'no'
+                        form(action="/vote/#{doc._id}/open",method="post")
+                            input(type="hidden",name="_method",value="put")
                             input.btn.btn-inverse(type="submit",value="启动")
-                        else
-                            input(type="hidden",name="isopen",value="no")
+                    else
+                        form(action="/vote/#{doc._id}/stop",method="post")
+                            input(type="hidden",name="_method",value="put")
                             input.btn.btn-danger(type="submit",value="停止")                        

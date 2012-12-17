@@ -24,22 +24,18 @@
 					<% });%>
 				</script>
 				<li><a href="#submit" id="votesubmit" onclick="post_form();">发送投票结果</a></li>
+				<li><a href="#submit" id="votesubmit" onclick="post_form();">立即暂存结果</a></li>
 			</ul>
 		</nav>
 	</div>
 
 	<div id="content">
-		<header id="pagetitle">请登入系统</header>
+		<header id="pagetitle"><a href="#">选票单一</a></header>
 		<article id="contentWrapper">
 			<div id="contentScroller">
 			  <p class="intro"></p>
 			  <div id="login" >
-			  		<p>请输入投票密码</p>
-					<label>用户名：
-						<input type="text" name="login" placeholder="用户名"  />
-					</label>
-					<label>密&nbsp;&nbsp;&nbsp;&nbsp;码：
-					<input type="text" name="password" placeholder="密码" />
+			  		<label>请输入投票密码:<input type="text" name="password" placeholder="投票密码" />
 					</label>
 					<button class="btn"  type="button" id="loginnow">登入</button>
 			  </div>
@@ -97,7 +93,7 @@
 
 			  </form>
 		     <script id="voteresult-tpl" type="text/template">
-				状态：<%= status%>
+				<div id="vote_result_msg">状态：<%= status%></div>
 			  </script>
 
 
