@@ -71,7 +71,8 @@ function loadhome(data){
 //显示标题
   var template = _.template("<%= name%>");
   var htmlstr = template({name : data.name});
-  jQuery("#pagetitle").text(htmlstr);
+  //jQuery("#pagetitle").text(htmlstr);
+  tplrender("section-nav-tpl",data);
 
 //显示基本信息
   // var welcometmp = _.template("本次会议共有选票单<%= sectioncount%>个。");
@@ -101,8 +102,9 @@ function loadhome(data){
 }
 
 function load_sidenav(data){
-  tplrender("sidenav-tpl",data);
+  //tplrender("sidenav-tpl",data);
 
+  
 }
 
 //显示选票表单
@@ -115,6 +117,11 @@ function load_ballot(count) {
       //jQuery("#votenow").siblings('.ui-btn-inner').children('.ui-btn-text').text("下一单");
       data.sections[count].count = count;
       if(count > 0 ) jQuery("div#section-"+(count -1)).remove();
+      //sidebar
+      jQuery(".sidebaritem").remove();
+      tplrender("question-nav-tpl",data.sections[count]);
+
+
       if(data.vtype=="mark") {
         tplrender("marksection-tpl",data.sections[count]);
       }

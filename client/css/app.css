@@ -15,7 +15,9 @@ body,ul,li,header,nav,aside,section,article,p {
 	margin:0;
 	border:0;
 }
-
+li{
+	list-style: none;
+}
 body {
 	font-size:12px;
 	-webkit-user-select:none;

@@ -11,7 +11,7 @@
 
 <div id="page">
 	<div id="sidebar" style="display:none;">
-		<header>选票单</header>
+		<header></header>
 		<nav id="navWrapper">
 			<ul id="navScroller">
 				<script id="sidenav-tpl" type="text/template">
@@ -23,14 +23,31 @@
 					</li>
 					<% });%>
 				</script>
-				<li><a href="#submit" id="votesubmit" onclick="post_form();">发送投票结果</a></li>
-				<li><a href="#submit" id="votesubmit" onclick="post_form();">立即暂存结果</a></li>
+
+				<script id="question-nav-tpl" type="text/template">
+				 <%  _.each(groups, function(group,i) {  %>
+	 					<% _.each(group.questions,function(question,j){%>
+	 						<li class="sidebaritem"> <%= question.text%> </li>
+						<% });%>
+				 <% }); %>  
+				</script>
+				<li class="sidebaritem"><a href="#submit" id="votesubmit" onclick="post_form();">发送投票结果</a></li>
+				<li class="sidebaritem"><a href="#submit" id="votesubmit" onclick="post_form();">立即暂存结果</a></li>
 			</ul>
 		</nav>
 	</div>
 
 	<div id="content">
-		<header id="pagetitle"><a href="#">选票单一</a></header>
+		<header id="pagetitle">
+			<script id="section-nav-tpl" type="text/template">
+				<% _.each(sections,function(section,i){%>
+				<a href="javascript:load_ballot(<%= i%>);"><%= section.title%></a>
+				<!--
+				<span class="subtitle"><%= section.subtitle%></span>
+				-->
+				<% });%>
+			</script>
+		</header>
 		<article id="contentWrapper">
 			<div id="contentScroller">
 			  <p class="intro"></p>
@@ -65,23 +82,22 @@
 				<div  id="section-<%= count%>">
 				 <%  _.each(groups, function(group,i) {  %>
 				 		<div class="group">
-				 		<div class="group-title"><%= group.title%></div>
 				 		<ul id="marklist" class="mark">
 			 				<% _.each(group.orgs,function(org,k){%>
-			 				<% if(!_.isNull(org)){%>
 			 					<li class="mark mark-org group-item">
 			 					<div class="group-org"><%= org.fullname%></div>
-			 					<% _.each(group.questions,function(question,j){%>
-									<label for="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>"><%= question.text%>
-									<div class="rangeinput_widget">
-			   						<a href="#" onclick="rangedecrease(this);">-</a>
-			   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
-			   						<a href="#" onclick="rangeadd(this);">+</a>
-			   						</div>
-			   						</label>
-								<% });%>
+			 					<ul>
+				 					<% _.each(group.questions,function(question,j){%>
+				 						<li>
+										<div class="rangeinput_widget">
+					   						<a href="#" onclick="rangedecrease(this);">-</a>
+					   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
+					   						<a href="#" onclick="rangeadd(this);">+</a>
+				   						</div>
+				   						</li>
+									<% });%>
+								</ul>
 			   					</li>
-			 				<% }%>
 				    		<% });%>
 				    	</ul>
 				    	</div><!--end of .group-->
