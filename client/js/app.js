@@ -7,16 +7,6 @@ $(document).ready(function(){
   //ajax test
   var connect={server:"192.168.1.8",port:"80"};
 
-  //for test use
-
-  //connect.password = '636609';
-  //for test use end
-
-  //localStorage.setItem("connect",JSON.stringify(connect));
-
-//for test use
- // login_load(connect);
-  //for test use end
 
   //登入界面
   jQuery("#loginnow").bind('click',connect,function(){
@@ -28,7 +18,7 @@ $(document).ready(function(){
     localStorage.setItem("connect",JSON.stringify(connect));
     //localStorage.setItem("votedata_str", "login="+login+"&password="+password);
     if(password == ''){
-      jQuery("p.intro").text("用户名和密码必须填写。").addClass('error').show('slow');
+      //jQuery("p.intro").text("用户名和密码必须填写。").addClass('error').show('slow');
     }
     else{
       login_load(connect);
@@ -110,6 +100,10 @@ function load_sidenav(data){
 //显示选票表单
 function load_ballot(count) {
    
+    $("header#pagetitle  a").removeClass("active");
+    $("header#pagetitle a#headerlinkto-section"+count).addClass("active");
+
+
     var data = JSON.parse(localStorage.getItem("vote"));
 
     //count is a temp var to count the sections array ,so when the value is larger than the array length,STOP RENDER.

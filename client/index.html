@@ -25,6 +25,7 @@
 				</script>
 
 				<script id="question-nav-tpl" type="text/template">
+				<li class="sidebaritem"><i>单位</i></li>
 				 <%  _.each(groups, function(group,i) {  %>
 	 					<% _.each(group.questions,function(question,j){%>
 	 						<li class="sidebaritem"> <%= question.text%> </li>
@@ -41,7 +42,7 @@
 		<header id="pagetitle">
 			<script id="section-nav-tpl" type="text/template">
 				<% _.each(sections,function(section,i){%>
-				<a href="javascript:load_ballot(<%= i%>);"><%= section.title%></a>
+				<a href="#" id="headerlinkto-section<%= i%>" onclick="load_ballot(<%= i%>);"><%= section.title%></a>
 				<!--
 				<span class="subtitle"><%= section.subtitle%></span>
 				-->
@@ -50,9 +51,9 @@
 		</header>
 		<article id="contentWrapper">
 			<div id="contentScroller">
-			  <p class="intro"></p>
+
 			  <div id="login" >
-			  		<label>请输入投票密码:<input type="text" name="password" placeholder="投票密码" />
+			  		<label>请输入投票密码:<input type="text" name="password" placeholder="投票密码" value="542421"/>
 					</label>
 					<button class="btn"  type="button" id="loginnow">登入</button>
 			  </div>
@@ -85,18 +86,21 @@
 				 		<ul id="marklist" class="mark">
 			 				<% _.each(group.orgs,function(org,k){%>
 			 					<li class="mark mark-org group-item">
+			 					
+			 					<% if(org  != null) {%>
 			 					<div class="group-org"><%= org.fullname%></div>
 			 					<ul>
 				 					<% _.each(group.questions,function(question,j){%>
-				 						<li>
+				 						<li class="question-input">
 										<div class="rangeinput_widget">
-					   						<a href="#" onclick="rangedecrease(this);">-</a>
+					   						<a href="#" touchstart="rangedecrease(this);">-</a>
 					   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue<%= count%>-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
-					   						<a href="#" onclick="rangeadd(this);">+</a>
+					   						<a href="#" touchstart="rangeadd(this);">+</a>
 				   						</div>
 				   						</li>
 									<% });%>
 								</ul>
+								<% } %>
 			   					</li>
 				    		<% });%>
 				    	</ul>
