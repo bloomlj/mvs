@@ -41,6 +41,7 @@ app.get('/vote/add', vote.add);
 app.get('/vote/addvote', vote.addvote);
 app.get('/vote/addmark', vote.addmark);
 app.get('/vote/:id/edit', vote.edit);
+app.get('/vote/:id/clone', vote.clone);
 app.get('/vote/api_opened/:password', vote.api_opened);
 app.get('/vote/:id/result.:format?', vote.result);
 //app.get('/vote/:id.:format?', vote.show);
@@ -49,10 +50,6 @@ app.post('/vote', vote.create);
 app.put('/vote/:id/open', vote.open);
 app.put('/vote/:id/stop', vote.stop);
 app.put('/vote/:id', vote.update);
-
-//api api_opened
-
-
 
 app.get('/org.:format?', org.list);
 app.get('/org/add', org.add);

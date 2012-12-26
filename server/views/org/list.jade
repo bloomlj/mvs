@@ -7,8 +7,22 @@ block breadcrumbs
     li
       a(href="/org") 单位
 block content
-    h1 全部单位
     a(href="/org/add") 添加一条新单位
+    h1 添加单位
+
+    form(method="post",action="/org")
+        p
+          label(for="name") 名称
+        p
+          input#name(name="name",type="text")
+        p
+          label(for="note") 说明
+        p
+          textarea#note(name="note")
+        p 
+          input(type="submit")
+
+    h1 全部单位
     table
         tr
             td ID

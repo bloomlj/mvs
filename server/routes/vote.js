@@ -141,6 +141,7 @@ exports.api_opened = function(req, res){
           db.do('vote',function(collection){
             collection.findOne({'_id' : new ObjectID(voterdoc.vote_id)},function(err, votedoc){
               console.dir(votedoc);
+              sortVote(votedoc);
               res.set('Access-Control-Allow-Origin', '*');
               res.send({'status':'success','info':'通过验证','data':votedoc});
             });
@@ -223,6 +224,7 @@ exports.create = function(req, res){
        //default values
       vote.updated_date = new Date();
       //vote.open = 'N';
+      sortVote(vote);
       collection.insert(vote, {safe:true}, function(err, docs) {
         if (err) console.warn(err.message);
         if (err && err.message.indexOf('E11000 ') !== -1) {
@@ -237,7 +239,8 @@ exports.create = function(req, res){
 
 
 exports.update = function(req, res){
-
+    sortVote(req.body);
+    
     db.do('vote',function(collection){
 
       var ObjectID = require('mongodb').ObjectID;
@@ -282,9 +285,27 @@ exports.open = function(req, res){
     });
 
 
-
-
 }
+
+exports.clone = function(req, res){
+
+    db.do('vote',function(collection){
+      var ObjectID = require('mongodb').ObjectID;
+      collection.findOne({'_id' : new ObjectID(req.params.id)},function(err, doc){
+        console.dir(doc);
+        var newdoc = doc;
+        newdoc._id = null;
+        newdoc.clone_from = doc._id;
+        newdoc.name = newdoc.name + "-副本";
+        collection.insert(newdoc, {safe: true}, function(err, records){
+            console.log("copy newdoc record: "+records[0]._id);
+            res.redirect('/vote/');
+        });
+      });
+
+    });
+}
+
 
 exports.stop = function(req, res){
 
@@ -316,3 +337,19 @@ exports.destroy = function(req, res){
     });
 
 };
+
+
+var sortFn_byorder = function(a, b){
+  if (a.order < b.order) return -1;
+  if (a.order > b.order) return 1;
+  if (a.order == b.order) return 0;
+}
+
+var sortVote = function(votedoc){
+  votedoc.sections.forEach(function(section) {
+    section.groups.forEach(function(group){
+      group.candidates.sort(sortFn_byorder);
+      group.orgs.sort(sortFn_byorder);
+    });
+  });
+}

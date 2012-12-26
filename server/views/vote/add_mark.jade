@@ -44,10 +44,8 @@ block content
                   button.btn.btn-primary(data-dismiss="modal",aria-hidden="true") 选好了
             //评价指标
             fieldset.formark.question
-              label 指标内容:
-                input(name="sections[0][groups][0][questions][0][text]",type="text",placeholder="一级指标内容").questiontext
-              label 分数
-                input.input-mini(name="sections[0][groups][0][questions][0][weight]",type="number",placeholder="分数")
+              input(name="sections[0][groups][0][questions][0][text]",type="text",placeholder="一级指标内容").questiontext
+              input.input-mini(name="sections[0][groups][0][questions][0][weight]",type="number",placeholder="分数")
               fieldset.formark.subquestion
                 ol
                   li 
@@ -56,7 +54,7 @@ block content
                     a(href="javascript:return false;",onclick="remove_field(this)")  删除
                   a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标
               a(href="javascript:return false;",onclick="remove_field(this)")  删除指标
-            a.formark(href="javascript:return false;",onclick="add_field(this,'question')")  添加指标
+            a.formark(href="#",onclick="add_field(this,'question')")  添加指标
             a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除组
           a.btn.btn-info.addgroup(href="javascript:return false;",onclick="add_field(this,'group')")  添加组
           a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除选票单

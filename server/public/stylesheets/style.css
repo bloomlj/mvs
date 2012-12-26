@@ -54,3 +54,15 @@ input.questiontext{
     width: 800px;
     left:40%;
 }
+.section{
+    margin-bottom: 10px;
+}
+
+#footer{
+    text-align: center;
+}
+
+.subquestion ol{
+    list-style: none;
+    margin-left: 5px;
+}

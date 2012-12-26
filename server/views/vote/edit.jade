@@ -49,7 +49,7 @@ block content
                         li.candidate
                           input.span2(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][org]",value="#{candidate.org}",type="text",placeholder="单位")
                           input.span1(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][name]",value="#{candidate.name}",type="text",placeholder="姓名")
-                          input.span1(name="sections[0][groups][0][candidates][0][order]",value="#{candidate.order}",type="text",placeholder="序号")
+                          input.span1(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][order]",value="#{candidate.order}",type="text",placeholder="序号")
                           //input(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][photo]",type="text")
                           a(href="javascript:return false;",onclick="remove_field(this)")  删除
                       a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
@@ -74,14 +74,14 @@ block content
                     //评价指标
                     for question,qi in group.questions
                       fieldset.formark.question
-                        label 指标内容:
-                          input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][text]",value="#{question.text}",type="text",placeholder="一级指标内容").questiontext
-                        label 分数
-                          input.input-mini(name="sections[#{si}][groups][#{gi}][questions][#{qi}][weight]",value="#{question.weight}",type="number",placeholder="分数")
+                        | #{qi + 1} :
+                        input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][text]",value="#{question.text}",type="text",placeholder="一级指标内容").questiontext
+                        input.input-mini(name="sections[#{si}][groups][#{gi}][questions][#{qi}][weight]",value="#{question.weight}",type="number",placeholder="分数")
                         fieldset.formark.subquestion
                           ol
                             for subquestion,subqi in question.subquestions
                               li 
+                                | #{qi + 1}.#{subqi + 1} :
                                 input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][text]",value="#{subquestion.text}",type="text",placeholder="二级指标内容").questiontext
                                 input.input-mini(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][weight]",value="#{subquestion.weight}",type="number",placeholder="分数")
                                 a(href="javascript:return false;",onclick="remove_field(this)")  删除
@@ -94,17 +94,18 @@ block content
       a.section.btn(href="javascript:return false;",onclick="add_field(this,'section')")  添加选票单
 
     #setp3
-      label 设置状态：
-        if votedata.isopen == "no"
-          input(type="radio",name="isopen",value="no",checked="checked")
-        else
-          input(type="radio",name="isopen",value="no")
-        | 稍后开放
-        if votedata.isopen == "yes"
-          input(type="radio",name="isopen",value="yes",checked="checked")
-        else
-          input(type="radio",name="isopen",value="yes")
-        | 立即开放
+      //
+        label 设置状态：
+          if votedata.isopen == "no"
+            input(type="radio",name="isopen",value="no",checked="checked")
+          else
+            input(type="radio",name="isopen",value="no")
+          | 稍后开放
+          if votedata.isopen == "yes"
+            input(type="radio",name="isopen",value="yes",checked="checked")
+          else
+            input(type="radio",name="isopen",value="yes")
+          | 立即开放
       input(type="hidden",name="_method",value="put")
       input.btn(type="submit")
   script(src="/javascripts/vote-editor.js")

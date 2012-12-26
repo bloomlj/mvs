@@ -18,7 +18,7 @@ block content
         for doc in docs
            li.span6
             div.thumbnail
-                h4 #{doc.name}#{doc.vtype}
+                h4(class="#{doc.vtype}") #{doc.name}
                 span.metainfo #{doc.created_date}
                 .note #{doc.note}
                 .actions
@@ -26,13 +26,16 @@ block content
                     a.btn(href="/vote/#{doc._id}/edit") 
                         i.icon-pencil
                         |修改
+                    a.btn(href="/vote/#{doc._id}/clone") 
+                        i.icon-clone
+                        |复制
                     a.btn(href="/vote/#{doc._id}/destroy") 
                         i.icon-remove
                         |删除
                     a.btn(href="/vote/#{doc._id}/result") 
                         i.icon-list
                         |查看结果
-
+                  //        
                     if doc.isopen == 'no'
                         form(action="/vote/#{doc._id}/open",method="post")
                             input(type="hidden",name="_method",value="put")

@@ -64,36 +64,13 @@ function loadhome(data){
   //jQuery("#pagetitle").text(htmlstr);
   tplrender("section-nav-tpl",data);
 
-//显示基本信息
-  // var welcometmp = _.template("本次会议共有选票单<%= sectioncount%>个。");
-  // var welcomestr = welcometmp({sectioncount : data.sections.length});
-  // jQuery("p.intro").text(welcomestr);
-
-  load_sidenav(data);
+  sideber_scroll_init();
   load_ballot(0);
 
-  var scrollNav = new iScroll('navWrapper',{
-    onBeforeScrollStart: function (e) {
-      e.preventDefault();
-    }
-  });
-  
-  var scrollContent = new iScroll('contentWrapper',
-  {
-    vScroll: false,
-    onBeforeScrollStart: function (e) {
-    var target = e.target;
-    while (target.nodeType != 1) target = target.parentNode;
 
-    if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA'&& target.tagName != 'BUTTON')
-      e.preventDefault();
-    }
-  });
 }
 
 function load_sidenav(data){
-  //tplrender("sidenav-tpl",data);
-
   
 }
 
@@ -102,7 +79,6 @@ function load_ballot(count) {
    
     $("header#pagetitle  a").removeClass("active");
     $("header#pagetitle a#headerlinkto-section"+count).addClass("active");
-
 
     var data = JSON.parse(localStorage.getItem("vote"));
 
@@ -115,35 +91,31 @@ function load_ballot(count) {
       jQuery(".sidebaritem").remove();
       tplrender("question-nav-tpl",data.sections[count]);
 
-
       if(data.vtype=="mark") {
         tplrender("marksection-tpl",data.sections[count]);
       }
       if(data.vtype=="vote") {
         tplrender("votesection-tpl",data.sections[count]);
-      }
-      
+      }  
 
       data.count +=1;
 
-
     }else{ }
-    //load datasaved
+
+    //load datasaved cache input result
     var userinput = JSON.parse(localStorage.getItem("userinput"));
-    //console.log(userinput);
     $("input").each(function(i){
-      //console.log($(this).val());
-      //console.log(userinput[this.name]);
       if(typeof userinput[this.name] != "undefined"){
         $(this).val(userinput[this.name]);
         if( "checkbox" == $(this).attr("type")  && '1' == parseInt(userinput[this.name]) ){
           $(this).attr("checked","checked");
         }
       }
-
     });
-
-
+    //init content scroll
+    content_scroll_init();
+    //init rang input widget
+    rangeinput_init();
 }
 
 
@@ -163,17 +135,44 @@ function post_form(){
       tplrender("voteresult-tpl",{"status":msg.status});
       jQuery("#voteform").remove();
       jQuery("#sidebar").remove();
+      jQuery("header a").remove();
       jQuery("#vote_result_msg").addClass("success_msg");
+      jQuery(".by_votereview-tpl").remove();  
    });
    
 }
+function review(){
+
+   var userinput = JSON.parse(localStorage.getItem("userinput"));
+   var connect = JSON.parse(localStorage.getItem("connect"));
+   var votedata = JSON.parse(localStorage.getItem("vote"));
+
+   console.log(userinput);
+   tplrender("votereview-tpl",{"inputs":userinput});
+
+  jQuery("#voteform").hide();
+  jQuery("#sidebar").hide();
+  jQuery("header a").hide();
+   
+}
+function canceltohome(){
+  jQuery("#voteform").show();
+  jQuery("#sidebar").show();
+  jQuery("header a").show();
+  jQuery(".by_votereview-tpl").remove();  
+}
+
 
 //tpl_el: tpl_element like $("xxx_id")  data: json data to bind.
  function tplrender(tpl_id,data,callback) {
 
+    console.log(data);
+    console.log(jQuery("#"+tpl_id).text());
+
     jQuery(".by_"+tpl_id).remove();
     var votenowtmp = _.template(jQuery("#"+tpl_id).text());
     var votenowstr = votenowtmp(data);
+   console.log(votenowstr);
    jQuery("#"+tpl_id).after(votenowstr);
    jQuery("#"+tpl_id).next().addClass("by_"+tpl_id);
    callback;
@@ -233,10 +232,67 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady(){
     document.addEventListener("backbutton", function(e){
-       r = confirm("确定要退出吗？");
+       r = confirm("确定要退出吗？如果你尚未提交数据，退出后丢失所有数据输入。");
        if(r){
-        e.preventDefault();
-        navigator.app.exitApp();
+          rr = confirm("您真的要退出吗？");
+          if(rr){
+              e.preventDefault();
+              navigator.app.exitApp();
+          }
        }else{}
     }, false);
+}
+    
+var debug_el = $("#debug");
+
+function log(str) {
+    debug_el.prepend(str +"<br>");
+}
+function rangeinput_init(){
+  // $(".rangeinput_widget a").hammer({
+  //       prevent_default: false,
+  //       drag_vertical: false
+  //   })
+  //   .bind("hold tap doubletap transformstart transform transformend dragstart drag dragend release swipe", function(ev) {
+  //       log(ev.type);
+  //   });
+    $(".rangeinput_widget a.rangedecrease").hammer({
+        prevent_default: false,
+        drag_vertical: false
+    })
+    .bind("hold", function(ev) {
+        console.log(ev);
+        log(ev.type);
+        rangedecrease(ev.target);
+    });
+    $(".rangeinput_widget a.rangeadd").hammer({
+        prevent_default: false,
+        drag_vertical: false
+    })
+    .bind("hold", function(ev) {
+        console.log(ev);
+        log(ev.type);
+        rangeadd(ev.target);
+    });
+
+}
+
+
+function sideber_scroll_init(){
+  var scrollNav = new iScroll('navWrapper',{
+  onBeforeScrollStart: function (e) {
+      e.preventDefault();
+    }
+  });
+}
+
+function content_scroll_init(){
+  var scrollContent = new iScroll('contentWrapper',{
+  onBeforeScrollStart: function (e) {
+      var target = e.target;
+      while (target.nodeType != 1) target = target.parentNode;
+      if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA'&& target.tagName != 'BUTTON')
+        e.preventDefault();
+      }
+  });
 }

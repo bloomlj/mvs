@@ -1,8 +1,10 @@
     function add_field(link,fieldtype){
       //先计算已有的字段
       var len = $(link).prevAll("."+fieldtype).length;
+      console.log($(link).prev().html());
       //复制一份
       $(link).before($(link).prev().clone());
+
 
       //更新这个的所有name
       for(i = 0;i<$(link).prev().find("input").length;i++){
@@ -15,6 +17,7 @@
         }
       }
 
+      event.preventDefault(); 
     }
 
     function remove_field(link){
