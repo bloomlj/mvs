@@ -141,7 +141,7 @@ exports.api_opened = function(req, res){
           db.do('vote',function(collection){
             collection.findOne({'_id' : new ObjectID(voterdoc.vote_id)},function(err, votedoc){
               console.dir(votedoc);
-              sortVote(votedoc);
+              //sortVote(votedoc);
               res.set('Access-Control-Allow-Origin', '*');
               res.send({'status':'success','info':'通过验证','data':votedoc});
             });
@@ -224,7 +224,7 @@ exports.create = function(req, res){
        //default values
       vote.updated_date = new Date();
       //vote.open = 'N';
-      sortVote(vote);
+      //sortVote(vote);
       collection.insert(vote, {safe:true}, function(err, docs) {
         if (err) console.warn(err.message);
         if (err && err.message.indexOf('E11000 ') !== -1) {

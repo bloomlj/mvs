@@ -1,7 +1,7 @@
     function add_field(link,fieldtype){
       //先计算已有的字段
       var len = $(link).prevAll("."+fieldtype).length;
-      console.log($(link).prev().html());
+      console.log(len);
       //复制一份
       $(link).before($(link).prev().clone());
 
