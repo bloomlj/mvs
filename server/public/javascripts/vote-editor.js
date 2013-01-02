@@ -36,6 +36,19 @@
           //$(this).parent().next().next(".mincandidate").find("input").attr("max",len);
     }
 
+    function org_modal_selectall(link){
+          //$(link).prev().val(1);
+          //$(link).parent().hide('slow');
+          $(link).parent().next(".modal-body").find("input:checkbox").attr("checked","checked");
+          //update_count(link);
+    }
+    function org_modal_cancelall(link){
+          //$(link).prev().val(1);
+          //$(link).parent().hide('slow');
+          $(link).parent().next(".modal-body").find("input:checkbox").removeAttr("checked");;
+          //update_count(link);
+    }
+
     $(document).ready(function(){
       // $("#setp2").hide();
       // $("#setp3").hide();

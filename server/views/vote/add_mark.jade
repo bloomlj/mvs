@@ -30,6 +30,8 @@ block content
               a(href="#",role="button",data-toggle="modal").btn.modalfire 选择参加评价的单位
               div.modal.hide.fade
                 div.modal-header
+                  a.btn.btn-info(onclick="org_modal_selectall(this)") 全选
+                  a.btn.btn-info(onclick="org_modal_cancelall(this)") 全部不选
                   button(type="button",data-dismiss="modal",aria-hidden="true").close &times;
                   h3 选择参加评价的单位
                 div.modal-body
@@ -39,7 +41,7 @@ block content
                         input(type="checkbox",name="sections[0][groups][0][orgs][#{i}][fullname]",value="#{org.name}")
                         | #{org.name}
                       label.order.span1
-                        input(type="text",name="sections[0][groups][0][orgs][#{i}][order]",placeholder="序号")
+                        input(type="text",name="sections[0][groups][0][orgs][#{i}][order]",placeholder="序号",value="0")
                 div.modal-footer
                   button.btn.btn-primary(data-dismiss="modal",aria-hidden="true") 选好了
             //评价指标

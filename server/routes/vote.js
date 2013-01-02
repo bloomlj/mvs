@@ -205,9 +205,9 @@ exports.edit = function(req, res){
         vote.votedata = doc;
         //get orgs
         db.do('orgs',function(collection){
-        collection.find({}).toArray(function(err, orgs) {
-        vote.allorgs = orgs;
-        res.render('vote/edit', vote);
+          collection.find({}).toArray(function(err, orgs) {
+            vote.allorgs = orgs;
+            res.render('vote/edit', vote);
           });
         });
 
@@ -238,9 +238,7 @@ exports.create = function(req, res){
 }
 
 
-exports.update = function(req, res){
-    sortVote(req.body);
-    
+exports.update = function(req, res){    
     db.do('vote',function(collection){
 
       var ObjectID = require('mongodb').ObjectID;
