@@ -279,7 +279,6 @@ function sideber_scroll_init(){
 
 function content_scroll_init(){
   var scrollContent = new iScroll('contentWrapper',{
-  vScroll:false,
   onBeforeScrollStart: function (e) {
       var target = e.target;
       while (target.nodeType != 1) target = target.parentNode;
@@ -288,13 +287,13 @@ function content_scroll_init(){
       }
   });
 
-  // var scrollContentBody = new iScroll('contentbodyScroller',{
-  // onBeforeScrollStart: function (e) {
-  //     var target = e.target;
-  //     while (target.nodeType != 1) target = target.parentNode;
-  //     if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA'&& target.tagName != 'BUTTON')
-  //       e.preventDefault();
-  //     }
-  // });
+  var scrollContentBody = new iScroll('contentbodyScroller',{
+  onBeforeScrollStart: function (e) {
+      var target = e.target;
+      while (target.nodeType != 1) target = target.parentNode;
+      if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA'&& target.tagName != 'BUTTON')
+        e.preventDefault();
+      }
+  });
 
 }

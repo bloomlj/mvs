@@ -5,50 +5,48 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 	<link rel="stylesheet"  href="css/app.css" />
-	
 </head>
 <body>
 
 <div id="page">
-	<div id="sidebar" style="display:none;">
-		<header><a href="#review" id="votereview" onclick="review();" class="btn go-btn">填好了，提交</a></header>
-		<nav id="sidebarbody">
-			
-		</nav>
-	</div>
-
 	<div id="content">
 		<header id="pagetitle"></header>
 		<article id="contentWrapper">
 			<div id="contentScroller">
-		  		<form id="voteform"> </form>
+				<div id="sidebarbody"></div>
+				<div id="contentbody">
+					<div id="contentbodyScroller">
+			  			<form id="voteform"></form>
+			  	    </div>
+				</div>
 			</div>
-			<div id="login"></div>
 			<div id="debug"></div>
 		</article>
 	</div>
 </div>
+
 <script id="login-tpl" type="text/template">
-<div id="login">
-	<label>请输入投票密码:<input type="text" name="password" placeholder="投票密码" value="950695"/></label>
-	<button class="btn login"  type="button" id="loginnow">登入</button>
-</div>
+	<div id="login">
+		<label>请输入投票密码:<input type="text" name="password" placeholder="投票密码" value="950695"/></label>
+		<label id="loginmsg"></label>
+	    <button class="btn login"  type="button" id="loginnow">登入</button>
+    </div>
 </script>
 
 <script id="sidenav-tpl" type="text/template">
 	<% _.each(sections,function(section,i){%>
 	<li class="sidebaritem"><a href="javascript:load_ballot(<%= i%>);"><%= section.title%></a>
-	<!--
-	<span class="subtitle"><%= section.subtitle%></span>
-	-->
+		<!--
+		<span class="subtitle"><%= section.subtitle%></span>
+		-->
 	</li>
 	<% });%>
 </script>
 
 <script id="question-nav-tpl" type="text/template">
-<ul id="navScroller">
+<ul id="questionslist">
 	<li class="sidebaritem"><i>单位</i></li>
-	 <%  _.each(groups, function(group,i) {  %>
+	<%  _.each(groups, function(group,i) {  %>
 				<% _.each(group.questions,function(question,j){%>
 					<% _.each(question.subquestions,function(subquestion,j){%>
 						<li class="sidebaritem"><%= question.text%><i> <%= subquestion.text%> </i></li>
@@ -58,68 +56,65 @@
 	 <% }); %>  
  </ul>
 </script>
-
 <script id="section-nav-tpl" type="text/template">
 	<% _.each(sections,function(section,i){%>
-		<a href="#" id="headerlinkto-<%= i%>" onclick="load_section('<%= i%>');"><%= section.title%></a>
+	<a href="#" id="headerlinkto-<%= i%>" onclick="load_section('<%= i%>');"><%= section.title%></a>
 	<% });%>
+	<a href="#review" id="votereview" onclick="review();" class="btn go-btn">填好了，提交</a>
 </script>
-
 <script id="votesection-tpl" type="text/template">
-	<div>
-	 <%  _.each(groups, function(group,i) {  %>
-	 	<div class="group">
-	 	<div class="group-title"><%= group.title%>最多选择<%= group.max%>个人</div> 
-	 	<ul id="votelist" class="vote">
-	 		<% _.each(group.candidates,function(candidate,j){%>
-	 			<li class="group-item">
-	 				<label><%= candidate.name%>(<%= candidate.org%>)
-	 				<div class="checkbox_widget">
-		 			<input type="checkbox" name="answer[<%= candidate.org%>][<%= candidate.name%>][votevalue]"  value=1 id="checkbox-<%= i%>" onchange="saveinput(this)" />
-		 			</div>
-		 			</label>
-	 			</li>
-	    	<% });%>
-	    </ul>
-	    </div><!--end of .group-->
-	 <% }); %>  
-	 </div> 
-	</script>
-
+<div id="section">
+ <%  _.each(groups, function(group,i) {  %>
+ 	<div class="group">
+ 	<div class="group-title"><%= group.title%>最多选择<%= group.max%>个人</div> 
+ 	<ul id="votelist" class="vote">
+ 		<% _.each(group.candidates,function(candidate,j){%>
+ 			<li class="group-item">
+ 				<label><%= candidate.name%>(<%= candidate.org%>)
+ 				<div class="checkbox_widget">
+	 			<input type="checkbox" name="answer[<%= candidate.org%>][<%= candidate.name%>][votevalue]"  value=1 id="checkbox-<%= i%>" onchange="saveinput(this)" />
+	 			</div>
+	 			</label>
+ 			</li>
+    	<% });%>
+    </ul>
+    </div><!--end of .group-->
+ <% }); %>  
+ </div> 
+</script>
 <script id="marksection-tpl" type="text/template">
-<div>
+<div class="section">
  <%  _.each(groups, function(group,i) {  %>
  		<div class="group">
  		<ul id="marklist" class="mark">
 				<% _.each(group.orgs,function(org,k){%>
 					<li class="mark mark-org group-item">
-					
 					<% if(org.fullname  != null) {%>
-					<div class="group-org"><%= org.fullname%></div>
-					<ul>
- 					<% _.each(group.questions,function(question,j){%>
-							<% _.each(question.subquestions,function(subquestion,h){%>
-	 						<li class="question-input">
+						<div class="group-org"><%= org.fullname%></div>
+						<ul>
+	 					<% _.each(group.questions,function(question,j){%>
+								<% _.each(question.subquestions,function(subquestion,h){%>
+		 						<li class="question-input">
+								<div class="rangeinput_widget">
+			   						<a href="#" class="rangedecrease" touchstart="rangedecrease(this);">-</a>
+			   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][<%= subquestion.text%>][markvalue]" id="markvalue-<%= i%>-<%= k%>-<%= j%>-<%= h%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
+			   						<a href="#" class="rangeadd" touchstart="rangeadd(this);">+</a>
+		   						</div>
+		   						</li>
+								<% });%>
+
+							<li class="question-input">
 							<div class="rangeinput_widget">
 		   						<a href="#" class="rangedecrease" touchstart="rangedecrease(this);">-</a>
-		   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][<%= subquestion.text%>][markvalue]" id="markvalue-<%= i%>-<%= k%>-<%= j%>-<%= h%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
+		   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
 		   						<a href="#" class="rangeadd" touchstart="rangeadd(this);">+</a>
 	   						</div>
 	   						</li>
-							<% });%>
+						<% });%>
 
-							<li class="question-input">
-						<div class="rangeinput_widget">
-	   						<a href="#" class="rangedecrease" touchstart="rangedecrease(this);">-</a>
-	   						<input type="number" class="rangeinput" name="answer[<%= org.fullname%>][<%= question.text%>][markvalue]" id="markvalue-<%= i%>-<%= k%>-<%= j%>" value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
-	   						<a href="#" class="rangeadd" touchstart="rangeadd(this);">+</a>
-   						</div>
-   						</li>
-					<% });%>
+					    </ul>
 
-				</ul>
-
-				<% } %>
+					<% } %>
 					</li>
     		<% });%>
     	</ul>
@@ -127,7 +122,6 @@
  <% }); %>  
  </div>  
 </script>
-
 <script id="votereview-tpl" type="text/template">
 <div id="vote_review">
 <ul>
@@ -143,11 +137,9 @@
 </div>
 
 </script>
-
 <script id="voteresult-tpl" type="text/template">
 <div id="vote_result_msg">状态：<%= status%></div>
 </script>
-
 	<script src="cordova-2.2.0.js" type="text/javascript"></script>
 	<script src="libs/jquery/jquery-1.7.1.js" type="text/javascript"></script>
 	<script src="libs/iscroll/iscroll.js" type="text/javascript" ></script>
