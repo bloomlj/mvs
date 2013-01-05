@@ -9,7 +9,7 @@
 </head>
 <body>
 
-<div id="page">
+<div id="homepage" class="page">
 	<div id="sidebar" style="display:none;">
 		<header><a href="#review" id="votereview" onclick="review();" class="btn go-btn">填好了，提交</a></header>
 		<nav id="sidebarbody">
@@ -23,14 +23,39 @@
 			<div id="contentScroller">
 		  		<form id="voteform"> </form>
 			</div>
-			<div id="login"></div>
 			<div id="debug"></div>
 		</article>
 	</div>
 </div>
+<div id="questioninput_page" class="page" style="display:none;">
+	<div id="questioninput_pagecontent" class="pagecontent">
+
+	</div>
+</div>
+<script id="questioninput-tpl" type="text/template">
+		<header><b class="backtohome" onclick="controller_backto_homepage()"><~返回</b><%= org.fullname%></header>
+		<article id="questioninput_wrapper">
+			<div id="questioninput_scroller">
+				<h1><%= question.text %></h1>
+				<ul>
+				<% _.each(question.subquestions,function(subq,subqkey){%>
+					<li>
+						<%= subq.text%>
+						<div class="rangeinput_widget">
+	   						<a href="#" class="rangedecrease" touchstart="rangedecrease(this);">-</a>
+	   						<input type="number" class="rangeinput" name="answer[<%= sectionkey%>][<%= groupkey%>][<%= orgkey%>][<%= questionkey%>][<%= orgkey%>][<%= subqkey%>]"  value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
+	   						<a href="#" class="rangeadd" touchstart="rangeadd(this);">+</a>
+   						</div>
+					</li>
+				<% });%>
+				</ul>
+			</div>
+		</article>
+</script>
 <script id="login-tpl" type="text/template">
 <div id="login">
 	<label>请输入投票密码:<input type="text" name="password" placeholder="投票密码" value="950695"/></label>
+	<label id="loginmsg"></label>
 	<button class="btn login"  type="button" id="loginnow">登入</button>
 </div>
 </script>
@@ -50,10 +75,12 @@
 	<li class="sidebaritem"><i>单位</i></li>
 	 <%  _.each(groups, function(group,i) {  %>
 				<% _.each(group.questions,function(question,j){%>
+					<!--
 					<% _.each(question.subquestions,function(subquestion,j){%>
 						<li class="sidebaritem"><%= question.text%><i> <%= subquestion.text%> </i></li>
-				<% });%>
-					<li class="sidebaritem"> <%= question.text%> 小计</li>
+					<% });%>
+					-->
+					<li class="sidebaritem"> <%= question.text%></li>
 			<% });%>
 	 <% }); %>  
  </ul>
@@ -93,11 +120,11 @@
  		<ul id="marklist" class="mark">
 				<% _.each(group.orgs,function(org,k){%>
 					<li class="mark mark-org group-item">
-					
 					<% if(org.fullname  != null) {%>
 					<div class="group-org"><%= org.fullname%></div>
 					<ul>
  					<% _.each(group.questions,function(question,j){%>
+							<!--
 							<% _.each(question.subquestions,function(subquestion,h){%>
 	 						<li class="question-input">
 							<div class="rangeinput_widget">
@@ -107,7 +134,7 @@
 	   						</div>
 	   						</li>
 							<% });%>
-
+							-->
 							<li class="question-input">
 						<div class="rangeinput_widget">
 	   						<a href="#" class="rangedecrease" touchstart="rangedecrease(this);">-</a>
@@ -128,6 +155,32 @@
  </div>  
 </script>
 
+<script id="marksection_table-tpl" type="text/template">
+<div class="marksection_<%=key%>">
+ <%  _.each(groups, function(group,i) {  %>
+ 	<table class="marksection_form group">
+ 		<tr class="group-orgs group_header">
+ 			<% _.each(group.orgs,function(org,k){%>
+ 				<% if(org.fullname  != null) {%>
+ 					<th><%= org.fullname %></th>
+ 				<%}%>
+ 			<% });%>
+ 		</tr>
+ 		<% _.each(group.questions,function(question,j){%>
+ 			<tr class="marksection_question">
+				<% _.each(group.orgs,function(org,k){%>
+					<% if(org.fullname  != null) {%>
+						<td class="question_button"  onclick="view_questioninput('<%= key%>','<%= i%>','<%= k%>','<%=j%>')">
+							icon
+		   				</td>
+		   			<% } %>
+				<% });%>
+			</tr>			
+		<% });%>
+    </table><!--end of .group-->
+ <% }); %>  
+ </div>  
+</script>
 <script id="votereview-tpl" type="text/template">
 <div id="vote_review">
 <ul>

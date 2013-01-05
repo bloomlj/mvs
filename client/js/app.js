@@ -1,9 +1,9 @@
 var client={};
 client.init = function(){
   //clear db
-  localStorage.setItem("vote",'');
-  localStorage.setItem("connect",'');
-  localStorage.setItem("userinput",'{}');
+  if(!localStorage.getItem("vote"))  localStorage.setItem("vote",'');
+  if(!localStorage.getItem("connect"))  localStorage.setItem("connect",'');
+  if(!localStorage.getItem("userinput"))  localStorage.setItem("userinput",'{}');
   client.connect = {server:"192.168.1.8",port:"80"};
 }
 client.view_login = function(){
@@ -34,6 +34,7 @@ client.http_login=function(connect){
     },
     success: function(doc){
       if(doc.status == 'success'){
+         $("#login").remove();
         client.loadhomepage(doc.data);
       }
       if(doc.status == 'error'){
@@ -46,8 +47,6 @@ client.http_login=function(connect){
 // when data get ,then load home page.
 client.loadhomepage=function(data){
   localStorage.setItem("vote",JSON.stringify(data));
-  //move login form
-  jQuery("#login").remove();
   //show sidebar nav
   $("#sidebar").show();
 
@@ -76,15 +75,11 @@ function load_section(section_key) {
     var data = JSON.parse(localStorage.getItem("vote"));
 
     if(typeof data.sections[section_key] != "undefined"){
-      //jQuery("#votenow").siblings('.ui-btn-inner').children('.ui-btn-text').text("下一单");
-      //data.sections[section_key].count = count;
-      //if(count > 0 ) jQuery("div#section-"+(count -1)).remove();
-      //sidebar
-      //jQuery(".sidebaritem").remove();
+      data.sections[section_key].key = section_key;
       tplrender("question-nav-tpl",data.sections[section_key],"sidebarbody");
 
       if(data.vtype=="mark") {
-        tplrender("marksection-tpl",data.sections[section_key],"voteform");
+        tplrender("marksection_table-tpl",data.sections[section_key],"voteform");
       }
       if(data.vtype=="vote") {
         tplrender("votesection-tpl",data.sections[section_key],"voteform");
@@ -129,6 +124,30 @@ function post_form(){
       jQuery(".by_votereview-tpl").remove();  
    });
    
+}
+
+function view_questioninput(section,group,org,question){
+  console.log(section);
+  console.log(group);
+  console.log(org);
+  console.log(question);
+  var vote = JSON.parse(localStorage.getItem("vote"));
+  console.log(vote.sections[section]);
+  console.log(vote['sections'][section]['groups'][group]['questions'][question]);
+  var qitem = {};
+  qitem.sectionkey = section;
+  qitem.groupkey = group;
+  qitem.orgkey = org;
+  qitem.questionkey = question;
+  qitem.org = vote['sections'][section]['groups'][group]['orgs'][org];
+  qitem.question = vote['sections'][section]['groups'][group]['questions'][question];
+  tplrender("questioninput-tpl",qitem,"questioninput_pagecontent");
+  jQuery("#homepage").hide();
+  jQuery("#questioninput_page").show();
+}
+function controller_backto_homepage(){
+  jQuery("#questioninput_page").hide();
+  jQuery("#homepage").show();
 }
 function review(){
 
