@@ -40,7 +40,7 @@
 				<ul>
 				<% _.each(question.subquestions,function(subq,subqkey){%>
 					<li>
-						<%= subq.text%>
+						<b><%= subq.text%></b>
 						<div class="rangeinput_widget">
 	   						<a href="#" class="rangedecrease" touchstart="rangedecrease(this);">-</a>
 	   						<input type="number" class="rangeinput" name="answer[<%= sectionkey%>][<%= groupkey%>][<%= orgkey%>][<%= questionkey%>][<%= orgkey%>][<%= subqkey%>]"  value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>

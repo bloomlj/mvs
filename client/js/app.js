@@ -144,6 +144,15 @@ function view_questioninput(section,group,org,question){
   tplrender("questioninput-tpl",qitem,"questioninput_pagecontent");
   jQuery("#homepage").hide();
   jQuery("#questioninput_page").show();
+
+  var questioninput_page_scroller = new iScroll('questioninput_scroller',{
+  onBeforeScrollStart: function (e) {
+      var target = e.target;
+      while (target.nodeType != 1) target = target.parentNode;
+      if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA'&& target.tagName != 'BUTTON')
+        e.preventDefault();
+      }
+  });
 }
 function controller_backto_homepage(){
   jQuery("#questioninput_page").hide();
@@ -307,13 +316,6 @@ function content_scroll_init(){
       }
   });
 
-  // var scrollContentBody = new iScroll('contentbodyScroller',{
-  // onBeforeScrollStart: function (e) {
-  //     var target = e.target;
-  //     while (target.nodeType != 1) target = target.parentNode;
-  //     if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA'&& target.tagName != 'BUTTON')
-  //       e.preventDefault();
-  //     }
-  // });
+
 
 }
