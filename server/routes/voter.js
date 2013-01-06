@@ -45,7 +45,7 @@ exports.print = function(req, res){
 
 exports.add = function(req, res){
 
-      db.do('vote',function(collection){
+    db.do('vote',function(collection){
         collection.find({}).toArray(function(err, docs) {
         console.dir(docs);
         res.render('voter/add', {"votes":docs});

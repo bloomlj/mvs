@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+    h1 报表
+    a(href="/report/add") 新建报表
+    table
+        tr
+            td ID
+            td 报表名称
+            td 涉及投票
+            td 报表类型
+            td
+        each doc in docs
+            tr
+                td #{doc._id}
+                td #{doc.title}
+                td #{doc.vote_id}
+                td #{doc.report_type}
+                td 
+                    a(href="/report/#{doc._id}") 查看详细
+                    a(href="/report/#{doc._id}/destroy") 删除
+

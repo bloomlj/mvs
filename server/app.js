@@ -9,6 +9,7 @@ var express = require('express')
   , vote = require('./routes/vote')
   , org = require('./routes/org')
   , answer = require('./routes/answer')
+  , report = require('./routes/report')
   , candiate = require('./routes/candiate')
   , bullot = require('./routes/bullot')
   , voter = require('./routes/voter')
@@ -76,6 +77,15 @@ app.get('/answer/:id/destroy', answer.destroy);
 app.post('/answer/api_create', answer.api_create);
 app.post('/answer', answer.create);
 app.put('/answer/:id', answer.update);
+
+app.get('/report.:format?', report.list);
+app.get('/report/add', report.add);
+app.get('/report/:id.:format?', report.show);
+app.get('/report/:id/edit', report.edit);
+app.get('/report/:id/destroy', report.destroy);
+app.post('/report', report.create);
+app.put('/report/:id', report.update);
+
 
 app.get('/candiate.:format?', candiate.list);
 app.get('/candiate/add', candiate.add);

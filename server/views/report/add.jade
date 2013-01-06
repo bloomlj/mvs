@@ -1,0 +1,16 @@
+extends ../layout
+block content
+  h1 添加报表
+  form(method="post",action="/report")
+    label(for="title") 报表名称:
+      input#name(name="title",type="text")
+    label 投票:
+      select(name="vote_id")
+        each vote in votes
+          option(value="#{vote._id}") #{vote.name}
+    label 报表类型:
+      select(name="report_type")
+        option(value="list") 列表分析
+    label(for="note") 方案描述:
+      textarea#note(name="note")
+    input(type="submit")
