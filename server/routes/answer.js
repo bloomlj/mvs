@@ -74,16 +74,18 @@ exports.create = function(req, res){
 exports.api_create = function(req, res){
 
     db.do('answer',function(collection){
-
        //insert
       var answer = req.body;
+      var answer.ip = req.ip;
+      var answer.submittime = new Date();;
+      
       collection.insert(answer, {safe:true}, function(err, objects) {
         if (err){
           console.warn(err.message);
         }
         else{
           res.set('Access-Control-Allow-Origin', '*');
-          res.send({status:"success"});
+          res.send({status:"您的数据已提交，并已存入数据库。"});
         }
         
       });

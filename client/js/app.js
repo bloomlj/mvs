@@ -86,14 +86,22 @@ function load_section(section_key) {
       }  
     }
 
-    loadsavedinput();
+    loadsaved2homepage();
     //init content scroll
     content_scroll_init();
     //init rang input widget
     rangeinput_init();
 }
 
-
+function post_conform(){
+      r = confirm("确定要提交吗？提交后将不能返回修改。");
+       if(r){
+          rr = confirm("确定要提交吗？");
+          if(rr){
+            post_form();
+          }
+       }else{}
+}
 function post_form(){
 
    var userinput = JSON.parse(localStorage.getItem("userinput"));
@@ -107,15 +115,21 @@ function post_form(){
    postdata["vote_name"] = votedata.name;
    console.log(postdata);
    $.post("http://"+connect.server+":"+connect.port+"/answer/api_create", postdata,function(msg){
-      tplrender("voteresult-tpl",{"status":msg.status});
-      jQuery("#voteform").remove();
-      jQuery("#sidebar").remove();
-      jQuery("header a").remove();
-      jQuery("#vote_result_msg").addClass("success_msg");
-      jQuery(".by_votereview-tpl").remove();  
+      tplrender("voteresult-page-tpl",{"status":msg.status},"voteresult_pagecontent");
+      //clear local db
+      localStorage.setItem("vote",'');
+      localStorage.setItem("connect",'');
+      localStorage.setItem("userinput",'{}');
+      //remove  the pages for vote
+      jQuery("#homepage").remove();
+      jQuery("#questioninput_page").remove();
+      jQuery("#review_page").remove();
+      //show voteresult page
+      jQuery("#voteresult_page").show();
+
    });
-   
 }
+
 
 function view_questioninput(section,group,org,question){
   // console.log(section);
@@ -148,25 +162,15 @@ function view_questioninput(section,group,org,question){
   });
 }
 
-function review(){
-
+function view_review(){
    var userinput = JSON.parse(localStorage.getItem("userinput"));
-   var connect = JSON.parse(localStorage.getItem("connect"));
-   var votedata = JSON.parse(localStorage.getItem("vote"));
+   var localanswers = tool_inputs2objwithtext(userinput)
+   console.log(localanswers);
+   tplrender("votereview-tpl",{"localanswers":localanswers},"review_pagecontent");
 
-   console.log(userinput);
-   tplrender("votereview-tpl",{"inputs":userinput});
-
-  jQuery("#voteform").hide();
-  jQuery("#sidebar").hide();
-  jQuery("header a").hide();
-   
-}
-function canceltohome(){
-  jQuery("#voteform").show();
-  jQuery("#sidebar").show();
-  jQuery("header a").show();
-  jQuery(".by_votereview-tpl").remove();  
+   jQuery("#homepage").hide();
+   jQuery("#review_page").show();
+   var reviewpage_scroller = new iScroll('review_scroller');
 }
 
 function tplrender(tpl_id,data,target_id) {
@@ -230,6 +234,7 @@ function saveinput(el){
   if("number" == $(el).attr("type")){
     userinput[$(el).attr("name")] = $(el).val();
     questioninput_total_autoreflash();
+    userinput[$($(".questiontotal_inputfield input")[0]).attr("name")] = $($(".questiontotal_inputfield input")[0]).val();
   }
   localStorage.setItem("userinput",JSON.stringify(userinput));
 
@@ -258,8 +263,8 @@ function questioninput_total_autoreflash(){
       subquestion_total+=parseInt($($(".subquestion_inputfield input")[i]).val());
     };
     $(".questiontotal_inputfield input").val(subquestion_total);
-
-        //another method
+    //save total input val,because it may not be changed by person.
+            //another method
     //var totalfieldkey = $(el).attr("name").replace(/subquestion_\d/, "total");
     //$("input[name='"+totalfieldkey+"']").val(subquestion_total);
 }
@@ -274,17 +279,90 @@ function  subquestion_name2key(name){
     keys['subquestion_key'] = subquestion_keyarray[4];
     return keys;
 }
-function controller_backto_homepage(){
+function tool_inputs2obj(inputs){
+    var local_answers={};
+    for (var key in inputs) {
+        //result += objName + "." + prop + " = " + inputs[key] + "\n";
+        var keyarray = key.match(/[a-z]+_\d+/g);
+        if(typeof local_answers[keyarray[0]] == "undefined")    local_answers[keyarray[0]] = {};
+        if(typeof local_answers[keyarray[0]][keyarray[1]] == "undefined") local_answers[keyarray[0]][keyarray[1]] = {};
+        if(typeof local_answers[keyarray[0]][keyarray[1]][keyarray[2]] == "undefined") local_answers[keyarray[0]][keyarray[1]][keyarray[2]]= {};
+        if(typeof local_answers[keyarray[0]][keyarray[1]][keyarray[2]][keyarray[3]] == "undefined")  local_answers[keyarray[0]][keyarray[1]][keyarray[2]][keyarray[3]]= {};
+        local_answers[keyarray[0]][keyarray[1]][keyarray[2]][keyarray[3]][keyarray[4]] = inputs[key];
+    }
+    return local_answers;
+}
+function tool_inputs2objwithtext(inputs){
+    var votedata = JSON.parse(localStorage.getItem("vote"));
+    var local_answers={};
+    for (var key in inputs) {
+        //result += objName + "." + prop + " = " + inputs[key] + "\n";
+        var keyarray = key.match(/[a-z]+_\d+/g);
+        //init
+        if(typeof local_answers[keyarray[0]] == "undefined")    local_answers[keyarray[0]] = {"groups":{}};
+        if(typeof local_answers[keyarray[0]]['groups'][keyarray[1]] == "undefined") local_answers[keyarray[0]]['groups'][keyarray[1]] = {"orgs":{}};
+        if(typeof local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]] == "undefined") local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]={"questions":{}};
+        if(typeof local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]] == "undefined")  local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]= {"subquestions":{}};
+        if(typeof local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['subquestions'][keyarray[4]] == "undefined")  local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['subquestions'][keyarray[4]]= {};
+        console.log(local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['subquestions']);
+        //give value
+        local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['subquestions'][keyarray[4]]['answer'] = inputs[key];
+        //get text
+        local_answers[keyarray[0]]['title'] = votedata['sections'][keyarray[0]]['title'];
+        local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['fullname'] = votedata['sections'][keyarray[0]]['groups'][keyarray[1]]['orgs'][[keyarray[2]]]['fullname'];
+        local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['text'] = votedata['sections'][keyarray[0]]['groups'][keyarray[1]]['questions'][[keyarray[3]]]['text'];
+        if(keyarray[4] != 'total_0')  local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['subquestions'][keyarray[4]]['text'] = votedata['sections'][keyarray[0]]['groups'][keyarray[1]]['questions'][[keyarray[3]]]['subquestions'][keyarray[4]]['text'];
+    }
+    return local_answers;
+}
+function tool_inputs2answeritem(inputs){
+    var votedata = JSON.parse(localStorage.getItem("vote"));
+    var answeritem={};
+    for (var key in inputs) {
+        //result += objName + "." + prop + " = " + inputs[key] + "\n";
+        var keyarray = key.match(/[a-z]+_\d+/g);
+        if(keyarray[4] == 'total_0') {
+          answeritem['section_key'] = keyarray[0];
+          answeritem['section_title'] = votedata['sections'][keyarray[0]]['title'];
+          answeritem['group_key'] = keyarray[1];
+          answeritem['org_key'] = keyarray[2];
+          answeritem['org_title'] = votedata['sections'][keyarray[0]]['groups'][keyarray[1]]['orgs'][[keyarray[2]]]['fullname'];
+          answeritem['question_key'] = keyarray[3];
+          answeritem['question_title'] = votedata['sections'][keyarray[0]]['groups'][keyarray[1]]['questions'][[keyarray[3]]]['text'];
+          answeritem['total'] = inputs[key];
+        }
+    }
+    return answeritem;
+}
+function questioninput_savebackto_homepage(){
   var totalfieldname = $($(".questiontotal_inputfield input")[0]).attr("name");
   var totalvalue = $($(".questiontotal_inputfield input")[0]).val();
   var keys = subquestion_name2key(totalfieldname);
   var tdid = "qgrid-"+keys['section_key']+"-"+keys['group_key']+"-"+keys['org_key']+"-"+keys['question_key'];
   $("td#"+tdid).html("已打"+totalvalue+"分");
   $("td#"+tdid).addClass("saved");
-
+  
   jQuery("#questioninput_page").hide();
   jQuery("#homepage").show();
 }
+function loadsaved2homepage(){
+  var userinput = JSON.parse(localStorage.getItem("userinput"));
+  for(fieldname in userinput){
+    var keys = subquestion_name2key(fieldname);
+    if(keys['subquestion_key'] == "total_0"){
+      var totalvalue = userinput[fieldname];
+      var tdid = "qgrid-"+keys['section_key']+"-"+keys['group_key']+"-"+keys['org_key']+"-"+keys['question_key'];
+      $("td#"+tdid).html("已打"+totalvalue+"分");
+      $("td#"+tdid).addClass("saved");
+    }
+
+  };
+}
+function review_backto_homepage(){
+  jQuery("#review_page").hide();
+  jQuery("#homepage").show();
+}
+
 document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady(){
