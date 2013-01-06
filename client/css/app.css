@@ -144,7 +144,6 @@ header#pagetitle > a.active{
 }
 
 
-
 div.group-org{
 	height:60px;
 	border-bottom: 1px solid #ccc;
@@ -197,21 +196,6 @@ li.question-input{
 	border:1px solid #aaa;
 }
 
-/*
-#contentScroller li.vote {
-	display:block; float:left;
-	width:100px; height:145px; 
-	line-height:20px;
-	text-align:center;
-	border:1px solid #aaa;
-	padding:5px;
-	background-repeat: no-repeat;
-	background-position: center center;
-}*/
-#contentScroller li.group-item{
-
-}
-
 #contentScroller li.group-item label{
 	display: block;
 	height:50px;
@@ -223,29 +207,6 @@ li.question-input{
 
 input[type="number"]{
 	width:2em;
-}
-
-
-#login{
-	background: #fff;
-	margin:20px auto 20px;
-	width:80%;
-	padding: 20px;
-}
-#login label{
-	display: block;
-	margin-bottom:10px;
-}
-#login input{
-	line-height: 20px;
-	padding: 10px;
-	width:70%;
-}
-.intro{
-	margin:20px;
-	padding: 20px;
-	background: #f0f0f0;
-	display: none;
 }
 
 
@@ -278,10 +239,8 @@ input[type="range"]::-webkit-slider-thumb {
 	display: block;
 }
 
-.rangeinput_widget{
-	
-}
-.rangeinput_widget a{
+
+.rangeinput_widget i{
 	background-color: #f0f0f0;
 	display: inline-block;
 	height:60px;
@@ -337,15 +296,7 @@ input[type="range"]::-webkit-slider-thumb {
 	color:#fff;
 	background: #ccc;
 }
-.btn.login{
-	line-height: 20px;
-	padding:5px 10px;
-	background:#4D90FE;
-	color:#fff;
-	border: 0px;
-	width:100%;
-	height:40px;
-}
+
 table.marksection_form{
 	border-collapse:collapse;
 	border-spacing: none;
@@ -377,15 +328,35 @@ table.marksection_form td.saved{
 	background:#aaa;
 	overflow:auto;
 }
-
+#review_wrapper {
+	position:absolute; z-index:1;
+	top:45px; bottom:48px; left:0;
+	width:100%;
+	background:#aaa;
+	overflow:auto;
+}
+#voteresult_wrapper{
+	position:absolute; z-index:1;
+	top:45px; bottom:48px; left:0;
+	width:100%;
+	background:#aaa;
+	overflow:auto;
+}
+#votereport_wrappe{
+	position:absolute; z-index:1;
+	top:45px; bottom:48px; left:0;
+	width:100%;
+	background:#aaa;
+	overflow:auto;
+}
 #questioninput_scroller {
 	position:absolute; z-index:1;
 /*	-webkit-touch-callout:none;*/
 	-webkit-tap-highlight-color:rgba(0,0,0,0);
 	width:100%;
 	padding:0;
+	height:800px;
 }
-
 .listpage_body ul {
 	list-style:none;
 	padding:0;
@@ -424,6 +395,8 @@ table.marksection_form td.saved{
 	width:15em
 }
 
-#review_scroller{
-	height:5000px;
+
+input#loginpassword{
+	width:100%;
+	height:70%;
 }

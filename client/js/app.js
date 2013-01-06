@@ -7,23 +7,8 @@ client.init = function(){
   client.connect = {server:"192.168.1.8",port:"80"};
 }
 client.view_login = function(){
-  tplrender("login-tpl",{},"voteform");
+  tplrender("login-tpl",{},"login_pagecontent");
 }
-client.contoller_login = function(){
-  //登入界面
-  jQuery("#login #loginnow").bind('click',client,function(){
-    var password = $("input[name='password']").val();
-    client.connect.password = password;
-    localStorage.setItem("connect",JSON.stringify(client.connect));
-    if(password == ''){
-      jQuery("#login #loginmsg").text("用户名和密码必须填写。").addClass('error').show('slow');
-    }
-    else{
-      client.http_login(client.connect);
-    }
-  });
-}
-
 client.http_login=function(connect){
   //login
   $.ajax({
@@ -34,11 +19,12 @@ client.http_login=function(connect){
     },
     success: function(doc){
       if(doc.status == 'success'){
-         $("#login").remove();
+         $("#login_page").remove();
+         $("#homepage").show();
         client.loadhomepage(doc.data);
       }
       if(doc.status == 'error'){
-        jQuery("#loginmsg").text("登录失败。原因："+doc.info).addClass('error').show('slow');
+        jQuery("#loginmsg").text("登录失败。原因："+doc.info).addClass('error');
       }
     }
   });
@@ -63,10 +49,20 @@ client.loadhomepage=function(data){
 $(document).ready(function(){
   client.init();
   client.view_login();
-  client.contoller_login();
 });
 
-
+function contoller_login(){
+  //登入界面
+    var password = $("input#loginpassword").val();
+    client.connect.password = password;
+    localStorage.setItem("connect",JSON.stringify(client.connect));
+    if(password == ''){
+      jQuery("#loginmsg").text("用户名和密码必须填写。").addClass('error');
+    }
+    else{
+      client.http_login(client.connect);
+    }
+}
 //显示选票表单
 function load_section(section_key) {
     $("header#pagetitle  a").removeClass("active");
@@ -90,7 +86,7 @@ function load_section(section_key) {
     //init content scroll
     content_scroll_init();
     //init rang input widget
-    rangeinput_init();
+    //rangeinput_init();
 }
 
 function post_conform(){
@@ -118,7 +114,7 @@ function post_form(){
       tplrender("voteresult-page-tpl",{"status":msg.status},"voteresult_pagecontent");
       //clear local db
       localStorage.setItem("vote",'');
-      localStorage.setItem("connect",'');
+      //localStorage.setItem("connect",'');
       localStorage.setItem("userinput",'{}');
       //remove  the pages for vote
       jQuery("#homepage").remove();
@@ -126,19 +122,14 @@ function post_form(){
       jQuery("#review_page").remove();
       //show voteresult page
       jQuery("#voteresult_page").show();
+      var voteresult_Scroll = new iScroll('voteresult_wrapper');
 
    });
 }
 
 
 function view_questioninput(section,group,org,question){
-  // console.log(section);
-  // console.log(group);
-  // console.log(org);
-  // console.log(question);
   var vote = JSON.parse(localStorage.getItem("vote"));
-  // console.log(vote.sections[section]);
-  // console.log(vote['sections'][section]['groups'][group]['questions'][question]);
   var qitem = {};
   qitem.sectionkey = section;
   qitem.groupkey = group;
@@ -152,7 +143,7 @@ function view_questioninput(section,group,org,question){
   
   loadsavedinput();
 
-  var questioninput_page_scroller = new iScroll('questioninput_scroller',{
+  var questioninput_page_scroller = new iScroll('questioninput_wrapper',{
   onBeforeScrollStart: function (e) {
       var target = e.target;
       while (target.nodeType != 1) target = target.parentNode;
@@ -170,9 +161,31 @@ function view_review(){
 
    jQuery("#homepage").hide();
    jQuery("#review_page").show();
-   var reviewpage_scroller = new iScroll('review_scroller');
+   var reviewpage_scroller = new iScroll('review_wrapper');
 }
 
+function fetch_report(){
+    var connect = JSON.parse(localStorage.getItem("connect"));
+    $.ajax({
+    type:"GET",
+    url:"http://" + connect.server + ":" + connect.port +"/report/api_opening/"+connect.password,
+    error: function(jqXHR, textStatus, errorThrown){
+      //$("#loginmsg").text("登录失败,错误信息：无法与服务器 "+connect.server+" 正常通信。").addClass("error").show('slow');
+    },
+    success: function(doc){
+      if(doc.status == 'success'){
+        console.log(doc);
+         tplrender("votereport-page-tpl",doc,"votereport_pagecontent");
+         jQuery("#voteresult_page").hide();
+         jQuery("#votereport_page").show();
+         var reviewpage_scroller = new iScroll('votereport_wrapper');
+       }
+      if(doc.status == 'error'){
+        //jQuery("#loginmsg").text("登录失败。原因："+doc.info).addClass('error');
+      }
+    }
+  });
+}
 function tplrender(tpl_id,data,target_id) {
    var tplhandle = _.template(jQuery("#"+tpl_id).text());
    var htmlstr = tplhandle(data);
@@ -200,22 +213,36 @@ function autotplrender(tpl_id,data,callback) {
 
 function rangedecrease(el) {
   var current = $(el).next().val();
+  //if null,give it max value for default
+  if(current == ""){
+    $(el).next().val($(el).next().attr('max'));
+    saveinput($(el).next()[0]);
+  }
   var min = $(el).next().attr('min');
   if(current > min) {
     $(el).next().val(current-1);
     saveinput($(el).next()[0]);
   }
+  
+
   return false;
 }
 
 function rangeadd(el) {
   var current = $(el).prev().val();
+  //if null,give it max value for default
+  if(current == ""){
+    $(el).prev().val($(el).prev().attr('max'));
+    saveinput($(el).prev()[0]);
+  }
   var max = $(el).prev().attr('max');
   if(parseInt(current) < max){
     $(el).prev().val(parseInt(current)+1);
     saveinput($(el).prev()[0]);
   }
   
+  //if null,give it max value for default
+  if(current = '') $(el).prev().val($(el).prev().attr('max'));
   return false;
 }
 
@@ -239,8 +266,8 @@ function saveinput(el){
   localStorage.setItem("userinput",JSON.stringify(userinput));
 
   //debug
-  console.log($(el).attr("type"));
-  console.log(userinput);
+  //console.log($(el).attr("type"));
+  //console.log(userinput);
   //console.log(localStorage.getItem("userinput"));
 }
 
@@ -259,9 +286,11 @@ function loadsavedinput(){
 
 function questioninput_total_autoreflash(){
     var subquestion_total = 0;
+    
     for (var i = 0; i < $(".subquestion_inputfield  input").length; i++) {
-      subquestion_total+=parseInt($($(".subquestion_inputfield input")[i]).val());
+      if($($(".subquestion_inputfield input")[i]).val() != "") subquestion_total+=parseInt($($(".subquestion_inputfield input")[i]).val());
     };
+    
     $(".questiontotal_inputfield input").val(subquestion_total);
     //save total input val,because it may not be changed by person.
             //another method

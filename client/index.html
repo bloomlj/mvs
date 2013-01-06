@@ -8,7 +8,12 @@
 	
 </head>
 <body>
-<div id="homepage" class="page">
+<div id="login_page" class="page" >
+	<div id="login_pagecontent" class="pagecontent">
+
+	</div>
+</div>
+<div id="homepage" class="page" style="display:none;">
 	<div id="sidebar" style="display:none;">
 		<header><b id="votereview" onclick="view_review()">填好了，提交</b></header>
 		<nav id="sidebarbody">
@@ -41,6 +46,11 @@
 
 	</div>
 </div>
+<div id="votereport_page" class="page" style="display:none;">
+	<div id="votereport_pagecontent" class="pagecontent">
+
+	</div>
+</div>
 <script id="questioninput-tpl" type="text/template">
 		<header><%= org.fullname%> <%= question.text %> 评价</header>
 		<article id="questioninput_wrapper">
@@ -51,9 +61,9 @@
 					<li class="subquestion_inputfield">
 						<b><%= subq.text%> (共<%= subq.weight %>分)</b>
 						<div class="rangeinput_widget">
-	   						<a href="#" class="rangedecrease" onclick="rangedecrease(this);">-</a>
-	   						<input type="number" class="rangeinput" name="answer[<%= sectionkey%>][<%= groupkey%>][<%= orgkey%>][<%= questionkey%>][<%= subqkey%>]"  value="0" min="0" max="<%= subq.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
-	   						<a href="#" class="rangeadd" onclick="rangeadd(this);">+</a>
+	   						<i class="rangedecrease" onclick="rangedecrease(this);">-</i>
+	   						<input type="number" class="rangeinput" name="answer[<%= sectionkey%>][<%= groupkey%>][<%= orgkey%>][<%= questionkey%>][<%= subqkey%>]"  value="" min="0" max="<%= subq.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
+	   						<i class="rangeadd" onclick="rangeadd(this);">+</i>
    						</div>
 					</li>
 				<% });%>
@@ -61,9 +71,9 @@
 				<li class="questiontotal_inputfield">
 					<b>合计</b>
 						<div class="rangeinput_widget">
-	   						<a href="#" class="rangedecrease" onclick="rangedecrease(this);">-</a>
-	   						<input type="number" class="rangeinput" name="answer[<%= sectionkey%>][<%= groupkey%>][<%= orgkey%>][<%= questionkey%>][total_0]"  value="0" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
-	   						<a href="#" class="rangeadd" onclick="rangeadd(this);">+</a>
+	   						<i class="rangedecrease" onclick="rangedecrease(this);">-</i>
+	   						<input type="number" class="rangeinput" name="answer[<%= sectionkey%>][<%= groupkey%>][<%= orgkey%>][<%= questionkey%>][total_0]"  value="" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
+	   						<i class="rangeadd" onclick="rangeadd(this);">+</i>
    						</div>
 				</li>
 				<li class="libtn" onclick="questioninput_savebackto_homepage()">保存，并返回</li>
@@ -72,12 +82,18 @@
 			</div>
 		</article>
 </script>
+
 <script id="login-tpl" type="text/template">
-<div id="login">
-	<label>请输入投票密码:<input type="text" name="password" placeholder="投票密码" value="950695"/></label>
-	<label id="loginmsg"></label>
-	<button class="btn login"  type="button" id="loginnow">登入</button>
-</div>
+	<header>登录</header>
+	<article id="voteresult_wrapper">
+		<div id="voteresult_scroller" class="listpage_body">
+			<ul>
+				<li id="loginmsg"></li>
+				<li ><input id="loginpassword" type="text" name="password" placeholder="请输入投票密码" value="950695"/></li>
+				<li class="libtn" id="loginnow" onclick="contoller_login();" >登入</li>
+			</ul>
+		</div>
+	</article>
 </script>
 
 <script id="sidenav-tpl" type="text/template">
@@ -225,9 +241,9 @@
 </script>
 
 <script id="voteresult-page-tpl" type="text/template">
-	<header>评价结果</header>
+	<header>提交结果</header>
 	<article id="voteresult_wrapper">
-		<div id="voteresult_scroller" class="listpage_body">
+		<div id="voteresult_status" class="listpage_body">
 			<ul>
 				<li id="post_status_msg">状态：<%= status%></li>
 				<li class="libtn" onclick="fetch_report();" >查看评价结果</li>
@@ -235,19 +251,26 @@
 		</div>
 	</article>
 </script>
-<script id="voteresult-list-tpl" type="text/template">
-				<%for(section in localanswers) {%>
-					<%for(group in localanswers[section]['groups']) {%>
-						<%for(org in localanswers[section]['groups'][group]['orgs']) {%>
-							<li class="lititle"><%= localanswers[section]['groups'][group]['orgs'][org]['fullname']%></li>
-							<%for(question in localanswers[section]['groups'][group]['orgs'][org]['questions']) {%>
-								<li><%= localanswers[section]['groups'][group]['orgs'][org]['questions'][question]['text']%>: <%= localanswers[section]['groups'][group]['orgs'][org]['questions'][question]['subquestions']['total_0']['answer']%></li>
-							<%}%>				
+<script id="votereport-page-tpl" type="text/template">
+	<header>本次投票数据统计</header>
+	<article id="votereport_wrapper">
+		<div id="votereport_detail" class="listpage_body">
+		<%for(section in reportbody['sections']) {%>
+			<%for(group in reportbody['sections'][section]['groups']) {%>
+				<%for(org in reportbody['sections'][section]['groups'][group]['orgs']) {%>
+					<% if(typeof reportbody['sections'][section]['groups'][group]['orgs'][org]['title'] != "undefined"){%>
+						<li class="lititle"><%= reportbody['sections'][section]['groups'][group]['orgs'][org]['title']%></li>
+						<%for(question in reportbody['sections'][section]['groups'][group]['orgs'][org]['questions']) {%>
+							<li><%= reportbody['sections'][section]['groups'][group]['orgs'][org]['questions'][question]['title']%>: <%= reportbody['sections'][section]['groups'][group]['orgs'][org]['questions'][question]['subquestions']['total_0']['all']%></li>
 						<%}%>
-					<%}%>
-					
+					<%}%>			
 				<%}%>
+			<%}%>
+		<%}%>
+		</div>
+	</article>
 </script>
+
 	<script src="cordova-2.2.0.js" type="text/javascript"></script>
 	<script src="libs/jquery/jquery-1.7.1.js" type="text/javascript"></script>
 	<script src="libs/iscroll/iscroll.js" type="text/javascript" ></script>

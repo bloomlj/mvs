@@ -80,6 +80,7 @@ app.put('/answer/:id', answer.update);
 
 app.get('/report.:format?', report.list);
 app.get('/report/add', report.add);
+app.get('/report/api_opening/:password', report.api_opening);
 app.get('/report/:id.:format?', report.show);
 app.get('/report/:id/edit', report.edit);
 app.get('/report/:id/destroy', report.destroy);

@@ -94,6 +94,97 @@ exports.show = function(req, res){
 
 };
 
+
+exports.api_opening = function(req, res){
+    var password = req.params.password;
+
+    //first check login ,then send data
+    db.do('voter',function(collection){
+      collection.findOne({'password':password},function(err, voterdoc){
+        console.dir(voterdoc);
+        if(!voterdoc){
+          res.set('Access-Control-Allow-Origin', '*');
+          res.send({'status':'error','info':'错误的用户名和密码。'});
+        }else{
+          var voteid = voterdoc.vote_id
+          var ObjectID = require('mongodb').ObjectID;
+
+      db.do('answer',function(collection){
+        collection.find({"vote_id":voteid}).toArray(function(err, answers) {
+          //report.answers = answers;
+          db.do('vote',function(collection){
+            var ObjectID = require('mongodb').ObjectID;
+            collection.findOne({'_id' : new ObjectID(voteid)},function(err, vote) {
+              report = {};
+              report.vote = vote;
+              report.reportbody = {"sections":{}};
+              
+              for(answerindex in answers){
+                for(section_key in answers[answerindex]['answer']){
+                  for(group_key in answers[answerindex]['answer'][section_key]){
+                    for(org_key in answers[answerindex]['answer'][section_key][group_key]){
+                      for(question_key in answers[answerindex]['answer'][section_key][group_key][org_key]){
+                        for(subquestion_key in answers[answerindex]['answer'][section_key][group_key][org_key][question_key]){
+                          if(typeof report.reportbody['sections'][section_key] == "undefined") report.reportbody['sections'][section_key] = {'groups':{}};
+                          if(typeof report.reportbody['sections'][section_key]['groups'][group_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key] = {"orgs":{}};
+                          if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key] = {'questions':{}};
+                          if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key] = {'subquestions':{}};
+                          if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] = {"all":0};
+                          report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['all']+= parseInt(answers[answerindex]['answer'][section_key][group_key][org_key][question_key][subquestion_key]);
+                          
+                          report.reportbody['sections'][section_key]['title'] = vote['sections'][section_key]['title'];
+                          report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['title'] = vote['sections'][section_key]['groups'][group_key]['orgs'][org_key]['fullname'];
+                          report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['title'] = vote['sections'][section_key]['groups'][group_key]['questions'][question_key]['text'];
+                          if(subquestion_key=='total_0') report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['title'] = '总计';
+                          else report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['title'] = vote['sections'][section_key]['groups'][group_key]['questions'][question_key]['subquestions'][subquestion_key]['text'];
+                          console.log(vote['sections'][section_key]['groups'][group_key]['questions'][question_key]['subquestions'][subquestion_key]);
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              //give the  undefine field a  NaN value.
+              for(section_key in vote.sections){
+                for(group_key in vote.sections[section_key]['groups']){
+                  for(org_key in vote.sections[section_key]['groups'][group_key]['orgs']){
+                    if(typeof vote.sections[section_key]['groups'][group_key]['orgs'][org_key]['fullname'] != "undefined"){
+                      console.log(vote.sections[section_key]['groups'][group_key]['orgs'][org_key]['fullname']);
+                      for(question_key in vote.sections[section_key]['groups'][group_key]['questions']){
+                        if(typeof report.reportbody['sections'][section_key] == "undefined") report.reportbody['sections'][section_key] = {'groups':{}};
+                        if(typeof report.reportbody['sections'][section_key]['groups'][group_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key] = {"orgs":{}};
+                        if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key] = {'questions':{}};
+                        if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key] = {'subquestions':{}};
+                        if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] == "undefined") {
+                          report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] = {"all":"N"};
+                          report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions']['total_0'] = {"all":"N"};
+                        }
+
+                      }
+                    }
+
+                  }
+                }
+              }
+               report.status = 'success';
+               res.set('Access-Control-Allow-Origin', '*');
+               res.send(report);
+
+            });
+          });
+
+        });
+      });
+      //answer get end
+
+        }
+
+      });
+    });
+
+}
+
+
 exports.add = function(req, res){
   db.do('vote',function(collection){
       collection.find({}).toArray(function(err, docs) {
