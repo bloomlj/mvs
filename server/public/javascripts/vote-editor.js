@@ -6,7 +6,7 @@
       $(link).before($(link).prev().clone());
 
 
-      //更新这个的所有name
+      //更新这个的所有input
       for(i = 0;i<$(link).prev().find("input").length;i++){
         name = $(link).prev().find("input")[i].name;
         if(fieldtype == 'section'){
@@ -17,6 +17,16 @@
         }
       }
 
+      //更新这个的所有textarea
+      for(i = 0;i<$(link).prev().find("textarea").length;i++){
+        name = $(link).prev().find("textarea")[i].name;
+        if(fieldtype == 'section'){
+          $(link).prev().find("textarea")[i].name = name.replace(fieldtype+'s'+'['+fieldtype+'_'+(len-1)+']',fieldtype+'s'+'['+fieldtype+'_'+len+']');
+        }
+        else{
+          $(link).prev().find("textarea")[i].name = name.replace('['+fieldtype+'s]'+'['+fieldtype+'_'+(len-1)+']','['+fieldtype+'s]'+'['+fieldtype+'_'+len+']');
+        }
+      }
       event.preventDefault(); 
     }
 

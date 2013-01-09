@@ -27,7 +27,7 @@ block content
                         i.icon-pencil
                         |修改
                     a.btn(href="/vote/#{doc._id}/clone") 
-                        i.icon-clone
+                        i.icon-repeat
                         |复制
                     a.btn(href="/vote/#{doc._id}/destroy") 
                         i.icon-remove
@@ -35,12 +35,4 @@ block content
                     a.btn(href="/vote/#{doc._id}/result") 
                         i.icon-list
                         |查看结果
-                  //        
-                    if doc.isopen == 'no'
-                        form(action="/vote/#{doc._id}/open",method="post")
-                            input(type="hidden",name="_method",value="put")
-                            input.btn.btn-inverse(type="submit",value="启动")
-                    else
-                        form(action="/vote/#{doc._id}/stop",method="post")
-                            input(type="hidden",name="_method",value="put")
-                            input.btn.btn-danger(type="submit",value="停止")                        
+               

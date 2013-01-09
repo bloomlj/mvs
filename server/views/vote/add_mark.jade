@@ -21,11 +21,12 @@ block content
           input(name="sections[section_0][subtitle]",type="text")
         //子选票单 groups
         .group.row
-          fieldset.group.span4
+          fieldset.group.span6
             ///legend 组
             ///label 标题:
-              input(name="sections[section_0][groups][group_0][title]",placeholder="标题",type="hidden")
-            //参与评价的单位              
+            input(name="sections[section_0][groups][group_0][title]",placeholder="标题",type="hidden")
+            //参与评价的单位 
+            h3 相关单位             
             fieldset.org
               a(href="#",role="button",data-toggle="modal").btn.modalfire 选择参加评价的单位
               div.modal.hide.fade
@@ -45,18 +46,24 @@ block content
                 div.modal-footer
                   button.btn.btn-primary(data-dismiss="modal",aria-hidden="true") 选好了
             //评价指标
+            h3 评价指标
             fieldset.question
               input(name="sections[section_0][groups][group_0][questions][question_0][text]",type="text",placeholder="一级指标内容").questiontext
               input.input-mini(name="sections[section_0][groups][group_0][questions][question_0][weight]",type="number",placeholder="分数")
-              fieldset
+              fieldset.subquestion
                 ol
-                  li.subquestion 
-                    input(name="sections[section_0][groups][group_0][questions][question_0][subquestions][subquestion_0][text]",type="text",placeholder="二级指标内容").questiontext
-                    input.input-mini(name="sections[section_0][groups][group_0][questions][question_0][subquestions][subquestion_0][weight]",type="number",placeholder="分数")
-                    a(href="javascript:return false;",onclick="remove_field(this)")  删除
-                  a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标
-              a(href="javascript:return false;",onclick="remove_field(this)")  删除指标
-            a(href="#",onclick="add_field(this,'question')")  添加指标
+                  li.item
+                    input(name="sections[section_0][groups][group_0][questions][question_0][subquestions][subquestion_0][items][item_0][text]",type="text",placeholder="二级指标内容").questiontext
+                    input.input-mini(name="sections[section_0][groups][group_0][questions][question_0][subquestions][subquestion_0][items][item_0][weight]",type="number",placeholder="分数")
+                    textarea(name="sections[section_0][groups][group_0][questions][question_0][subquestions][subquestion_0][items][item_0][note]")
+                    a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标
+                  a.btn(href="javascript:return false;",onclick="add_field(this,'item')")  添加二级指标
+                  hr
+                a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标集
+              a.btn(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标集
+              hr
+              a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除一级指标
+            a.btn(href="#",onclick="add_field(this,'question')")  添加一级指标
             a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除组
           a.btn.btn-info.addgroup(href="javascript:return false;",onclick="add_field(this,'group')")  添加组
         a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除选票单

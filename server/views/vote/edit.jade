@@ -33,26 +33,24 @@ block content
           //子选票单 groups
           .group.row
             for group,gi in section.groups
-              fieldset.group.span4
+              fieldset.group.span6
                 if votedata.vtype == 'vote'
-                    ///legend 组
-                    ///label 标题:
-                    input(name="sections[#{si}][groups][#{gi}][title]",placeholder="标题",type="hidden",value="#{group.title}")
-                    label 限投
-                      input(name="sections[#{si}][groups][#{gi}][max]",type="number",value="#{group.max}")
-                      | 人
-                    ///label 最少选几
-                      input(name="sections[#{si}][groups][#{gi}][min]",type="number",type="hidden",value="#{group.min}")
-                    //候选人
-                    ol
-                      for candidate,ci in group.candidates
-                        li.candidate
-                          input.span2(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][org]",value="#{candidate.org}",type="text",placeholder="单位")
-                          input.span1(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][name]",value="#{candidate.name}",type="text",placeholder="姓名")
-                          input.span1(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][order]",value="#{candidate.order}",type="text",placeholder="序号")
-                          //input(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][photo]",type="text")
-                          a(href="javascript:return false;",onclick="remove_field(this)")  删除
-                      a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
+                  input(name="sections[#{si}][groups][#{gi}][title]",placeholder="标题",type="hidden",value="#{group.title}")
+                  label 限投
+                    input(name="sections[#{si}][groups][#{gi}][max]",type="number",value="#{group.max}")
+                    | 人
+                  ///label 最少选几
+                    input(name="sections[#{si}][groups][#{gi}][min]",type="number",type="hidden",value="#{group.min}")
+                  //候选人
+                  ol
+                    for candidate,ci in group.candidates
+                      li.candidate
+                        input.span2(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][org]",value="#{candidate.org}",type="text",placeholder="单位")
+                        input.span1(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][name]",value="#{candidate.name}",type="text",placeholder="姓名")
+                        input.span1(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][order]",value="#{candidate.order}",type="text",placeholder="序号")
+                        //input(name="sections[#{si}][groups][#{gi}][candidates][#{ci}][photo]",type="text")
+                        a(href="javascript:return false;",onclick="remove_field(this)")  删除
+                    a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
                 else
                     //参与评价的单位              
                     fieldset.formark.org
@@ -83,21 +81,25 @@ block content
                                   input(type="text",name="sections[#{si}][groups][#{gi}][orgs][#{i}][order]",placeholder="序号",value="")              
                         div.modal-footer
                           button.btn.btn-primary(data-dismiss="modal",aria-hidden="true") 选好了
-                    //评价指标
+                    h2 评价指标
                     for question,qi in group.questions
                       fieldset.formark.question
                         input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][text]",value="#{question.text}",type="text",placeholder="一级指标内容").questiontext
                         input.input-mini(name="sections[#{si}][groups][#{gi}][questions][#{qi}][weight]",value="#{question.weight}",type="number",placeholder="分数")
-                        fieldset.formark.subquestion
-                          ol
-                            for subquestion,subqi in question.subquestions
-                              li.subquestion 
-                                input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][text]",value="#{subquestion.text}",type="text",placeholder="二级指标内容").questiontext
-                                input.input-mini(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][weight]",value="#{subquestion.weight}",type="number",placeholder="分数")
-                                a(href="javascript:return false;",onclick="remove_field(this)")  删除
-                            a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标
-                        a(href="javascript:return false;",onclick="remove_field(this)")  删除指标
-                      a.formark(href="javascript:return false;",onclick="add_field(this,'question')")  添加指标
+                        for subquestion,subqi in question.subquestions
+                          fieldset.subquestion
+                            ol
+                              for item,itemi in subquestion.items
+                                li.item 
+                                  input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][items][#{itemi}][text]",value="#{subquestion.text}",type="text",placeholder="二级指标内容").questiontext
+                                  input.input-mini(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][items][#{itemi}][weight]",value="#{subquestion.weight}",type="number",placeholder="分数")
+                                  a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标
+                              a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标
+                              hr
+                            a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标集
+                          a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标集
+                        a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除一级指标
+                      a.formark(href="javascript:return false;",onclick="add_field(this,'question')")  添加一级指标
                   a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除组
             a.btn.btn-info.addgroup(href="javascript:return false;",onclick="add_field(this,'group')")  添加组
           a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除选票单
