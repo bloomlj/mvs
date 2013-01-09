@@ -91,10 +91,11 @@ block content
                             ol
                               for item,itemi in subquestion.items
                                 li.item 
-                                  input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][items][#{itemi}][text]",value="#{subquestion.text}",type="text",placeholder="二级指标内容").questiontext
-                                  input.input-mini(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][items][#{itemi}][weight]",value="#{subquestion.weight}",type="number",placeholder="分数")
+                                  input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][items][#{itemi}][text]",value="#{item.text}",type="text",placeholder="二级指标内容").questiontext
+                                  input.input-mini(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][items][#{itemi}][weight]",value="#{item.weight}",type="number",placeholder="分数")
+                                  textarea(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][items][#{itemi}][note]") #{item.note}
                                   a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标
-                              a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标
+                              a(href="javascript:return false;",onclick="add_field(this,'item')")  添加二级指标
                               hr
                             a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标集
                           a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标集

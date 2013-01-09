@@ -41,7 +41,7 @@ client.loadhomepage=function(data){
   var htmlstr = template({name : data.name});
   //jQuery("#pagetitle").text(htmlstr);
   tplrender("section-nav-tpl",data,"pagetitle");
-  $("#role").html("您是:"+data.role);
+  $("#role").html(data.role);
   //sideber_scroll_init();
   load_section("section_0");
 }

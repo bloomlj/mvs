@@ -51,31 +51,41 @@
 	</div>
 </div>
 <script id="questioninput-tpl" type="text/template">
-		<header><%= org.fullname%> <%= question.text %> 评价</header>
+		<header><%= org.fullname%> 指标：<%= question.text %><b class="headerbtn leftbtn" onclick="questioninput_savebackto_homepage()">保存本地，并返回</b></header>
 		<article id="questioninput_wrapper">
 			<div id="questioninput_scroller" class="listpage_body">
-				<h1><%= question.text %> (共<%= question.weight%>分)</h1>
 				<ul>
-				<% _.each(question.subquestions,function(subq,subqkey){%>
-					<li class="subquestion_inputfield">
-						<b><%= subq.text%> (共<%= subq.weight %>分)</b>
-						<div class="rangeinput_widget">
-	   						<i class="rangedecrease" onclick="rangedecrease(this);">-</i>
-	   						<input type="number" class="rangeinput" name="answer[<%= sectionkey%>][<%= groupkey%>][<%= orgkey%>][<%= questionkey%>][<%= subqkey%>]"  value="" min="0" max="<%= subq.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
-	   						<i class="rangeadd" onclick="rangeadd(this);">+</i>
-   						</div>
-					</li>
-				<% });%>
-
 				<li class="questiontotal_inputfield">
-					<b>合计</b>
+					<b><%= question.text %> (满分：<%= question.weight%>分)</b>
 						<div class="rangeinput_widget">
 	   						<i class="rangedecrease" onclick="rangedecrease(this);">-</i>
 	   						<input type="number" class="rangeinput" name="answer[<%= sectionkey%>][<%= groupkey%>][<%= orgkey%>][<%= questionkey%>][total_0]"  value="" min="0" max="<%= question.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
 	   						<i class="rangeadd" onclick="rangeadd(this);">+</i>
    						</div>
+   					
 				</li>
-				<li class="libtn" onclick="questioninput_savebackto_homepage()">保存本地，并返回</li>
+				<% _.each(question.subquestions,function(subq,subqkey){%>
+					<li class="subquestion_inputfield hasitems">
+					<% console.log(_.size(subq.items) );%>
+						<div class="list_inlineblock">
+							<ul>
+							<% _.each(subq.items,function(item,itemkey){%>
+								<li><%= item.text%> <%= item.note %> <%= item.weight %></li>
+							<% });%>
+							</ul>
+						</div>
+
+						<% if(_.size(question.subquestions) > 1){ %>
+						<div class="rangeinput_widget">
+	   						<i class="rangedecrease" onclick="rangedecrease(this);">-</i>
+	   						<input type="number" class="rangeinput" name="answer[<%= sectionkey%>][<%= groupkey%>][<%= orgkey%>][<%= questionkey%>][<%= subqkey%>]"  value="" min="0" max="<%= subq.weight%>"  data-highlight="true" onchange="saveinput(this)"/>
+	   						<i class="rangeadd" onclick="rangeadd(this);">+</i>
+   						</div>
+   						<%}%>
+					</li>
+				<% });%>
+
+				
 
 				</ul>
 			</div>
@@ -88,7 +98,7 @@
 		<div id="voteresult_scroller" class="listpage_body">
 			<ul>
 				<li id="loginmsg"></li>
-				<li><input id="loginpassword" type="text" name="password" placeholder="请输入投票密码" value="70805"/></li>
+				<li><input id="loginpassword" type="text" name="password" placeholder="请输入投票密码" value="202316"/></li>
 				<li class="libtn" id="loginnow" onclick="contoller_login();" >登入</li>
 			</ul>
 		</div>
@@ -109,6 +119,7 @@
 						<li class="sidebaritem"> <%= question.text%></li>
 				<% });%>
 		 <% }); %>  
+		 <li class="sidebaritem"><i>合计</i></li>
 	 </ul>
 
 </script>
@@ -117,7 +128,7 @@
 	<% _.each(sections,function(section,i){%>
 		<a href="#" id="headerlinkto-<%= i%>" onclick="load_section('<%= i%>');"><%= section.title%></a>
 	<% });%>
-	<b id="votereview" onclick="view_review()">填好了，提交</b>
+	<b id="votereview" onclick="view_review()" class="headerbtn rightbtn">填好了，提交</b>
 </script>
 
 <script id="votesection-tpl" type="text/template">
@@ -205,6 +216,13 @@
 				<% });%>
 			</tr>			
 		<% });%>
+		<tr class="org_total group_footer">
+ 			<% _.each(group.orgs,function(org,k){%>
+ 				<% if(org.fullname  != null) {%>
+ 					<td id="total-grid-<%=key%>-<%= i%>-<%=k%>"></td>
+ 				<%}%>
+ 			<% });%>
+ 		</tr>
     </table><!--end of .group-->
  <% }); %>  
  </div>  

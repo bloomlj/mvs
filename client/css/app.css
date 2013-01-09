@@ -307,16 +307,16 @@ table.marksection_form th{
 	height:60px;
 	border-bottom: 1px solid #ccc;
 	border-right: 1px solid #ccc;
-	line-height:60px;
 	padding:0 10px;
+
 }
 table.marksection_form td{
-	height:59px;
+	height:60px;
 	border-bottom: 1px solid #ccc;
 	border-right: 1px solid #ccc;
 	text-align: center;
 	padding:0 5px;
-
+	width:60px;
 }
 table.marksection_form td.saved{
 	background:#BBFFE9 ;
@@ -403,4 +403,41 @@ input#loginpassword{
 #role{
 	font-size:14px;
 	line-height:18px ;
+	color:#fff;
+	padding-top:5px;
+}
+li.subquestion_inputfield.hasitems{
+	min-height: 65px;
+	height:auto;
+	line-height: 1.8em;
+}
+li.subquestion_inputfield.hasitems div.list_inlineblock{
+	display: inline-block;
+	width:600px;
+}
+li.subquestion_inputfield.hasitems div.list_inlineblock table{
+	display: inline-table;
+}
+header,li{
+	position:relative;
+}
+li div.rangeinput_widget{
+	position: absolute;
+	top:0px;
+	right:10px;
+}
+
+b.headerbtn{
+	position: absolute;
+	background-color: #C52000;
+	color:#fff;
+	padding:2px 5px;
+}
+b.headerbtn.leftbtn{
+	top:0;
+	left:0;
+}
+b.headerbtn.rightbtn{
+	top:0;
+	right:0;
 }

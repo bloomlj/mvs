@@ -15,7 +15,6 @@ exports.list = function(req, res){
         else res.render('voter/list', {'docs' : docs});
       });
     });
-
   
 };
 
