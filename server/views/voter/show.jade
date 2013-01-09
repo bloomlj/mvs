@@ -8,9 +8,9 @@ block breadcrumbs
       a(href="/voter") 投票密码
       span.divider /
     li 
-      a(href="/voter/#{_id}") 投票#{vote_name}的密码
+      a(href="/voter/#{_id}") 投票#{vote_name},#{role}组的密码
 block content
-    h1 投票"#{vote_name}"，共有#{passcount}个密码
+    h1 投票"#{vote_name}"，#{role}组共有#{passcount}个密码
     .row
       for p,i in password
           .span3 

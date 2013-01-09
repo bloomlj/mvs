@@ -15,9 +15,8 @@
 </div>
 <div id="homepage" class="page" style="display:none;">
 	<div id="sidebar" style="display:none;">
-		<header><b id="votereview" onclick="view_review()">填好了，提交</b></header>
+		<header id="role"></header>
 		<nav id="sidebarbody">
-			
 		</nav>
 	</div>
 
@@ -76,7 +75,7 @@
 	   						<i class="rangeadd" onclick="rangeadd(this);">+</i>
    						</div>
 				</li>
-				<li class="libtn" onclick="questioninput_savebackto_homepage()">保存，并返回</li>
+				<li class="libtn" onclick="questioninput_savebackto_homepage()">保存本地，并返回</li>
 
 				</ul>
 			</div>
@@ -89,43 +88,36 @@
 		<div id="voteresult_scroller" class="listpage_body">
 			<ul>
 				<li id="loginmsg"></li>
-				<li ><input id="loginpassword" type="text" name="password" placeholder="请输入投票密码" value="950695"/></li>
+				<li><input id="loginpassword" type="text" name="password" placeholder="请输入投票密码" value="70805"/></li>
 				<li class="libtn" id="loginnow" onclick="contoller_login();" >登入</li>
 			</ul>
 		</div>
 	</article>
 </script>
 
-<script id="sidenav-tpl" type="text/template">
-	<% _.each(sections,function(section,i){%>
-	<li class="sidebaritem"><a href="javascript:load_ballot(<%= i%>);"><%= section.title%></a>
-	<!--
-	<span class="subtitle"><%= section.subtitle%></span>
-	-->
-	</li>
-	<% });%>
-</script>
-
 <script id="question-nav-tpl" type="text/template">
-<ul id="navScroller">
-	<li class="sidebaritem"><i>单位</i></li>
-	 <%  _.each(groups, function(group,i) {  %>
-				<% _.each(group.questions,function(question,j){%>
-					<!--
-					<% _.each(question.subquestions,function(subquestion,j){%>
-						<li class="sidebaritem"><%= question.text%><i> <%= subquestion.text%> </i></li>
-					<% });%>
-					-->
-					<li class="sidebaritem"> <%= question.text%></li>
-			<% });%>
-	 <% }); %>  
- </ul>
+
+	<ul id="navScroller">
+		<li class="sidebaritem"><i>单位</i></li>
+		 <%  _.each(groups, function(group,i) {  %>
+					<% _.each(group.questions,function(question,j){%>
+						<!--
+						<% _.each(question.subquestions,function(subquestion,j){%>
+							<li class="sidebaritem"><%= question.text%><i> <%= subquestion.text%> </i></li>
+						<% });%>
+						-->
+						<li class="sidebaritem"> <%= question.text%></li>
+				<% });%>
+		 <% }); %>  
+	 </ul>
+
 </script>
 
 <script id="section-nav-tpl" type="text/template">
 	<% _.each(sections,function(section,i){%>
 		<a href="#" id="headerlinkto-<%= i%>" onclick="load_section('<%= i%>');"><%= section.title%></a>
 	<% });%>
+	<b id="votereview" onclick="view_review()">填好了，提交</b>
 </script>
 
 <script id="votesection-tpl" type="text/template">
@@ -207,7 +199,7 @@
 				<% _.each(group.orgs,function(org,k){%>
 					<% if(org.fullname  != null) {%>
 						<td id="qgrid-<%=key%>-<%= i%>-<%= k%>-<%= j%>" class="question_button"  onclick="view_questioninput('<%= key%>','<%= i%>','<%= k%>','<%=j%>')">
-							未打分
+							点击评分
 		   				</td>
 		   			<% } %>
 				<% });%>

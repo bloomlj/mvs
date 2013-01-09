@@ -16,15 +16,15 @@ block content
       fieldset.section
         ///legend 选票单
         label 标题: 
-          input(name="sections[0][title]",type="text")
+          input(name="sections[section_0][title]",type="text")
         label 副标题:
-          input(name="sections[0][subtitle]",type="text")
+          input(name="sections[section_0][subtitle]",type="text")
         //子选票单 groups
         .group.row
           fieldset.group.span4
             ///legend 组
             ///label 标题:
-              input(name="sections[0][groups][0][title]",placeholder="标题",type="hidden")
+              input(name="sections[section_0][groups][group_0][title]",placeholder="标题",type="hidden")
             //参与评价的单位              
             fieldset.org
               a(href="#",role="button",data-toggle="modal").btn.modalfire 选择参加评价的单位
@@ -38,21 +38,21 @@ block content
                   p 
                     each org,i in allorgs
                       label.fullname.span2
-                        input(type="checkbox",name="sections[0][groups][0][orgs][#{i}][fullname]",value="#{org.name}")
+                        input(type="checkbox",name="sections[section_0][groups][group_0][orgs][org_#{i}][fullname]",value="#{org.name}")
                         | #{org.name}
                       label.order.span1
-                        input(type="text",name="sections[0][groups][0][orgs][#{i}][order]",placeholder="序号",value="0")
+                        input(type="text",name="sections[section_0][groups][group_0][orgs][org_#{i}][order]",placeholder="序号",value="0")
                 div.modal-footer
                   button.btn.btn-primary(data-dismiss="modal",aria-hidden="true") 选好了
             //评价指标
             fieldset.question
-              input(name="sections[0][groups][0][questions][0][text]",type="text",placeholder="一级指标内容").questiontext
-              input.input-mini(name="sections[0][groups][0][questions][0][weight]",type="number",placeholder="分数")
+              input(name="sections[section_0][groups][group_0][questions][question_0][text]",type="text",placeholder="一级指标内容").questiontext
+              input.input-mini(name="sections[section_0][groups][group_0][questions][question_0][weight]",type="number",placeholder="分数")
               fieldset
                 ol
                   li.subquestion 
-                    input(name="sections[0][groups][0][questions][0][subquestions][0][text]",type="text",placeholder="二级指标内容").questiontext
-                    input.input-mini(name="sections[0][groups][0][questions][0][subquestions][0][weight]",type="number",placeholder="分数")
+                    input(name="sections[section_0][groups][group_0][questions][question_0][subquestions][subquestion_0][text]",type="text",placeholder="二级指标内容").questiontext
+                    input.input-mini(name="sections[section_0][groups][group_0][questions][question_0][subquestions][subquestion_0][weight]",type="number",placeholder="分数")
                     a(href="javascript:return false;",onclick="remove_field(this)")  删除
                   a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标
               a(href="javascript:return false;",onclick="remove_field(this)")  删除指标

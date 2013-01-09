@@ -10,10 +10,10 @@
       for(i = 0;i<$(link).prev().find("input").length;i++){
         name = $(link).prev().find("input")[i].name;
         if(fieldtype == 'section'){
-          $(link).prev().find("input")[i].name = name.replace(fieldtype+'s'+'['+(len-1)+']',fieldtype+'s'+'['+len+']');
+          $(link).prev().find("input")[i].name = name.replace(fieldtype+'s'+'['+fieldtype+'_'+(len-1)+']',fieldtype+'s'+'['+fieldtype+'_'+len+']');
         }
         else{
-          $(link).prev().find("input")[i].name = name.replace('['+fieldtype+'s]'+'['+(len-1)+']','['+fieldtype+'s]'+'['+len+']');
+          $(link).prev().find("input")[i].name = name.replace('['+fieldtype+'s]'+'['+fieldtype+'_'+(len-1)+']','['+fieldtype+'s]'+'['+fieldtype+'_'+len+']');
         }
       }
 

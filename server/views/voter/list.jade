@@ -12,13 +12,13 @@ block content
     table
         tr
             td 投票名称
-            //
-                td 用户名
-            td 密码
+            td 用户组
+            td 
             td
         each doc in docs
             tr
                 td #{doc.vote_name}
+                td #{doc.role}
                 //
                     td #{doc.login}
                 td 共有#{doc.password.length}个密码

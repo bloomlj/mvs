@@ -140,8 +140,8 @@ exports.api_opened = function(req, res){
           var ObjectID = require('mongodb').ObjectID;
           db.do('vote',function(collection){
             collection.findOne({'_id' : new ObjectID(voterdoc.vote_id)},function(err, votedoc){
-              console.dir(votedoc);
-              //sortVote(votedoc);
+              votedoc.role = voterdoc.role;
+             console.dir(votedoc);
               res.set('Access-Control-Allow-Origin', '*');
               res.send({'status':'success','info':'通过验证','data':votedoc});
             });

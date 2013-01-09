@@ -90,30 +90,6 @@ exports.create = function(req, res){
  };
 
 
-exports.update = function(req, res){
-
-    db.do('voter',function(collection){
-      //find
-       var ObjectID = require('mongodb').ObjectID;
-        collection.findOne({'_id' : new ObjectID(req.params.id)},function(err, doc) {
-        var voter = doc;
-        console.dir(voter);
-        //insert
-        voter.name = req.body.name;
-        voter.note = req.body.note;
-
-        collection.save(voter,{safe:true}, function(err,object) {
-             if (err) console.warn(err.message);
-             else {console.log('successfully updated' + object);res.redirect('/voter/');}
-        });
-
-      });
-
-    });
-
-
-};
-
 exports.destroy = function(req, res){
 
     db.do('voter',function(collection){

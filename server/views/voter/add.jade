@@ -12,10 +12,13 @@ block content
   h1 随机生成投票密码
 
   form#passform(method="post",action="/voter")
-    label 投票
-        select(name="vote_id")
-            each vote in votes
-                option(value="#{vote._id}") #{vote.name}
+    label 用户角色:
+      input#role(type="text",name="role")
+    label 投票:
+      select(name="vote_id")
+        option(value="") ---
+        each vote in votes
+          option(value="#{vote._id}") #{vote.name}
     input(type="hidden",name="vote_name")
     label 个数：
         input#passcount(type="number",name="passcount",value="100",min="1")

@@ -91,7 +91,7 @@ block content
                         fieldset.formark.subquestion
                           ol
                             for subquestion,subqi in question.subquestions
-                              li 
+                              li.subquestion 
                                 input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][text]",value="#{subquestion.text}",type="text",placeholder="二级指标内容").questiontext
                                 input.input-mini(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][weight]",value="#{subquestion.weight}",type="number",placeholder="分数")
                                 a(href="javascript:return false;",onclick="remove_field(this)")  删除

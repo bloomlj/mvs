@@ -400,3 +400,7 @@ input#loginpassword{
 	width:100%;
 	height:70%;
 }
+#role{
+	font-size:14px;
+	line-height:18px ;
+}
