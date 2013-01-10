@@ -244,7 +244,7 @@
 							<% var orgtotal = 0; %>
 							<%for(question in localanswers[section]['groups'][group]['orgs'][org]['questions']) {%>
 								<% orgtotal += parseInt(localanswers[section]['groups'][group]['orgs'][org]['questions'][question]['subquestions']['total_0']['answer']); %>
-							<%}%>	
+							<%}%>
 							<li>
 							<b class="liinlineb"><%= localanswers[section]['groups'][group]['orgs'][org]['fullname']%>:<%= orgtotal%>分</b>
 							<b class="libar" style="width:<%=orgtotal*6 %>px;"></b></li>			

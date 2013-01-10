@@ -3,9 +3,7 @@ client.init = function(){
   //clear db
 
   if(!localStorage.getItem("connect"))  localStorage.setItem("connect",'');
-  if(!localStorage.getItem("userinput"))  localStorage.setItem("userinput",'{}');
-  if(!localStorage.getItem("localreport"))  localStorage.setItem("localreport",'{}');
-  if(!localStorage.getItem("vote"))  localStorage.setItem("vote",'');
+
   client.connect = {server:"192.168.80.177",port:"80"};
 }
 client.view_login = function(){
@@ -21,6 +19,13 @@ client.http_login=function(connect){
     },
     success: function(doc){
       if(doc.status == 'success'){
+        client.userinput_dbname = "userinput_"+client.connect.password;
+        client.localreport_dbname = "localreport_"+client.connect.password;
+        client.vote_dbname = "vote_"+client.connect.password;
+
+        if(!localStorage.getItem(client.userinput_dbname))  localStorage.setItem(client.userinput_dbname,'{}');
+        if(!localStorage.getItem(client.localreport_dbname))  localStorage.setItem(client.localreport_dbname,'{}');
+        if(!localStorage.getItem(client.vote_dbname))  localStorage.setItem(client.vote_dbname,'');
          $("#login_page").remove();
          $("#homepage").show();
         client.loadhomepage(doc.data);
@@ -34,7 +39,7 @@ client.http_login=function(connect){
 }
 // when data get ,then load home page.
 client.loadhomepage=function(data){
-  localStorage.setItem("vote",JSON.stringify(data));
+  localStorage.setItem(client.vote_dbname,JSON.stringify(data));
   //show sidebar nav
   $("#sidebar").show();
 
@@ -43,7 +48,7 @@ client.loadhomepage=function(data){
   var htmlstr = template({name : data.name});
   //jQuery("#pagetitle").text(htmlstr);
   tplrender("section-nav-tpl",data,"pagetitle");
-  $("#role").html(data.role);
+  $("#role").html(data.role+"(id:"+client.connect.password+")");
   //sideber_scroll_init();
   load_section("section_0");
 }
@@ -71,7 +76,7 @@ function load_section(section_key) {
     $("header#pagetitle  a").removeClass("active");
     $("header#pagetitle a#headerlinkto-"+section_key).addClass("active");
 
-    var data = JSON.parse(localStorage.getItem("vote"));
+    var data = JSON.parse(localStorage.getItem(client.vote_dbname));
 
     if(typeof data.sections[section_key] != "undefined"){
       data.sections[section_key].key = section_key;
@@ -80,7 +85,7 @@ function load_section(section_key) {
       if(data.vtype=="mark") {
         tplrender("marksection_table-tpl",data.sections[section_key],"voteform");
       }
-      if(data.vtype=="vote") {
+      if(data.vtype==client.vote_dbname) {
         tplrender("votesection-tpl",data.sections[section_key],"voteform");
       }  
     }
@@ -103,9 +108,9 @@ function post_conform(){
 }
 function post_form(){
 
-   var userinput = JSON.parse(localStorage.getItem("userinput"));
+   var userinput = JSON.parse(localStorage.getItem(client.userinput_dbname));
    var connect = JSON.parse(localStorage.getItem("connect"));
-   var votedata = JSON.parse(localStorage.getItem("vote"));
+   var votedata = JSON.parse(localStorage.getItem(client.vote_dbname));
 
    var postdata = userinput;
    postdata["password"] = connect.password;
@@ -116,10 +121,10 @@ function post_form(){
    $.post("http://"+connect.server+":"+connect.port+"/answer/api_create", postdata,function(msg){
       tplrender("voteresult-page-tpl",{"status":msg.status},"voteresult_pagecontent");
       //clear local db
-      localStorage.setItem("vote",'');
+      localStorage.setItem(client.vote_dbname,'');
       //localStorage.setItem("connect",'');
-      localStorage.setItem("userinput",'{}');
-      localStorage.setItem("localreport",'{}');
+      localStorage.setItem(client.userinput_dbname,'{}');
+      localStorage.setItem(client.localreport_dbname,'{}');
       //remove  the pages for vote
       jQuery("#homepage").remove();
       jQuery("#questioninput_page").remove();
@@ -133,7 +138,7 @@ function post_form(){
 
 
 function view_questioninput(section,group,org,question){
-  var vote = JSON.parse(localStorage.getItem("vote"));
+  var vote = JSON.parse(localStorage.getItem(client.vote_dbname));
   var qitem = {};
   qitem.sectionkey = section;
   qitem.groupkey = group;
@@ -158,7 +163,7 @@ function view_questioninput(section,group,org,question){
 }
 
 function view_review(){
-   var userinput = JSON.parse(localStorage.getItem("userinput"));
+   var userinput = JSON.parse(localStorage.getItem(client.userinput_dbname));
    var localanswers = tool_inputs2objwithtext(userinput)
    console.log(localanswers);
    tplrender("votereview-tpl",{"localanswers":localanswers},"review_pagecontent");
@@ -252,7 +257,8 @@ function rangeadd(el) {
 }
 
 function saveinput(el){
-  var userinput = JSON.parse(localStorage.getItem("userinput"));
+  var userinput = JSON.parse(localStorage.getItem(client.userinput_dbname));
+  console.log(userinput);
   //checkbox
   if("checkbox" == $(el).attr("type")){
     if("checked" == $(el).attr("checked")){
@@ -281,7 +287,7 @@ function saveinput(el){
     userinput[$($(".questiontotal_inputfield input")[0]).attr("name")] = $($(".questiontotal_inputfield input")[0]).val();
 
   }
-  localStorage.setItem("userinput",JSON.stringify(userinput));
+  localStorage.setItem(client.userinput_dbname,JSON.stringify(userinput));
 
   //debug
   //console.log($(el).attr("type"));
@@ -291,7 +297,7 @@ function saveinput(el){
 
 function loadsavedinput(){
       //load saved cache of inputs
-    var userinput = JSON.parse(localStorage.getItem("userinput"));
+    var userinput = JSON.parse(localStorage.getItem(client.userinput_dbname));
     $("input").each(function(i){
       if(typeof userinput[this.name] != "undefined"){
         $(this).val(userinput[this.name]);
@@ -340,7 +346,7 @@ function tool_inputs2obj(inputs){
     return local_answers;
 }
 function tool_inputs2objwithtext(inputs){
-    var votedata = JSON.parse(localStorage.getItem("vote"));
+    var votedata = JSON.parse(localStorage.getItem(client.vote_dbname));
     var local_answers={};
     for (var key in inputs) {
         //result += objName + "." + prop + " = " + inputs[key] + "\n";
@@ -362,8 +368,10 @@ function tool_inputs2objwithtext(inputs){
     }
     return local_answers;
 }
+
+
 function tool_inputs2answeritem(inputs){
-    var votedata = JSON.parse(localStorage.getItem("vote"));
+    var votedata = JSON.parse(localStorage.getItem(client.vote_dbname));
     var answeritem={};
     for (var key in inputs) {
         //result += objName + "." + prop + " = " + inputs[key] + "\n";
@@ -390,7 +398,7 @@ function questioninput_savebackto_homepage(){
     $("td#"+tdid).html("已打"+totalvalue+"分");
     $("td#"+tdid).addClass("saved");
    //save the local report
-    var localreport = JSON.parse(localStorage.getItem("localreport"));
+    var localreport = JSON.parse(localStorage.getItem(client.localreport_dbname));
 
     if(typeof localreport[keys['section_key']]== "undefined") localreport[keys['section_key']] = {};
     if(typeof localreport[keys['section_key']][keys['group_key']]== "undefined") localreport[keys['section_key']][keys['group_key']] = {'orgs':{}};
@@ -402,7 +410,7 @@ function questioninput_savebackto_homepage(){
       orgtotalvalue+= parseInt(localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'][qk]);
     }
     localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['total'] = orgtotalvalue;
-    localStorage.setItem("localreport",JSON.stringify(localreport));
+    localStorage.setItem(client.localreport_dbname,JSON.stringify(localreport));
     //update the local org total
     var all_tid = "totalgrid-"+keys['section_key']+"-"+keys['group_key']+"-"+keys['org_key'];
     $("td#"+all_tid).html(orgtotalvalue+"分");
@@ -413,8 +421,8 @@ function questioninput_savebackto_homepage(){
     jQuery("#homepage").show();
 }
 function loadsaved2homepage(){
-  var userinput = JSON.parse(localStorage.getItem("userinput"));
-  var localreport = JSON.parse(localStorage.getItem("localreport"));
+  var userinput = JSON.parse(localStorage.getItem(client.userinput_dbname));
+  var localreport = JSON.parse(localStorage.getItem(client.localreport_dbname));
   for(fieldname in userinput){
     var keys = subquestion_name2key(fieldname);
     if(keys['subquestion_key'] == "total_0"){

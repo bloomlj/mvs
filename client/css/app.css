@@ -251,7 +251,8 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .rangeinput_widget input.rangeinput{
 	display: inline-block;
-	line-height: ;
+	line-height:40px;
+	font-size: 25px;
 	height:30px;
 	width: 40px;
 	border-radius: 3px;
