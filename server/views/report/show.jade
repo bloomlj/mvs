@@ -25,7 +25,10 @@ block content
             td #{question.text}
             each org,orgkey in group.orgs
               if typeof org.fullname != "undefined"
-                td #{reportbody['sections'][sectionkey]['groups'][groupkey]['orgs'][orgkey]['questions'][questionkey]['subquestions']['total_0']['all']}
-
+                td 
+                  |分数和：#{reportbody['sections'][sectionkey]['groups'][groupkey]['orgs'][orgkey]['questions'][questionkey]['subquestions']['total_0']['all']}
+                  |票数：#{reportbody['sections'][sectionkey]['groups'][groupkey]['orgs'][orgkey]['questions'][questionkey]['subquestions']['total_0']['count']}
+                  |最高分：#{reportbody['sections'][sectionkey]['groups'][groupkey]['orgs'][orgkey]['questions'][questionkey]['subquestions']['total_0']['largest']}
+                  |最低分：#{reportbody['sections'][sectionkey]['groups'][groupkey]['orgs'][orgkey]['questions'][questionkey]['subquestions']['total_0']['minist']}
 
 

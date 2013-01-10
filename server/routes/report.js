@@ -43,9 +43,17 @@ exports.show = function(req, res){
                           if(typeof report.reportbody['sections'][section_key]['groups'][group_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key] = {"orgs":{}};
                           if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key] = {'questions':{}};
                           if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key] = {'subquestions':{}};
-                          if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] = {"all":0};
-                          report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['all']+= parseInt(answers[answerindex]['answer'][section_key][group_key][org_key][question_key][subquestion_key]);
+                          if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] = {"all":0,"count":0,"avg":0,"largest":0,"minist":100};
+                          var thisvalue = parseInt(answers[answerindex]['answer'][section_key][group_key][org_key][question_key][subquestion_key]);
                           
+                          report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['all']+= thisvalue;
+                          report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['count']++;
+                          if(report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['largest'] < thisvalue){
+                            report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['largest'] = thisvalue;
+                          }
+                          if(report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['minist'] > thisvalue){
+                            report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['minist'] = thisvalue;
+                          }                      
                           report.reportbody['sections'][section_key]['title'] = vote['sections'][section_key]['title'];
                           report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['title'] = vote['sections'][section_key]['groups'][group_key]['orgs'][org_key]['fullname'];
                           report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['title'] = vote['sections'][section_key]['groups'][group_key]['questions'][question_key]['text'];
@@ -118,7 +126,6 @@ exports.api_opening = function(req, res){
               report = {};
               report.vote = vote;
               report.reportbody = {"sections":{}};
-              
               for(answerindex in answers){
                 for(section_key in answers[answerindex]['answer']){
                   for(group_key in answers[answerindex]['answer'][section_key]){
@@ -129,9 +136,18 @@ exports.api_opening = function(req, res){
                           if(typeof report.reportbody['sections'][section_key]['groups'][group_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key] = {"orgs":{}};
                           if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key] = {'questions':{}};
                           if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key] = {'subquestions':{}};
-                          if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] = {"all":0};
-                          report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['all']+= parseInt(answers[answerindex]['answer'][section_key][group_key][org_key][question_key][subquestion_key]);
+                          if(typeof report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] == "undefined") report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key] = {"all":0,"count":0,"avg":0,"largest":0,"minist":100};
+                          var thisvalue = parseInt(answers[answerindex]['answer'][section_key][group_key][org_key][question_key][subquestion_key]);
                           
+                          report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['all']+= thisvalue;
+                          report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['count']++;
+                          if(report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['largest'] < thisvalue){
+                            report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['largest'] = thisvalue;
+                          }
+                          if(report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['minist'] > thisvalue){
+                            report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['subquestions'][subquestion_key]['minist'] = thisvalue;
+                          }
+
                           report.reportbody['sections'][section_key]['title'] = vote['sections'][section_key]['title'];
                           report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['title'] = vote['sections'][section_key]['groups'][group_key]['orgs'][org_key]['fullname'];
                           report.reportbody['sections'][section_key]['groups'][group_key]['orgs'][org_key]['questions'][question_key]['title'] = vote['sections'][section_key]['groups'][group_key]['questions'][question_key]['text'];

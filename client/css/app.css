@@ -392,7 +392,7 @@ table.marksection_form td.saved{
 }
 #questioninput_scroller b{
 	display:inline-block;
-	width:15em
+	width:20em
 }
 
 
@@ -413,10 +413,17 @@ li.subquestion_inputfield.hasitems{
 }
 li.subquestion_inputfield.hasitems div.list_inlineblock{
 	display: inline-block;
-	width:600px;
+	width:800px;
 }
-li.subquestion_inputfield.hasitems div.list_inlineblock table{
-	display: inline-table;
+li.subquestion_inputfield.hasitems div.list_inlineblock ul li{
+	min-height: 65px;
+	height:auto;
+	line-height: 1.8em;
+}
+li.questiontotal_inputfield {
+	min-height: 65px;
+	line-height: 65px;
+	height:auto;
 }
 header,li{
 	position:relative;
@@ -424,7 +431,7 @@ header,li{
 li div.rangeinput_widget{
 	position: absolute;
 	top:0px;
-	right:10px;
+	right:20px;
 }
 
 b.headerbtn{
@@ -432,6 +439,10 @@ b.headerbtn{
 	background-color: #C52000;
 	color:#fff;
 	padding:2px 5px;
+	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+	-o-border-radius:5px;
+	border-radius:5px;
 }
 b.headerbtn.leftbtn{
 	top:0;
@@ -440,4 +451,14 @@ b.headerbtn.leftbtn{
 b.headerbtn.rightbtn{
 	top:0;
 	right:0;
+}
+li b.libar{
+	display:inline-block;
+	background-color: #C52000;
+	height:20px;
+}
+li b.liinlineb{
+	display:inline-block;
+	width:10em;
+	line-height: 1.5em;
 }

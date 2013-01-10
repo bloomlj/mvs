@@ -66,11 +66,12 @@
 				</li>
 				<% _.each(question.subquestions,function(subq,subqkey){%>
 					<li class="subquestion_inputfield hasitems">
-					<% console.log(_.size(subq.items) );%>
+					<% subq.weight = 0;%>
 						<div class="list_inlineblock">
 							<ul>
 							<% _.each(subq.items,function(item,itemkey){%>
-								<li><%= item.text%> <%= item.note %> <%= item.weight %></li>
+								<li><%= item.text%>： <%= item.note %> <%= item.weight %>分</li>
+								<% subq.weight += parseInt(item.weight)%>
 							<% });%>
 							</ul>
 						</div>
@@ -98,7 +99,7 @@
 		<div id="voteresult_scroller" class="listpage_body">
 			<ul>
 				<li id="loginmsg"></li>
-				<li><input id="loginpassword" type="text" name="password" placeholder="请输入投票密码" value="202316"/></li>
+				<li><input id="loginpassword" type="text" name="password" placeholder="请输入投票密码" /></li>
 				<li class="libtn" id="loginnow" onclick="contoller_login();" >登入</li>
 			</ul>
 		</div>
@@ -219,7 +220,7 @@
 		<tr class="org_total group_footer">
  			<% _.each(group.orgs,function(org,k){%>
  				<% if(org.fullname  != null) {%>
- 					<td id="total-grid-<%=key%>-<%= i%>-<%=k%>"></td>
+ 					<td id="totalgrid-<%=key%>-<%= i%>-<%=k%>"></td>
  				<%}%>
  			<% });%>
  		</tr>
@@ -228,23 +229,30 @@
  </div>  
 </script>
 <script id="votereview-tpl" type="text/template">
-	<header>本地评价结果</header>
+	<header>
+		<b class="headerbtn leftbtn" onclick="review_backto_homepage();">返回修改</b>
+		本地评价结果
+		<b class="headerbtn rightbtn" onclick="post_conform();" >确定无误,提交!</b>
+	</header>
 	<article id="review_wrapper">
 		<div id="review_scroller" class="listpage_body">
 			<ul>
 				<%for(section in localanswers) {%>
 					<%for(group in localanswers[section]['groups']) {%>
 						<%for(org in localanswers[section]['groups'][group]['orgs']) {%>
-							<li class="lititle"><%= localanswers[section]['groups'][group]['orgs'][org]['fullname']%></li>
+							<% var orgtotal = 0; %>
 							<%for(question in localanswers[section]['groups'][group]['orgs'][org]['questions']) {%>
-								<li><%= localanswers[section]['groups'][group]['orgs'][org]['questions'][question]['text']%>: <%= localanswers[section]['groups'][group]['orgs'][org]['questions'][question]['subquestions']['total_0']['answer']%></li>
-							<%}%>				
+								<% orgtotal += parseInt(localanswers[section]['groups'][group]['orgs'][org]['questions'][question]['subquestions']['total_0']['answer']); %>
+							<%}%>	
+							<li>
+							<b class="liinlineb"><%= localanswers[section]['groups'][group]['orgs'][org]['fullname']%>:<%= orgtotal%>分</b>
+							<b class="libar" style="width:<%=orgtotal*6 %>px;"></b></li>			
 						<%}%>
 					<%}%>
 					
 				<%}%>
-				<li class="libtn" onclick="post_conform();" >确定无误,提交!</li>
-				<li class="libtn" onclick="review_backto_homepage();">返回修改</li>
+				
+				
 			</ul>
 		</div>
 	</article>
@@ -256,23 +264,31 @@
 		<div id="voteresult_status" class="listpage_body">
 			<ul>
 				<li id="post_status_msg">状态：<%= status%></li>
+				<!--
 				<li class="libtn" onclick="fetch_report();" >查看评价结果</li>
+				-->
 			</ul>
 		</div>
 	</article>
 </script>
 <script id="votereport-page-tpl" type="text/template">
-	<header>本次投票数据统计</header>
+	<header>本次投票数据统计<b class="headerbtn rightbtn" onclick="fetch_report();" >刷新</b></header>
 	<article id="votereport_wrapper">
 		<div id="votereport_detail" class="listpage_body">
 		<%for(section in reportbody['sections']) {%>
 			<%for(group in reportbody['sections'][section]['groups']) {%>
 				<%for(org in reportbody['sections'][section]['groups'][group]['orgs']) {%>
 					<% if(typeof reportbody['sections'][section]['groups'][group]['orgs'][org]['title'] != "undefined"){%>
-						<li class="lititle"><%= reportbody['sections'][section]['groups'][group]['orgs'][org]['title']%></li>
+
+						<% var orgtotal = 0; %>
 						<%for(question in reportbody['sections'][section]['groups'][group]['orgs'][org]['questions']) {%>
-							<li><%= reportbody['sections'][section]['groups'][group]['orgs'][org]['questions'][question]['title']%>: <%= reportbody['sections'][section]['groups'][group]['orgs'][org]['questions'][question]['subquestions']['total_0']['all']%></li>
-						<%}%>
+							<% orgtotal += parseInt(reportbody['sections'][section]['groups'][group]['orgs'][org]['questions'][question]['subquestions']['total_0']['all']); %>
+						<%}%>	
+						<li>
+						<b class="liinlineb"><%= reportbody['sections'][section]['groups'][group]['orgs'][org]['title']%>:<%= orgtotal%>分</b>
+						<b class="libar" style="width:<%=orgtotal*6 %>px;"></b>
+						</li>
+
 					<%}%>			
 				<%}%>
 			<%}%>

@@ -4,6 +4,7 @@ client.init = function(){
   if(!localStorage.getItem("vote"))  localStorage.setItem("vote",'');
   if(!localStorage.getItem("connect"))  localStorage.setItem("connect",'');
   if(!localStorage.getItem("userinput"))  localStorage.setItem("userinput",'{}');
+  if(!localStorage.getItem("localreport"))  localStorage.setItem("localreport",'{}');
   client.connect = {server:"192.168.1.8",port:"80"};
 }
 client.view_login = function(){
@@ -117,6 +118,7 @@ function post_form(){
       localStorage.setItem("vote",'');
       //localStorage.setItem("connect",'');
       localStorage.setItem("userinput",'{}');
+      localStorage.setItem("localreport",'{}');
       //remove  the pages for vote
       jQuery("#homepage").remove();
       jQuery("#questioninput_page").remove();
@@ -216,12 +218,14 @@ function rangedecrease(el) {
   var current = $(el).next().val();
   //if null,give it max value for default
   if(current == ""){
-    $(el).next().val($(el).next().attr('max'));
+    
+    $(el).next().val(parseInt($(el).next().attr('max')));
     saveinput($(el).next()[0]);
   }
   var min = $(el).next().attr('min');
-  if(current > min) {
-    $(el).next().val(current-1);
+  if(parseInt(current) > parseInt(min)) {
+    console.log(parseInt(current)-1);
+    $(el).next().val(parseInt(current)-1);
     saveinput($(el).next()[0]);
   }
   
@@ -261,7 +265,8 @@ function saveinput(el){
   //number
   if("number" == $(el).attr("type")){
     userinput[$(el).attr("name")] = $(el).val();
-    questioninput_total_autoreflash();
+    //if is not the total field itself ,then autorefalsh it.
+    if($(el).attr("name").indexOf("total") == -1)     questioninput_total_autoreflash();
     userinput[$($(".questiontotal_inputfield input")[0]).attr("name")] = $($(".questiontotal_inputfield input")[0]).val();
   }
   localStorage.setItem("userinput",JSON.stringify(userinput));
@@ -371,12 +376,32 @@ function questioninput_savebackto_homepage(){
   var tdid = "qgrid-"+keys['section_key']+"-"+keys['group_key']+"-"+keys['org_key']+"-"+keys['question_key'];
   $("td#"+tdid).html("已打"+totalvalue+"分");
   $("td#"+tdid).addClass("saved");
+
+  //save the local report
+  var localreport = JSON.parse(localStorage.getItem("localreport"));
+
+  if(typeof localreport[keys['section_key']]== "undefined") localreport[keys['section_key']] = {};
+  if(typeof localreport[keys['section_key']][keys['group_key']]== "undefined") localreport[keys['section_key']][keys['group_key']] = {'orgs':{}};
+  if(typeof localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]== "undefined")  localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']] = {'questions':{}};
+  localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'][keys['question_key']] = totalvalue;
   
+  var orgtotalvalue = 0;
+  for(qk in localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'] ){
+    orgtotalvalue+= parseInt(localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'][qk]);
+  }
+  localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['total'] = orgtotalvalue;
+  localStorage.setItem("localreport",JSON.stringify(localreport));
+  //update the local org total
+  var all_tid = "totalgrid-"+keys['section_key']+"-"+keys['group_key']+"-"+keys['org_key'];
+  $("td#"+all_tid).html(orgtotalvalue+"分");
+  $("td#"+all_tid).addClass("saved");
+
   jQuery("#questioninput_page").hide();
   jQuery("#homepage").show();
 }
 function loadsaved2homepage(){
   var userinput = JSON.parse(localStorage.getItem("userinput"));
+  var localreport = JSON.parse(localStorage.getItem("localreport"));
   for(fieldname in userinput){
     var keys = subquestion_name2key(fieldname);
     if(keys['subquestion_key'] == "total_0"){
@@ -387,6 +412,17 @@ function loadsaved2homepage(){
     }
 
   };
+
+  for(s in localreport){
+    for(g in localreport[s]){
+      for(o in localreport[s][g]['orgs']){
+        orgtotalvalue = localreport[s][g]['orgs'][o]['total'];
+        var all_tid = "totalgrid-"+s+"-"+g+"-"+o;
+        $("td#"+all_tid).html(orgtotalvalue+"分");
+        $("td#"+all_tid).addClass("saved");
+      }
+    }
+  }
 }
 function review_backto_homepage(){
   jQuery("#review_page").hide();
@@ -397,7 +433,7 @@ document.addEventListener("deviceready", onDeviceReady, false);
 
 function onDeviceReady(){
     document.addEventListener("backbutton", function(e){
-       r = confirm("确定要退出吗？如果你尚未提交数据，退出后丢失所有数据输入。");
+       r = confirm("确定要退出吗？");
        if(r){
           rr = confirm("您真的要退出吗？");
           if(rr){
