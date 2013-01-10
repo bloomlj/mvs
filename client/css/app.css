@@ -495,3 +495,10 @@ li b.liinlineb{
 	font-size: 40px;
 	text-align: center; 
 }
+li#post_status_msg{
+	height:120px;
+	line-height:60px;
+	font-size: 40px;
+	text-align:center; 
+	color:#C52000;
+}

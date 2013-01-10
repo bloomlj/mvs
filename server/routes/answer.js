@@ -85,7 +85,7 @@ exports.api_create = function(req, res){
         }
         else{
           res.set('Access-Control-Allow-Origin', '*');
-          res.send({status:"您的数据已提交，并已存入数据库。"});
+          res.send({status:"您的数据已成功提交，并已存入数据库。<br/>非常感谢您的参与！谢谢！"});
         }
         
       });
