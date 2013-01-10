@@ -218,7 +218,6 @@ function rangedecrease(el) {
   var current = $(el).next().val();
   //if null,give it max value for default
   if(current == ""){
-    
     $(el).next().val(parseInt($(el).next().attr('max')));
     saveinput($(el).next()[0]);
   }
