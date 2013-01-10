@@ -250,8 +250,10 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .rangeinput_widget input.rangeinput{
 	display: inline-block;
-	height:40px;
+	height:30px;
 	width: 40px;
+	border-radius: 3px;
+	border:1px solid #003AA0;
 }
 
 .checkbox_widget{
