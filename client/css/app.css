@@ -489,3 +489,9 @@ li b.liinlineb{
 	width:10em;
 	line-height: 1.5em;
 }
+#login_page li#loginmsg{
+	height:120px;
+	line-height:60px;
+	font-size: 40px;
+	text-align: center; 
+}

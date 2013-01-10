@@ -138,22 +138,31 @@ exports.api_opened = function(req, res){
           res.send({'status':'error','info':'错误的密码。'});
         }else{
           var ObjectID = require('mongodb').ObjectID;
-          db.do('vote',function(collection){
-            collection.findOne({'_id' : new ObjectID(voterdoc.vote_id)},function(err, votedoc){
-              if(!votedoc){
+           db.do('answer',function(collection){
+            collection.findOne({'password':password,'vote_id':voterdoc.vote_id},function(err, votedoc){
+              if(votedoc){
                 res.set('Access-Control-Allow-Origin', '*');
-                res.send({'status':'error','info':'密码已过期。'});
+                res.send({'status':'error','info':'该密码已经参加过投票，并且已成功提交，现已过期。'});
               }else{
-                votedoc.role = voterdoc.role;
-                console.dir(votedoc);
-                res.set('Access-Control-Allow-Origin', '*');
-                res.send({'status':'success','info':'通过验证','data':votedoc});
+                db.do('vote',function(collection){
+                collection.findOne({'_id' : new ObjectID(voterdoc.vote_id)},function(err, votedoc){
+                  if(!votedoc){
+                    res.set('Access-Control-Allow-Origin', '*');
+                    res.send({'status':'error','info':'密码已过期。'});
+                  }else{
+                    votedoc.role = voterdoc.role;
+                    console.dir(votedoc);
+                    res.set('Access-Control-Allow-Origin', '*');
+                    res.send({'status':'success','info':'通过验证','data':votedoc});
+                  }
+                  });
+                });
               }
-              
-             
 
             });
           });
+                   
+
         }
 
       });

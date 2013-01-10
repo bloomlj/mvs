@@ -99,7 +99,7 @@
 	<article id="voteresult_wrapper">
 		<div id="voteresult_scroller" class="listpage_body">
 			<ul>
-				<li id="loginmsg"></li>
+				<li id="loginmsg">西南交通大学机关、业务、直属单位工作考评系统<br/>（2012年度）</li>
 				<li><input id="loginpassword" type="text" name="password" placeholder="请输入投票密码" /></li>
 				<li class="libtn" id="loginnow" onclick="contoller_login();" >登入</li>
 			</ul>
@@ -238,19 +238,20 @@
 	<article id="review_wrapper">
 		<div id="review_scroller" class="listpage_body">
 			<ul>
-				<%for(section in localanswers) {%>
-					<%for(group in localanswers[section]['groups']) {%>
-						<%for(org in localanswers[section]['groups'][group]['orgs']) {%>
+				<%for(section in localanswers['votedata']['sections']) {%>
+				<%if(typeof localanswers[section]  != "undefined"){%>
+					<%for(org in localanswers['votedata']['sections'][section]['groups']['group_0']['orgs']) {%>
+						<%if(typeof localanswers[section]['groups']['group_0']['orgs'][org] != "undefined"){%>
 							<% var orgtotal = 0; %>
-							<%for(question in localanswers[section]['groups'][group]['orgs'][org]['questions']) {%>
-								<% orgtotal += parseInt(localanswers[section]['groups'][group]['orgs'][org]['questions'][question]['subquestions']['total_0']['answer']); %>
+							<%for(question in localanswers[section]['groups']['group_0']['orgs'][org]['questions']) {%>
+								<% orgtotal += parseInt(localanswers[section]['groups']['group_0']['orgs'][org]['questions'][question]['subquestions']['total_0']['answer']); %>
 							<%}%>
 							<li>
-							<b class="liinlineb"><%= localanswers[section]['groups'][group]['orgs'][org]['fullname']%>:<%= orgtotal%>分</b>
-							<b class="libar" style="width:<%=orgtotal*6 %>px;"></b></li>			
+							<b class="liinlineb"><%= localanswers[section]['groups']['group_0']['orgs'][org]['fullname']%>:<%= orgtotal%>分</b>
+							<b class="libar" style="width:<%=orgtotal*6 %>px;"></b></li>		
 						<%}%>
 					<%}%>
-					
+				<%}%>
 				<%}%>
 				
 				

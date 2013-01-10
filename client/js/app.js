@@ -348,6 +348,7 @@ function tool_inputs2obj(inputs){
 function tool_inputs2objwithtext(inputs){
     var votedata = JSON.parse(localStorage.getItem(client.vote_dbname));
     var local_answers={};
+    local_answers.votedata = votedata;
     for (var key in inputs) {
         //result += objName + "." + prop + " = " + inputs[key] + "\n";
         var keyarray = key.match(/[a-z]+_\d+/g);
@@ -357,7 +358,7 @@ function tool_inputs2objwithtext(inputs){
         if(typeof local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]] == "undefined") local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]={"questions":{}};
         if(typeof local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]] == "undefined")  local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]= {"subquestions":{}};
         if(typeof local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['subquestions'][keyarray[4]] == "undefined")  local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['subquestions'][keyarray[4]]= {};
-        console.log(local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['subquestions']);
+        //console.log(local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['subquestions']);
         //give value
         local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['subquestions'][keyarray[4]]['answer'] = inputs[key];
         //get text
@@ -366,6 +367,7 @@ function tool_inputs2objwithtext(inputs){
         local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['text'] = votedata['sections'][keyarray[0]]['groups'][keyarray[1]]['questions'][[keyarray[3]]]['text'];
         if(keyarray[4] != 'total_0')  local_answers[keyarray[0]]['groups'][keyarray[1]]['orgs'][keyarray[2]]['questions'][keyarray[3]]['subquestions'][keyarray[4]]['text'] = votedata['sections'][keyarray[0]]['groups'][keyarray[1]]['questions'][[keyarray[3]]]['subquestions'][keyarray[4]]['text'];
     }
+
     return local_answers;
 }
 

@@ -77,7 +77,7 @@ exports.api_create = function(req, res){
        //insert
       var answer = req.body;
       answer.ip = req.ip;
-      answer.submittime = new Date();;
+      answer.submittime = new Date();
       
       collection.insert(answer, {safe:true}, function(err, objects) {
         if (err){
