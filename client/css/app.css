@@ -247,9 +247,11 @@ input[type="range"]::-webkit-slider-thumb {
 	line-height: 60px;
 	padding:0 20px;
 	font-size: 30px;
+	border:1px solid #B2C7EB;
 }
 .rangeinput_widget input.rangeinput{
 	display: inline-block;
+	line-height: ;
 	height:30px;
 	width: 40px;
 	border-radius: 3px;
@@ -417,6 +419,25 @@ li.subquestion_inputfield.hasitems div.list_inlineblock{
 	display: inline-block;
 	width:800px;
 }
+li.subquestion_inputfield.hasitems div.list_inlineblock  table{
+	display: inline-block;
+	border-collapse: collapse;
+	
+}
+li.subquestion_inputfield.hasitems div.list_inlineblock  td{
+	border:1px solid #bbbbbb;
+	border-collapse:collapse;
+	padding:10px;
+}
+li.subquestion_inputfield.hasitems div.list_inlineblock  td.weight{
+	width:3em;
+}
+li.subquestion_inputfield.hasitems div.list_inlineblock  td.note{
+	width:35em;
+}
+li.subquestion_inputfield.hasitems div.list_inlineblock  td.text{
+	width:10em;
+}
 li.subquestion_inputfield.hasitems div.list_inlineblock ul li{
 	min-height: 65px;
 	height:auto;
@@ -432,10 +453,13 @@ header,li{
 }
 li div.rangeinput_widget{
 	position: absolute;
-	top:0px;
+	top:0;
 	right:20px;
 }
-
+li.subquestion_inputfield.hasitems div.rangeinput_widget{
+	top:25%;
+	right:20px;
+}
 b.headerbtn{
 	position: absolute;
 	background-color: #C52000;

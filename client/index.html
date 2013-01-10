@@ -67,13 +67,14 @@
 				<% _.each(question.subquestions,function(subq,subqkey){%>
 					<li class="subquestion_inputfield hasitems">
 					<% subq.weight = 0;%>
+
 						<div class="list_inlineblock">
-							<ul>
+							<table>
 							<% _.each(subq.items,function(item,itemkey){%>
-								<li><%= item.text%>： <%= item.note %> <%= item.weight %>分</li>
+								<tr><td class="text"><%= item.text%></td><td class="note"><%= item.note %></td><td class="weight"><%= item.weight %>分</td></tr>
 								<% subq.weight += parseInt(item.weight)%>
 							<% });%>
-							</ul>
+							</table>
 						</div>
 
 						<% if(_.size(question.subquestions) > 1){ %>

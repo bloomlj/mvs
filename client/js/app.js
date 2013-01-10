@@ -1,10 +1,11 @@
 var client={};
 client.init = function(){
   //clear db
-  if(!localStorage.getItem("vote"))  localStorage.setItem("vote",'');
+
   if(!localStorage.getItem("connect"))  localStorage.setItem("connect",'');
   if(!localStorage.getItem("userinput"))  localStorage.setItem("userinput",'{}');
   if(!localStorage.getItem("localreport"))  localStorage.setItem("localreport",'{}');
+  if(!localStorage.getItem("vote"))  localStorage.setItem("vote",'');
   client.connect = {server:"192.168.80.177",port:"80"};
 }
 client.view_login = function(){
@@ -146,14 +147,14 @@ function view_questioninput(section,group,org,question){
   
   loadsavedinput();
 
-  var questioninput_page_scroller = new iScroll('questioninput_wrapper',{
-  onBeforeScrollStart: function (e) {
-      var target = e.target;
-      while (target.nodeType != 1) target = target.parentNode;
-      if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA'&& target.tagName != 'BUTTON')
-        e.preventDefault();
-      }
-  });
+  // var questioninput_page_scroller = new iScroll('questioninput_wrapper',{
+  // onBeforeScrollStart: function (e) {
+  //     var target = e.target;
+  //     while (target.nodeType != 1) target = target.parentNode;
+  //     if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA'&& target.tagName != 'BUTTON')
+  //       e.preventDefault();
+  //     }
+  // });
 }
 
 function view_review(){
@@ -263,10 +264,22 @@ function saveinput(el){
   }
   //number
   if("number" == $(el).attr("type")){
+    if(parseInt($(el).val()) > parseInt($(el).attr("max"))){
+      alert("输入已超过最大值。");
+      $(el).val('');
+      return false;
+    }
+    if(parseInt($(el).val()) < parseInt($(el).attr("min"))){
+      alert("输入小于最小值。");
+      $(el).val('');
+      return false;
+    }
+    
     userinput[$(el).attr("name")] = $(el).val();
     //if is not the total field itself ,then autorefalsh it.
     if($(el).attr("name").indexOf("total") == -1)     questioninput_total_autoreflash();
     userinput[$($(".questiontotal_inputfield input")[0]).attr("name")] = $($(".questiontotal_inputfield input")[0]).val();
+
   }
   localStorage.setItem("userinput",JSON.stringify(userinput));
 
@@ -373,30 +386,31 @@ function questioninput_savebackto_homepage(){
   var totalvalue = $($(".questiontotal_inputfield input")[0]).val();
   var keys = subquestion_name2key(totalfieldname);
   var tdid = "qgrid-"+keys['section_key']+"-"+keys['group_key']+"-"+keys['org_key']+"-"+keys['question_key'];
-  $("td#"+tdid).html("已打"+totalvalue+"分");
-  $("td#"+tdid).addClass("saved");
+  if(totalvalue != ''){
+    $("td#"+tdid).html("已打"+totalvalue+"分");
+    $("td#"+tdid).addClass("saved");
+   //save the local report
+    var localreport = JSON.parse(localStorage.getItem("localreport"));
 
-  //save the local report
-  var localreport = JSON.parse(localStorage.getItem("localreport"));
+    if(typeof localreport[keys['section_key']]== "undefined") localreport[keys['section_key']] = {};
+    if(typeof localreport[keys['section_key']][keys['group_key']]== "undefined") localreport[keys['section_key']][keys['group_key']] = {'orgs':{}};
+    if(typeof localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]== "undefined")  localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']] = {'questions':{}};
+    localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'][keys['question_key']] =  parseInt(totalvalue);
+    
+    var orgtotalvalue = 0;
+    for(qk in localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'] ){
+      orgtotalvalue+= parseInt(localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'][qk]);
+    }
+    localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['total'] = orgtotalvalue;
+    localStorage.setItem("localreport",JSON.stringify(localreport));
+    //update the local org total
+    var all_tid = "totalgrid-"+keys['section_key']+"-"+keys['group_key']+"-"+keys['org_key'];
+    $("td#"+all_tid).html(orgtotalvalue+"分");
+    $("td#"+all_tid).addClass("saved");
 
-  if(typeof localreport[keys['section_key']]== "undefined") localreport[keys['section_key']] = {};
-  if(typeof localreport[keys['section_key']][keys['group_key']]== "undefined") localreport[keys['section_key']][keys['group_key']] = {'orgs':{}};
-  if(typeof localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]== "undefined")  localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']] = {'questions':{}};
-  localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'][keys['question_key']] = totalvalue;
-  
-  var orgtotalvalue = 0;
-  for(qk in localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'] ){
-    orgtotalvalue+= parseInt(localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'][qk]);
   }
-  localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['total'] = orgtotalvalue;
-  localStorage.setItem("localreport",JSON.stringify(localreport));
-  //update the local org total
-  var all_tid = "totalgrid-"+keys['section_key']+"-"+keys['group_key']+"-"+keys['org_key'];
-  $("td#"+all_tid).html(orgtotalvalue+"分");
-  $("td#"+all_tid).addClass("saved");
-
-  jQuery("#questioninput_page").hide();
-  jQuery("#homepage").show();
+    jQuery("#questioninput_page").hide();
+    jQuery("#homepage").show();
 }
 function loadsaved2homepage(){
   var userinput = JSON.parse(localStorage.getItem("userinput"));
