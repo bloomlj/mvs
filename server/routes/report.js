@@ -31,6 +31,34 @@ exports.show = function(req, res){
             var ObjectID = require('mongodb').ObjectID;
             collection.findOne({'_id' : new ObjectID(report.vote_id)},function(err, vote) {
               report.vote = vote;
+              report.answers = answers;
+              //give the  undefine field a  NaN value.
+              if (req.params.format == 'json') { res.set('Access-Control-Allow-Origin', '*');res.send(report);}
+              else res.render('report/show', report);
+            });
+          });
+
+        });
+      });
+      //answer get end
+    });
+  });
+
+};
+
+
+exports.show2 = function(req, res){
+
+  db.do('report',function(collection){
+    var ObjectID = require('mongodb').ObjectID;
+    collection.findOne({'_id' : new ObjectID(req.params.id)},function(err, report){
+      db.do('answer',function(collection){
+        collection.find({"vote_id":report['vote_id']}).toArray(function(err, answers) {
+          //report.answers = answers;
+          db.do('vote',function(collection){
+            var ObjectID = require('mongodb').ObjectID;
+            collection.findOne({'_id' : new ObjectID(report.vote_id)},function(err, vote) {
+              report.vote = vote;
               report.reportbody = {"sections":{}};
               
               for(answerindex in answers){

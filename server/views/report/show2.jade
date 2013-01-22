@@ -1,0 +1,34 @@
+extends ../layout
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li
+      a(href="/report") 报表
+      span.divider /
+    li 
+      a(href="/report/#{_id}") 报表详细
+block content
+  h1 报表：#{title}
+  each section ,sectionkey in vote.sections
+    h2 #{section.title}
+    each group ,groupkey in section.groups
+      table.table.table-striped
+        tr 
+          td 指标
+          each org,orgkey in group.orgs
+            if typeof org.fullname != "undefined"
+              td #{org.fullname}
+        each question,questionkey in group.questions
+          tr
+            td #{question.text}
+            each org,orgkey in group.orgs
+              if typeof org.fullname != "undefined"
+                td 
+                  |分数和：#{reportbody['sections'][sectionkey]['groups'][groupkey]['orgs'][orgkey]['questions'][questionkey]['subquestions']['total_0']['all']}
+                  |票数：#{reportbody['sections'][sectionkey]['groups'][groupkey]['orgs'][orgkey]['questions'][questionkey]['subquestions']['total_0']['count']}
+                  |最高分：#{reportbody['sections'][sectionkey]['groups'][groupkey]['orgs'][orgkey]['questions'][questionkey]['subquestions']['total_0']['largest']}
+                  |最低分：#{reportbody['sections'][sectionkey]['groups'][groupkey]['orgs'][orgkey]['questions'][questionkey]['subquestions']['total_0']['minist']}
+
+
