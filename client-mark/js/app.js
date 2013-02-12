@@ -4,7 +4,7 @@ client.init = function(){
 
   if(!localStorage.getItem("connect"))  localStorage.setItem("connect",'');
 
-  client.connect = {server:"192.168.1.8",port:"80"};
+  client.connect = {server:"192.168.80.177",port:"80"};
 }
 client.view_login = function(){
   tplrender("login-tpl",{},"login_pagecontent");
