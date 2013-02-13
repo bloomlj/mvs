@@ -13,6 +13,7 @@
           $(link).prev().find("input")[i].name = name.replace(fieldtype+'s'+'['+fieldtype+'_'+(len-1)+']',fieldtype+'s'+'['+fieldtype+'_'+len+']');
         }
         else{
+          console.log('['+fieldtype+'s]'+'['+fieldtype+'_'+(len-1)+']');
           $(link).prev().find("input")[i].name = name.replace('['+fieldtype+'s]'+'['+fieldtype+'_'+(len-1)+']','['+fieldtype+'s]'+'['+fieldtype+'_'+len+']');
         }
       }
