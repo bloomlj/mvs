@@ -79,14 +79,13 @@ function load_section(section_key) {
     var data = JSON.parse(localStorage.getItem(client.vote_dbname));
 
     if(typeof data.sections[section_key] != "undefined"){
+      data.sections[section_key].key = section_key;
+      tplrender("question-nav-tpl",data.sections[section_key],"sidebarbody");
+
       if(data.vtype=="mark") {
-      	 data.sections[section_key].key = section_key;
-      	 //评价指标显示
-         tplrender("question-nav-tpl",data.sections[section_key],"sidebarbody");
-         //评价表格显示
         tplrender("marksection_table-tpl",data.sections[section_key],"voteform");
       }
-      if(data.vtype=="vote") {
+      if(data.vtype==client.vote_dbname) {
         tplrender("votesection-tpl",data.sections[section_key],"voteform");
       }  
     }
