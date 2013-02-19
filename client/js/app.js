@@ -79,19 +79,28 @@ function load_section(section_key) {
     var data = JSON.parse(localStorage.getItem(client.vote_dbname));
 
     if(typeof data.sections[section_key] != "undefined"){
+    	 //复制section_key到模版变量用于标示
+    	 data.sections[section_key].key = section_key;
       if(data.vtype=="mark") {
-      	 data.sections[section_key].key = section_key;
       	 //评价指标显示
          tplrender("question-nav-tpl",data.sections[section_key],"sidebarbody");
          //评价表格显示
         tplrender("marksection_table-tpl",data.sections[section_key],"voteform");
+        //加载本地已选结果
+        loadsaved2homepage();
       }
       if(data.vtype=="vote") {
-        tplrender("votesection-tpl",data.sections[section_key],"voteform");
+      	  //这里加上投票时左侧静态导航显示：选择、姓名、单位
+      	  tplrender("vote-nav-tpl",{},"sidebarbody");
+      	  //选票表格显示
+        tplrender("votesection_table-tpl",data.sections[section_key],"voteform");
+        //加载本地已选结果
+        loadsavedinput();
       }  
     }
 
-    loadsaved2homepage();
+    
+    
     //init content scroll
     content_scroll_init();
     //init rang input widget
@@ -437,6 +446,7 @@ function loadsaved2homepage(){
 
   };
 
+  //生成临时本地报表
   for(s in localreport){
     for(g in localreport[s]){
       for(o in localreport[s][g]['orgs']){

@@ -302,7 +302,7 @@ input[type="range"]::-webkit-slider-thumb {
 	background: #ccc;
 }
 
-table.marksection_form,table.votesection_form_container,table.votegroup_form{
+table.marksection_form{
 	border-collapse:collapse;
 	border-spacing: none;
 	border-color: gray;
@@ -326,19 +326,6 @@ table.marksection_form td{
 table.marksection_form td.saved{
 	background:#BBFFE9 ;
 }
-table.votegroup_form{
-margin-right:5px;
-}
-table.votegroup_form td{
-	height:60px;
-	border-bottom: 1px solid #ccc;
-	border-right: 1px solid #ccc;
-	text-align: center;
-	padding:0 5px;
-	width:60px;
-}
-
-
 #questioninput_wrapper {
 	position:absolute; z-index:1;
 	top:45px; bottom:48px; left:0;
