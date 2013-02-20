@@ -1,0 +1,46 @@
+extends ../layout
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li
+      a(href="/report") 报表
+      span.divider /
+    li 
+      a(href="/report/#{_id}") 报表详细
+block content
+  h1 报表：#{title}
+  b 复制并粘贴下面内容到excel可实现简单导出。
+  hr
+  each section ,sectionkey in vote.sections
+    h2 #{section.title}
+    each group ,groupkey in section.groups
+      table.table.table-striped
+        tr 
+          td key
+          td 指标
+          each org,orgkey in group.orgs
+            if typeof org.fullname != "undefined"
+              td #{org.fullname}
+        each answer,answerkey in answers
+          each question,questionkey in group.questions
+            //td #{answer['answer'][sectionkey]}
+            tr
+              td #{answer.password}
+              td #{question.text}
+              each org,orgkey in group.orgs
+                if typeof org.fullname != "undefined" 
+                  if typeof answer['answer'][sectionkey] == "undefined"
+                    td 无
+                  else
+                    if typeof answer['answer'][sectionkey][groupkey] == "undefined"
+                      td 无
+                    else
+                      if typeof answer['answer'][sectionkey][groupkey][orgkey] == "undefined"
+                        td 无
+                      else
+                        if typeof answer['answer'][sectionkey][groupkey][orgkey][questionkey] == "undefined"
+                          td 无
+                        else
+                          td #{answer['answer'][sectionkey][groupkey][orgkey][questionkey]['total_0']}

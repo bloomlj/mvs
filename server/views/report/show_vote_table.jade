@@ -1,0 +1,43 @@
+extends ../layout
+block breadcrumbs
+  ul.breadcrumb
+    li
+      a(href="/") 首页
+      span.divider /
+    li
+      a(href="/report") 报表
+      span.divider /
+    li 
+      a(href="/report/#{_id}") 报表详细
+block content
+  h1 vote报表：#{title}
+  b 复制并粘贴下面内容到excel可实现简单导出。
+  hr
+  each section ,sectionkey in vote.sections
+    h2 #{section.title}
+    each group ,groupkey in section.groups
+      table.table.table-striped
+        tr 
+          td 投票密码
+          td 姓名
+          td 单位
+          td 投票结果
+        each answer,answerkey in answers
+            each candidate,candidatekey in group.candidates
+                tr
+                    td #{answer.password}
+                    td #{candidate.name}
+                    td #{candidate.org}
+                    if typeof answer['answer'][sectionkey] == "undefined"
+                        td ×
+                    else
+                        if typeof answer['answer'][sectionkey][groupkey] == "undefined"
+                            td ×
+                        else
+                            if typeof answer['answer'][sectionkey][groupkey][candidatekey] == "undefined"
+                                td ×
+                            else
+                                td √
+                                //td #{answer['answer'][sectionkey][groupkey][candidatekey]['votevalue']}
+  
+       

@@ -139,20 +139,40 @@
 </script>
 
 <script id="votesection_table-tpl" type="text/template">
-	<div class="marksection_<%=key%>">
+	<div class="votesection_<%=key%>">
+	<table class="votesection_form_container">
+ 	<tr>
 	 <%  _.each(groups, function(group,i) {  %>
-	 	<ul id="votelist" class="vote">
-	 		<% _.each(group.candidates,function(candidate,j){%>
-	 			<li class="group-item">
-	 				<label><%= candidate.name%>(<%= candidate.org%>)
-	 				<div class="checkbox_widget">
-		 			<input type="checkbox" name="answer[<%= candidate.org%>][<%= candidate.name%>][votevalue]"  value=1 id="checkbox-<%= i%>" onchange="saveinput(this)" />
-		 			</div>
-		 			</label>
-	 			</li>
-	    	<% });%>
-	    </ul>
+ 		<td>
+ 		<table class="votegroup_form">
+ 			<tr>
+ 			<% _.each(group.candidates,function(candidate,j){%>
+	 			<td class="candidate_checkbox">
+		 		  <input type="checkbox" name="answer[<%= candidate.org%>][<%= candidate.name%>][votevalue]"  value=1 id="checkbox-<%= i%>" onchange="saveinput(this)" />
+	 			</td>
+	 		 <% });%>
+ 			</tr>
+ 			<tr>
+ 			 <% _.each(group.candidates,function(candidate,j){%>
+	 			<td class="candidate">
+	 			<%= candidate.name%>
+	 			</td>
+	 		 <% });%>
+ 			</tr>
+ 			<tr>
+ 			<% _.each(group.candidates,function(candidate,j){%>
+	 			<td class="org">
+	 			<%= candidate.org%>
+	 			</td>
+	 		 <% });%>
+ 			</tr>
+ 			
+ 		</table>
+
+	       </td>
+
 	 <% }); %>  
+	 </tr></table>
 	 </div> 
 </script>
 

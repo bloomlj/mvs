@@ -34,10 +34,7 @@ exports.show = function(req, res){
               report.answers = answers;
               //give the  undefine field a  NaN value.
               if (req.params.format == 'json') { res.set('Access-Control-Allow-Origin', '*');res.send(report);}
-              else{
-              	   if(vote.vtype == 'mark'){res.render('report/show_mark_table', report);}
-              	   if(vote.vtype == 'vote'){res.render('report/show_vote_table', report);} 
-              	  }
+              else res.render('report/show', report);
             });
           });
 
