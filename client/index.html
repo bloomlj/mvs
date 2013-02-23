@@ -156,7 +156,7 @@
  			<tr><td colspan="<%= _.size(group.candidates) %>">限投<%= group.max%>人</td></tr>
  			<tr>
  			<% _.each(group.candidates,function(candidate,j){%>
-	 			<td class="candidate_checkbox" onclick="td_save_checkbox(this)">
+	 			<td class="candidate_checkbox" >
 		 		  <input type="checkbox" data-limit="<%= group.max%>"  name="answer[<%=key%>][<%=i%>][<%=j%>][votevalue]"  value=1 id="checkbox-<%= i%>"  class="hiddenfield"/>
 	 			</td>
 	 		 <% });%>

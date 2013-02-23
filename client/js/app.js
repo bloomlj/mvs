@@ -73,7 +73,6 @@ function contoller_login(){
       $("#loginmsg").text("用户名和密码必须填写。").addClass('error');
     }
     else{
-    alert("xx");
       client.http_login(client.connect);
     }
 }
@@ -101,8 +100,13 @@ function load_section(section_key) {
       	  tplrender("vote-nav-tpl",{},"sidebarbody");
       	  //选票表格显示
         tplrender("votesection_table-tpl",data.sections[section_key],"voteform");
+
         //加载本地已选结果
         loadsavedinput();
+         //绑定
+        $('.candidate_checkbox').tap(function(){
+		  td_save_checkbox(this);
+		})
       }  
     }
 
@@ -110,7 +114,7 @@ function load_section(section_key) {
     
     //init content scroll
     
-    //content_scroll_init();
+    content_scroll_init();
     //init rang input widget
     //rangeinput_init();
 }
@@ -151,7 +155,7 @@ function post_form(){
       $("#voteresult_page").show();
       var voteresult_Scroll = new iScroll('voteresult_wrapper');
 
-   });
+   },'json');
 }
 
 
@@ -327,12 +331,12 @@ function saveinput(el){
   //number
   if("number" == $(el).attr("type")){
     if(parseInt($(el).val()) > parseInt($(el).attr("max"))){
-      alert("输入已超过最大值。");
+      showAlert("输入已超过最大值。");
       $(el).val('');
       return false;
     }
     if(parseInt($(el).val()) < parseInt($(el).attr("min"))){
-      alert("输入小于最小值。");
+      showAlert("输入小于最小值。");
       $(el).val('');
       return false;
     }
@@ -381,7 +385,7 @@ function questioninput_total_autoreflash(){
 }
 function  subquestion_name2key(name){
     var subquestion_keyarray = name.match(/[a-z]+_\d+/g);
-    //alert(subquestion_keyarray.length);
+    
     var keys = {};
     keys['section_key'] = subquestion_keyarray[0];
     keys['group_key'] = subquestion_keyarray[1];
@@ -578,15 +582,14 @@ function content_scroll_init(){
 		client.scrollContent.destory();
 		client.scrollConten = null;
 	}
-
 	//重新打开
-	
   client.scrollContent = new iScroll('contentWrapper',{
   vScroll:false,
+  checkDOMChange:false,
   onBeforeScrollStart: function (e) {
       var target = e.target;
       while (target.nodeType != 1) target = target.parentNode;
-      if (target.tagName != 'INPUT' && target.tagName != 'BUTTON')
+      if (target.tagName != 'INPUT' && target.tagName != 'BUTTON' && target.tagName != 'td')
         e.preventDefault();
       }
   });
@@ -600,12 +603,13 @@ function showAlert(msg) {
             '好，知道了。'                  // buttonName
         );
 }
-    // alert dialog dismissed
+
+// alert dialog dismissed
 function alertDismissed() {
         // do something
 }
-    // Vibrate for 2 seconds
-    //
+
+// Vibrate for 2 seconds
 function vibrate() {
         navigator.notification.vibrate(1000);
 }
