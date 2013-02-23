@@ -266,6 +266,23 @@ function rangeadd(el) {
   return false;
 }
 
+function td_save_checkbox(el){
+    //td模拟checkbox的点击行为。
+   var checkbox_el = $(el).children("input")[0];
+   if("checked" == $(checkbox_el).attr("checked")){
+       $(checkbox_el).removeAttr("checked");
+       //去掉checked图标
+       $(el).removeClass("checked");
+   }    
+   else{
+       $(checkbox_el).attr("checked","checked");
+       //显示点击图标
+       $(el).addClass("checked");
+   }
+    //保存输入
+    saveinput(checkbox_el);
+
+}
 
 function saveinput(el){
   var userinput = JSON.parse(localStorage.getItem(client.userinput_dbname));
@@ -287,6 +304,8 @@ function saveinput(el){
       if(checkedcount >= limit){
       	      alert("已超过输入限制。若要选择此项，请先取消一个已选项目。");
       	      $(el).removeAttr("checked");
+      	      //去掉checked图标          //显示图标
+      	       $($(el).parent("td")[0]).removeClass("checked");
       	      return false;
       }
       userinput[$(el).attr("name")] = 1;
@@ -330,6 +349,8 @@ function loadsavedinput(){
         $(this).val(userinput[this.name]);
         if( "checkbox" == $(this).attr("type")  && '1' == parseInt(userinput[this.name]) ){
           $(this).attr("checked","checked");
+          //显示图标
+          $($(this).parent("td")[0]).addClass("checked");
         }
       }
     });

@@ -1,4 +1,6 @@
 var client={};
+client["scrollContent"] = null;
+
 client.init = function(){
   //clear db
 
@@ -10,15 +12,18 @@ client.view_login = function(){
   tplrender("login-tpl",{},"login_pagecontent");
 }
 client.http_login=function(connect){
+
   //login
   $.ajax({
     type:"GET",
+    dataType: 'json',
     url:"http://" + connect.server + ":" + connect.port +"/vote/api_opened/"+connect.password,
     error: function(jqXHR, textStatus, errorThrown){
       $("#loginmsg").text("登录失败,错误信息：无法与服务器 "+connect.server+" 正常通信。").addClass("error").show('slow');
     },
     success: function(doc){
       if(doc.status == 'success'){
+      
         client.userinput_dbname = "userinput_"+client.connect.password;
         client.localreport_dbname = "localreport_"+client.connect.password;
         client.vote_dbname = "vote_"+client.connect.password;
@@ -31,7 +36,7 @@ client.http_login=function(connect){
         client.loadhomepage(doc.data);
       }
       if(doc.status == 'error'){
-        jQuery("#loginmsg").text("登录失败。原因："+doc.info).addClass('error');
+        $("#loginmsg").text("登录失败。原因："+doc.info).addClass('error');
       }
     }
   });
@@ -46,7 +51,7 @@ client.loadhomepage=function(data){
 //显示标题
   var template = _.template("<%= name%>");
   var htmlstr = template({name : data.name});
-  //jQuery("#pagetitle").text(htmlstr);
+  //$("#pagetitle").text(htmlstr);
   tplrender("section-nav-tpl",data,"pagetitle");
   $("#role").html(data.role+"(id:"+client.connect.password+")");
   //sideber_scroll_init();
@@ -65,14 +70,16 @@ function contoller_login(){
     client.connect.password = password;
     localStorage.setItem("connect",JSON.stringify(client.connect));
     if(password == ''){
-      jQuery("#loginmsg").text("用户名和密码必须填写。").addClass('error');
+      $("#loginmsg").text("用户名和密码必须填写。").addClass('error');
     }
     else{
+    alert("xx");
       client.http_login(client.connect);
     }
 }
 //显示选票表单
 function load_section(section_key) {
+
     $("header#pagetitle  a").removeClass("active");
     $("header#pagetitle a#headerlinkto-"+section_key).addClass("active");
 
@@ -102,7 +109,8 @@ function load_section(section_key) {
     
     
     //init content scroll
-    content_scroll_init();
+    
+    //content_scroll_init();
     //init rang input widget
     //rangeinput_init();
 }
@@ -136,11 +144,11 @@ function post_form(){
       localStorage.setItem(client.userinput_dbname,'{}');
       localStorage.setItem(client.localreport_dbname,'{}');
       //remove  the pages for vote
-      jQuery("#homepage").remove();
-      jQuery("#questioninput_page").remove();
-      jQuery("#review_page").remove();
+      $("#homepage").remove();
+      $("#questioninput_page").remove();
+      $("#review_page").remove();
       //show voteresult page
-      jQuery("#voteresult_page").show();
+      $("#voteresult_page").show();
       var voteresult_Scroll = new iScroll('voteresult_wrapper');
 
    });
@@ -157,8 +165,8 @@ function view_questioninput(section,group,org,question){
   qitem.org = vote['sections'][section]['groups'][group]['orgs'][org];
   qitem.question = vote['sections'][section]['groups'][group]['questions'][question];
   tplrender("questioninput-tpl",qitem,"questioninput_pagecontent");
-  jQuery("#homepage").hide();
-  jQuery("#questioninput_page").show();
+  $("#homepage").hide();
+  $("#questioninput_page").show();
   
   loadsavedinput();
 
@@ -178,8 +186,8 @@ function view_review(){
    console.log(localanswers);
    tplrender("votereview-tpl",{"localanswers":localanswers},"review_pagecontent");
 
-   jQuery("#homepage").hide();
-   jQuery("#review_page").show();
+   $("#homepage").hide();
+   $("#review_page").show();
    var reviewpage_scroller = new iScroll('review_wrapper');
 }
 
@@ -195,21 +203,21 @@ function fetch_report(){
       if(doc.status == 'success'){
         console.log(doc);
          tplrender("votereport-page-tpl",doc,"votereport_pagecontent");
-         jQuery("#voteresult_page").hide();
-         jQuery("#votereport_page").show();
+         $("#voteresult_page").hide();
+         $("#votereport_page").show();
          var reviewpage_scroller = new iScroll('votereport_wrapper');
        }
       if(doc.status == 'error'){
-        //jQuery("#loginmsg").text("登录失败。原因："+doc.info).addClass('error');
+        //$("#loginmsg").text("登录失败。原因："+doc.info).addClass('error');
       }
     }
   });
 }
 function tplrender(tpl_id,data,target_id) {
-   var tplhandle = _.template(jQuery("#"+tpl_id).text());
+   var tplhandle = _.template($("#"+tpl_id).text());
    var htmlstr = tplhandle(data);
-   jQuery("#"+target_id).html(htmlstr);
-   jQuery("#"+target_id).addClass("by_"+tpl_id);
+   $("#"+target_id).html(htmlstr);
+   $("#"+target_id).addClass("by_"+tpl_id);
    // console.log(target_id);
    // console.log(tpl_id);
    // console.log(htmlstr);
@@ -218,14 +226,14 @@ function tplrender(tpl_id,data,target_id) {
 //tpl_el: tpl_element like $("xxx_id")  data: json data to bind.
 function autotplrender(tpl_id,data,callback) {
    //console.log(data);
-   //console.log(jQuery("#"+tpl_id).text());
+   //console.log($("#"+tpl_id).text());
 
-   jQuery(".by_"+tpl_id).remove();
-   var votenowtmp = _.template(jQuery("#"+tpl_id).text());
+   $(".by_"+tpl_id).remove();
+   var votenowtmp = _.template($("#"+tpl_id).text());
    var votenowstr = votenowtmp(data);
    //console.log(votenowstr);
-   jQuery("#"+tpl_id).after(votenowstr);
-   jQuery("#"+tpl_id).next().addClass("by_"+tpl_id);
+   $("#"+tpl_id).after(votenowstr);
+   $("#"+tpl_id).next().addClass("by_"+tpl_id);
    //callback;
  }
 
@@ -302,7 +310,9 @@ function saveinput(el){
       	     
       }
       if(checkedcount >= limit){
-      	      alert("已超过输入限制。若要选择此项，请先取消一个已选项目。");
+      	      showAlert("已超过输入限制。若要选择此项，请先取消一个已选项目。");
+      	      //vibrate();
+      	      
       	      $(el).removeAttr("checked");
       	      //去掉checked图标          //显示图标
       	       $($(el).parent("td")[0]).removeClass("checked");
@@ -476,8 +486,8 @@ function questioninput_savebackto_homepage(){
     $("td#"+all_tid).addClass("saved");
 
   }
-    jQuery("#questioninput_page").hide();
-    jQuery("#homepage").show();
+    $("#questioninput_page").hide();
+    $("#homepage").show();
 }
 function loadsaved2homepage(){
   var userinput = JSON.parse(localStorage.getItem(client.userinput_dbname));
@@ -506,8 +516,8 @@ function loadsaved2homepage(){
   }
 }
 function review_backto_homepage(){
-  jQuery("#review_page").hide();
-  jQuery("#homepage").show();
+  $("#review_page").hide();
+  $("#homepage").show();
 }
 
 document.addEventListener("deviceready", onDeviceReady, false);
@@ -563,16 +573,39 @@ function sideber_scroll_init(){
 }
 
 function content_scroll_init(){
-  var scrollContent = new iScroll('contentWrapper',{
+	//先关闭滚动条
+	if(client.scrollConten != null){
+		client.scrollContent.destory();
+		client.scrollConten = null;
+	}
+
+	//重新打开
+	
+  client.scrollContent = new iScroll('contentWrapper',{
   vScroll:false,
   onBeforeScrollStart: function (e) {
       var target = e.target;
       while (target.nodeType != 1) target = target.parentNode;
-      if (target.tagName != 'SELECT' && target.tagName != 'INPUT' && target.tagName != 'TEXTAREA'&& target.tagName != 'BUTTON')
+      if (target.tagName != 'INPUT' && target.tagName != 'BUTTON')
         e.preventDefault();
       }
   });
+}
 
-
-
+function showAlert(msg) {
+        navigator.notification.alert(
+            msg,  // message
+            alertDismissed,         // callback
+            '提醒',            // title
+            '好，知道了。'                  // buttonName
+        );
+}
+    // alert dialog dismissed
+function alertDismissed() {
+        // do something
+}
+    // Vibrate for 2 seconds
+    //
+function vibrate() {
+        navigator.notification.vibrate(1000);
 }
