@@ -515,3 +515,9 @@ li#post_status_msg{
 	text-align:center; 
 	color:#C52000;
 }
+.hiddenfield{
+   display:none;
+}
+td.candidate_checkbox.checked{
+    background:url("../images/checked.png") no-repeat 50% 50%;
+}

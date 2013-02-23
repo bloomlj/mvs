@@ -126,6 +126,7 @@
 </script>
 <script id="vote-nav-tpl" type="text/template">
 	<ul id="navScroller">
+		<li class="sidebaritem"><i>说明</i></li>
 		<li class="sidebaritem"><i>选择</i></li>
 		<li class="sidebaritem"><i>姓名</i></li>
 		<li class="sidebaritem"><i>单位</i></li>
@@ -135,7 +136,14 @@
 	<% _.each(sections,function(section,i){%>
 		<a href="#" id="headerlinkto-<%= i%>" onclick="load_section('<%= i%>');"><%= section.title%></a>
 	<% });%>
-	<b id="votereview" onclick="view_review()" class="headerbtn rightbtn">填好了，提交</b>
+	
+	<%if(vtype == "mark"){%>
+		<b id="votereview" onclick="view_review()" class="headerbtn rightbtn">填好了，提交</b>
+	<%}else{%>
+		<b id="votereview" onclick="post_conform()" class="headerbtn rightbtn">填好了，提交</b>
+		
+	<%}%>
+	
 </script>
 
 <script id="votesection_table-tpl" type="text/template">
@@ -145,10 +153,11 @@
 	 <%  _.each(groups, function(group,i) {  %>
  		<td>
  		<table class="votegroup_form">
+ 			<tr><td colspan="<%= _.size(group.candidates) %>">限投<%= group.max%>人</td></tr>
  			<tr>
  			<% _.each(group.candidates,function(candidate,j){%>
 	 			<td class="candidate_checkbox">
-		 		  <input type="checkbox" name="answer[<%= candidate.org%>][<%= candidate.name%>][votevalue]"  value=1 id="checkbox-<%= i%>" onchange="saveinput(this)" />
+		 		  <input type="checkbox" data-limit="<%= group.max%>"  name="answer[<%=key%>][<%=i%>][<%=j%>][votevalue]"  value=1 id="checkbox-<%= i%>" onclick="saveinput(this)" />
 	 			</td>
 	 		 <% });%>
  			</tr>

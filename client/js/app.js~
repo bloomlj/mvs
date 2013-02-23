@@ -266,14 +266,31 @@ function rangeadd(el) {
   return false;
 }
 
+
 function saveinput(el){
   var userinput = JSON.parse(localStorage.getItem(client.userinput_dbname));
   console.log(userinput);
   //checkbox
   if("checkbox" == $(el).attr("type")){
     if("checked" == $(el).attr("checked")){
+      limit = $(el).attr("data-limit");
+      keys = candidate_name2key($(el).attr("name"));
+      //check选择超过限制判断。
+      var checkedcount = 0;
+      for (var name in userinput) {
+      	      if(-1 != name.indexOf("answer["+keys.section_key+"]["+keys.group_key+"]")){
+      	      	      checkedcount++;
+      	      	      //console.log("find");
+      	      	}
+      	     
+      }
+      if(checkedcount >= limit){
+      	      alert("已超过输入限制。若要选择此项，请先取消一个已选项目。");
+      	      $(el).removeAttr("checked");
+      	      return false;
+      }
       userinput[$(el).attr("name")] = 1;
-      console.log($(el).val());
+      //console.log($(el).val());    
     }else{
       delete userinput[$(el).attr("name")];
     }
@@ -342,10 +359,19 @@ function  subquestion_name2key(name){
     keys['subquestion_key'] = subquestion_keyarray[4];
     return keys;
 }
+
+function  candidate_name2key(name){
+    var keyarray = name.match(/[a-z]+_\d+/g);
+    var keys = {};
+    keys['section_key'] = keyarray[0];
+    keys['group_key'] = keyarray[1];
+    keys['candidate_key'] = keyarray[2];
+    return keys;
+}
 function tool_inputs2obj(inputs){
     var local_answers={};
     for (var key in inputs) {
-        //result += objName + "." + prop + " = " + inputs[key] + "\n";
+    //result += objName + "." + prop + " = " + inputs[key] + "\n";
         var keyarray = key.match(/[a-z]+_\d+/g);
         if(typeof local_answers[keyarray[0]] == "undefined")    local_answers[keyarray[0]] = {};
         if(typeof local_answers[keyarray[0]][keyarray[1]] == "undefined") local_answers[keyarray[0]][keyarray[1]] = {};
