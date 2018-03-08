@@ -1,13 +1,17 @@
-var mongodb = require('mongodb');
-var db_server = "127.0.0.1";
-var db_port = 27017;
-var db_name = 'mvs';
-exports.do = function(table,callback){
-    var server = new mongodb.Server(db_server, db_port, {});
+const mongo_client = require('mongodb').MongoClient;
+const assert = require('assert');
 
-    new mongodb.Db(db_name, server, {}).open(function (error, client) {
+//connect url
+const url = 'mongodb://localhost:27017';
+//db name
+const db_name = 'mvs'
+
+
+exports.do = function(table,callback){
+    mongo_client.connect(url,function (error, client) {
       if (error) throw error;
-      var collection = new mongodb.Collection(client, table);
+      const db = client.db(db_name);
+      const collection = db.collection(client, table);
 	  callback(collection);
     });
 
