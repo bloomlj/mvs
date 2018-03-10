@@ -11,7 +11,7 @@ exports.do = function(table,callback){
     mongo_client.connect(url,function (error, client) {
       if (error) throw error;
       const db = client.db(db_name);
-      const collection = db.collection(client, table);
+      const collection = db.collection(table);
 	  callback(collection);
     });
 
