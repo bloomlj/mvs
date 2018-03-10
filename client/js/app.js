@@ -6,7 +6,7 @@ client.init = function(){
 
   if(!localStorage.getItem("connect"))  localStorage.setItem("connect",'');
 
-  client.connect = {server:"192.168.1.8",port:"80"};
+  client.connect = {server:"127.0.0.1",port:"8888"};
 }
 client.view_login = function(){
   tplrender("login-tpl",{},"login_pagecontent");
@@ -23,7 +23,7 @@ client.http_login=function(connect){
     },
     success: function(doc){
       if(doc.status == 'success'){
-      
+
         client.userinput_dbname = "userinput_"+client.connect.password;
         client.localreport_dbname = "localreport_"+client.connect.password;
         client.vote_dbname = "vote_"+client.connect.password;
@@ -107,13 +107,13 @@ function load_section(section_key) {
         $('.candidate_checkbox').tap(function(){
 		  td_save_checkbox(this);
 		})
-      }  
+      }
     }
 
-    
-    
+
+
     //init content scroll
-    
+
     content_scroll_init();
     //init rang input widget
     //rangeinput_init();
@@ -171,7 +171,7 @@ function view_questioninput(section,group,org,question){
   tplrender("questioninput-tpl",qitem,"questioninput_pagecontent");
   $("#homepage").hide();
   $("#questioninput_page").show();
-  
+
   loadsavedinput();
 
   // var questioninput_page_scroller = new iScroll('questioninput_wrapper',{
@@ -255,7 +255,7 @@ function rangedecrease(el) {
     $(el).next().val(parseInt(current)-1);
     saveinput($(el).next()[0]);
   }
-  
+
 
   return false;
 }
@@ -272,7 +272,7 @@ function rangeadd(el) {
     $(el).prev().val(parseInt(current)+1);
     saveinput($(el).prev()[0]);
   }
-  
+
   //if null,give it max value for default
   if(current = '') $(el).prev().val($(el).prev().attr('max'));
   return false;
@@ -285,7 +285,7 @@ function td_save_checkbox(el){
        $(checkbox_el).removeAttr("checked");
        //去掉checked图标
        $(el).removeClass("checked");
-   }    
+   }
    else{
        $(checkbox_el).attr("checked","checked");
        //显示点击图标
@@ -311,19 +311,19 @@ function saveinput(el){
       	      	      checkedcount++;
       	      	      //console.log("find");
       	      	}
-      	     
+
       }
       if(checkedcount >= limit){
       	      showAlert("已超过输入限制。若要选择此项，请先取消一个已选项目。");
       	      //vibrate();
-      	      
+
       	      $(el).removeAttr("checked");
       	      //去掉checked图标          //显示图标
       	       $($(el).parent("td")[0]).removeClass("checked");
       	      return false;
       }
       userinput[$(el).attr("name")] = 1;
-      //console.log($(el).val());    
+      //console.log($(el).val());
     }else{
       delete userinput[$(el).attr("name")];
     }
@@ -340,7 +340,7 @@ function saveinput(el){
       $(el).val('');
       return false;
     }
-    
+
     userinput[$(el).attr("name")] = $(el).val();
     //if is not the total field itself ,then autorefalsh it.
     if($(el).attr("name").indexOf("total") == -1)     questioninput_total_autoreflash();
@@ -372,11 +372,11 @@ function loadsavedinput(){
 
 function questioninput_total_autoreflash(){
     var subquestion_total = 0;
-    
+
     for (var i = 0; i < $(".subquestion_inputfield  input").length; i++) {
       if($($(".subquestion_inputfield input")[i]).val() != "") subquestion_total+=parseInt($($(".subquestion_inputfield input")[i]).val());
     };
-    
+
     $(".questiontotal_inputfield input").val(subquestion_total);
     //save total input val,because it may not be changed by person.
             //another method
@@ -385,7 +385,7 @@ function questioninput_total_autoreflash(){
 }
 function  subquestion_name2key(name){
     var subquestion_keyarray = name.match(/[a-z]+_\d+/g);
-    
+
     var keys = {};
     keys['section_key'] = subquestion_keyarray[0];
     keys['group_key'] = subquestion_keyarray[1];
@@ -477,7 +477,7 @@ function questioninput_savebackto_homepage(){
     if(typeof localreport[keys['section_key']][keys['group_key']]== "undefined") localreport[keys['section_key']][keys['group_key']] = {'orgs':{}};
     if(typeof localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]== "undefined")  localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']] = {'questions':{}};
     localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'][keys['question_key']] =  parseInt(totalvalue);
-    
+
     var orgtotalvalue = 0;
     for(qk in localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'] ){
       orgtotalvalue+= parseInt(localreport[keys['section_key']][keys['group_key']]['orgs'][keys['org_key']]['questions'][qk]);
@@ -538,7 +538,7 @@ function onDeviceReady(){
        }else{}
     }, false);
 }
-    
+
 var debug_el = $("#debug");
 
 function log(str) {
