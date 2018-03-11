@@ -1,32 +1,29 @@
 extends ../layout
 block content
-  h1 添加一次投票
 
   form(method="post",action="/vote")
     #setp1.well
-      h2 填写基本信息
+      h2 填写项目信息
       label(for="title") 名称:
         input#name(name="name",type="text")
         input(type="hidden",name="vtype",value="mark")
       label(for="note") 说明:
         textarea#note(name="note")
     #setp2
-      h2 编辑选票
-      //选票单 sections
+      h2 编辑指标体系
       fieldset.section
-        ///legend 选票单
-        label 标题: 
+        label 指标体系名称:
           input(name="sections[section_0][title]",type="text")
-        label 副标题:
-          input(name="sections[section_0][subtitle]",type="text")
+        label 指标体系简介:
+          input(name="sections[section_0][subtitle]",type="text",size="200")
         //子选票单 groups
         .group.row
           fieldset.group.span6
             ///legend 组
             ///label 标题:
             input(name="sections[section_0][groups][group_0][title]",placeholder="标题",type="hidden")
-            //参与评价的单位 
-            h3 相关单位             
+            //参与评价的单位
+            h3 参评单位
             fieldset.org
               a(href="#",role="button",data-toggle="modal").btn.modalfire 选择参加评价的单位
               div.modal.hide.fade
@@ -36,7 +33,7 @@ block content
                   button(type="button",data-dismiss="modal",aria-hidden="true").close &times;
                   h3 选择参加评价的单位
                 div.modal-body
-                  p 
+                  p
                     each org,i in allorgs
                       label.fullname.span2
                         input(type="checkbox",name="sections[section_0][groups][group_0][orgs][org_#{i}][fullname]",value="#{org.name}")
@@ -48,7 +45,7 @@ block content
             //评价指标
             h3 评价指标
             fieldset.question
-              input(name="sections[section_0][groups][group_0][questions][question_0][text]",type="text",placeholder="一级指标内容").questiontext
+              input(name="sections[section_0][groups][group_0][questions][question_0][text]",type="text",placeholder="指标内容").questiontext
               input.input-mini(name="sections[section_0][groups][group_0][questions][question_0][weight]",type="number",placeholder="分数")
               fieldset.subquestion
                 ol
@@ -56,16 +53,16 @@ block content
                     input(name="sections[section_0][groups][group_0][questions][question_0][subquestions][subquestion_0][items][item_0][text]",type="text",placeholder="二级指标内容").questiontext
                     input.input-mini(name="sections[section_0][groups][group_0][questions][question_0][subquestions][subquestion_0][items][item_0][weight]",type="number",placeholder="分数")
                     textarea(name="sections[section_0][groups][group_0][questions][question_0][subquestions][subquestion_0][items][item_0][note]")
-                    a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标
-                  a.btn(href="javascript:return false;",onclick="add_field(this,'item')")  添加二级指标
+                    a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除指标明细项
+                  a.btn(href="javascript:return false;",onclick="add_field(this,'item')")  添加指标明细项
                   hr
-                a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标集
-              a.btn(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标集
+                a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删指指标明细项组
+              a.btn(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加指标明细项组
               hr
-              a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除一级指标
-            a.btn(href="#",onclick="add_field(this,'question')")  添加一级指标
-            a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除组
-          a.btn.btn-info.addgroup(href="javascript:return false;",onclick="add_field(this,'group')")  添加组
+              a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除指标内容
+            a.btn(href="#",onclick="add_field(this,'question')")  添加指标内容
+            a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除子项目
+          a.btn.btn-info.addgroup(href="javascript:return false;",onclick="add_field(this,'group')")  添加子项目
         a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除选票单
       a.section.btn(href="javascript:return false;",onclick="add_field(this,'section')")  添加选票单
 

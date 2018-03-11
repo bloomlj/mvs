@@ -5,12 +5,10 @@ block breadcrumbs
       a(href="/") 首页
       span.divider /
     li
-      a(href="/vote") 投票
+      a(href="/vote") 评价项目
       span.divider /
     li.active #{votedata.name}
 block content
-  h1 添加一次投票
-
   form(method="post",action="/vote/#{votedata._id}")
     #setp1.well
       h2 基本信息
@@ -21,12 +19,12 @@ block content
         textarea#note(name="note") #{votedata.note}
 
     #setp2
-      h2 编辑选票单
+      h2 编辑指标体系
       //选票单 sections
       for section,si in votedata.sections
         fieldset.section
           ///legend 选票单
-          label 标题: 
+          label 标题:
             input(name="sections[#{si}][title]",type="text",value="#{section.title}")
           label 副标题:
             input(name="sections[#{si}][subtitle]",type="text",value="#{section.subtitle}")
@@ -35,6 +33,7 @@ block content
             for group,gi in section.groups
               fieldset.group.span6
                 if votedata.vtype == 'vote'
+                  //这个分支已然无用亦
                   input(name="sections[#{si}][groups][#{gi}][title]",placeholder="标题",type="hidden",value="#{group.title}")
                   label 限投
                     input(name="sections[#{si}][groups][#{gi}][max]",type="number",value="#{group.max}")
@@ -52,7 +51,7 @@ block content
                         a(href="javascript:return false;",onclick="remove_field(this)")  删除
                     a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
                 else
-                    //参与评价的单位              
+                    //参与评价的单位
                     fieldset.formark.org
                       a(href="#",role="button",data-toggle="modal").btn.modalfire 选择参加评价的单位
                       div.modal.hide.fade
@@ -60,7 +59,7 @@ block content
                           button(type="button",data-dismiss="modal",aria-hidden="true").close &times;
                           h3 选择参加评价的单位
                         div.modal-body
-                          p 
+                          p
                             each org,i in allorgs
                               - var isfind = 'no'
                               //这里显示已经选过的。
@@ -70,39 +69,39 @@ block content
                                   label.fullname.span2
                                     input(type="checkbox",name="sections[#{si}][groups][#{gi}][orgs][#{i}][fullname]",value="#{org.name}",checked="checked")
                                     | #{org.name}
-                                  label.order.span1  
-                                    input(type="text",name="sections[#{si}][groups][#{gi}][orgs][#{i}][order]",placeholder="序号",value="#{selectedorg.order}")   
+                                  label.order.span1
+                                    input(type="text",name="sections[#{si}][groups][#{gi}][orgs][#{i}][order]",placeholder="序号",value="#{selectedorg.order}")
                               //这里显示未选的。
                               if isfind == 'no'
                                 label.fullname.span2
                                   input(type="checkbox",name="sections[#{si}][groups][#{gi}][orgs][#{i}][fullname]",value="#{org.name}")
                                   | #{org.name}
-                                label.order.span1  
-                                  input(type="text",name="sections[#{si}][groups][#{gi}][orgs][#{i}][order]",placeholder="序号",value="")              
+                                label.order.span1
+                                  input(type="text",name="sections[#{si}][groups][#{gi}][orgs][#{i}][order]",placeholder="序号",value="")
                         div.modal-footer
                           button.btn.btn-primary(data-dismiss="modal",aria-hidden="true") 选好了
                     h2 评价指标
                     for question,qi in group.questions
                       fieldset.formark.question
-                        input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][text]",value="#{question.text}",type="text",placeholder="一级指标内容").questiontext
+                        input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][text]",value="#{question.text}",type="text",placeholder="指标内容").questiontext
                         input.input-mini(name="sections[#{si}][groups][#{gi}][questions][#{qi}][weight]",value="#{question.weight}",type="number",placeholder="分数")
                         for subquestion,subqi in question.subquestions
                           fieldset.subquestion
                             ol
                               for item,itemi in subquestion.items
-                                li.item 
-                                  input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][items][#{itemi}][text]",value="#{item.text}",type="text",placeholder="二级指标内容").questiontext
+                                li.item
+                                  input(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][items][#{itemi}][text]",value="#{item.text}",type="text",placeholder="指标明细项").questiontext
                                   input.input-mini(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][items][#{itemi}][weight]",value="#{item.weight}",type="number",placeholder="分数")
                                   textarea(name="sections[#{si}][groups][#{gi}][questions][#{qi}][subquestions][#{subqi}][items][#{itemi}][note]") #{item.note}
-                                  a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标
-                              a(href="javascript:return false;",onclick="add_field(this,'item')")  添加二级指标
+                                  a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除指标明细项
+                              a(href="javascript:return false;",onclick="add_field(this,'item')")  添加指标明细项
                               hr
-                            a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除二级指标集
-                          a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加二级指标集
-                        a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除一级指标
-                      a.formark(href="javascript:return false;",onclick="add_field(this,'question')")  添加一级指标
-                  a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除组
-            a.btn.btn-info.addgroup(href="javascript:return false;",onclick="add_field(this,'group')")  添加组
+                            a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删指指标明细项组
+                          a(href="javascript:return false;",onclick="add_field(this,'subquestion')")  添加指标全部明细项组
+                        a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除指标
+                      a.formark(href="javascript:return false;",onclick="add_field(this,'question')")  添加指标
+                  a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除子项目
+            a.btn.btn-info.addgroup(href="javascript:return false;",onclick="add_field(this,'group')")  添加子项目
           a.deletebtn(href="javascript:return false;",onclick="remove_field(this)")  删除选票单
       a.section.btn(href="javascript:return false;",onclick="add_field(this,'section')")  添加选票单
 

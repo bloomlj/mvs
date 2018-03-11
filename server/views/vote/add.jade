@@ -5,12 +5,10 @@ block breadcrumbs
       a(href="/") 首页
       span.divider /
     li
-      a(href="/vote") 投票
+      a(href="/vote") 评价项目
       span.divider /
-    li.active 添加投票
+    li.active 添加评价项目
 block content
-  h1 添加一次投票
-
   form(method="post",action="/vote")
     #setp1.well
       h2 填写基本信息
@@ -18,7 +16,7 @@ block content
         input#name(name="name",type="text")
       label 类型:
         select#vtype(name="vtype")
-          option(value="") 
+          option(value="")
           option(value="vote") 投票
           option(value="mark") 评分
       label(for="note") 说明:
@@ -26,11 +24,10 @@ block content
       a#btn_to_setp2.btn(href="#setp2")  下一步
 
     #setp2
-      h2 编辑选票
-      //选票单 sections
+      h2 编辑指标体系
       fieldset.section
         ///legend 选票单
-        label 标题: 
+        label 标题:
           input(name="sections[0][title]",type="text")
         label 副标题:
           input(name="sections[0][subtitle]",type="text")
@@ -55,7 +52,7 @@ block content
                   a(href="javascript:return false;",onclick="remove_field(this)")  删除
                 a.forvote(href="javascript:return false;",onclick="add_field(this,'candidate')")  添加候选人
 
-            //参与评价的单位              
+            //参与评价的单位
             fieldset.formark.org
               legend 参与评价的单位
               each org,i in allorgs

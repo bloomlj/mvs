@@ -5,15 +5,11 @@ block breadcrumbs
       a(href="/") 首页
       span.divider /
     li.active
-      a(href="/vote") 投票
+      a(href="/vote") 评价项目
 block content
-    h1 全部投票记录
-    a.btn(href="/vote/addvote") 
+    a.btn(href="/vote/addmark")
        i.icon-file
-       | 添加投票
-    a.btn(href="/vote/addmark") 
-       i.icon-file
-       | 添加评价
+       | 添加评价项目
     ul#votelist.thumbnails
         for doc in docs
            li.span6
@@ -22,14 +18,12 @@ block content
                 span.metainfo #{doc.created_date}
                 .note #{doc.note}
                 .actions
-                    |操作：
-                    a.btn(href="/vote/#{doc._id}/edit") 
+                    a.btn(href="/vote/#{doc._id}/edit")
                         i.icon-pencil
                         |修改
-                    a.btn(href="/vote/#{doc._id}/clone") 
+                    a.btn(href="/vote/#{doc._id}/clone")
                         i.icon-repeat
                         |复制
-                    a.btn(href="/vote/#{doc._id}/destroy") 
+                    a.btn(href="/vote/#{doc._id}/destroy")
                         i.icon-remove
                         |删除
-               
